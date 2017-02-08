@@ -1,9 +1,12 @@
+html body {
+    font-family: 'Open Sans', sans-serif;
+}
+
 .hidden.menu {
     display: none;
 }
 
 .masthead.segment {
-    min-height: 600px;
     padding: 1em 0em;
 }
 .masthead .logo.item img {
@@ -14,7 +17,7 @@
 }
 .masthead h2.ui.header {
     margin-top: 2em;
-    margin-bottom: 0em;
+    margin-bottom: .5em;
     font-size: 3em;
     font-weight: normal;
 }
@@ -23,18 +26,23 @@
     font-weight: normal;
     margin-bottom: 1em;
 }
-.ui.vertical.stripe.price {
-    background: #f7f7f7;
-}
-.ui.vertical.stripe.pesan {
-    background: #f7f7f7;
-}
 .ui.vertical.stripe {
     padding: 6em 0em;
 }
 .ui.vertical.stripe h3 {
     font-size: 2em;
 }
+
+.ui.vertical.stripe.infra {
+    padding: 3em 0em;
+}
+.ui.vertical.stripe.infra h3 {
+    font-size: 2em;
+}
+.ui.vertical.stripe.infra p {
+    font-size: 1.33em;
+}
+
 .ui.vertical.stripe .button + h3,
 .ui.vertical.stripe p + h3 {
     margin-top: 3em;
@@ -49,12 +57,8 @@
     margin: 3em 0em;
 }
 
-.quote.stripe.segment {
-    padding: 0em;
-}
-.quote.stripe.segment .grid .column {
-    padding-top: 5em;
-    padding-bottom: 5em;
+.ui.container.plans {
+    margin: 3em;
 }
 
 .footer.segment {
@@ -63,6 +67,16 @@
 
 .secondary.pointing.menu .toc.item {
     display: none;
+}
+
+#banner {
+    padding-top: 8em;
+    padding-bottom: 10em;
+}
+
+#banner-other {
+    padding-top: 4em;
+    padding-bottom: 6em;
 }
 
 @media only screen and (max-width: 700px) {
@@ -90,15 +104,50 @@
 }
 
 /* Override semantic.min.css */
-.ui.inverted.teal.segment {
-    border-top: 1em solid #FFD700;
-}
-.ui.vertical.segment:last-child {
-    border-bottom : 1em solid #FFD700;
-}
 .ui.secondary.inverted.pointing.menu {
     border-width: 0px;
 }
 .ui.image.logo {
     margin: 1em 3.25em 1.5em;
 }
+/* ------------------------------------- */
+
+/* Login - Signup page */
+.login-signup {
+    background: #00B5AD;
+}
+
+#logo {
+    padding-top: 6em;
+    margin: 0 auto 30px;
+}
+
+.login-signup.column {
+    max-width: 500px;
+}
+
+.ui.text.header.logo {
+    font-size: 2em;
+    margin-top: .5em;
+    margin-bottom: 1em;
+}
+/* ------------------------------------- */
+
+/* Login - Signup page */
+.error {
+    background: #00B5AD;
+}
+
+#logo {
+    padding-top: 6em;
+    margin: 0 auto 30px;
+}
+
+.error.column {
+    max-width: 500px;
+}
+
+.ui.text.header.logo {
+    margin: 1em;
+}
+/* ------------------------------------- */
