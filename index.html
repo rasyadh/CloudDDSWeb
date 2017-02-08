@@ -1,5 +1,5 @@
 <!DOCTYPE Html>
-<html>
+<html ng-app="CloudDDS">
 
 <head>
     <meta charset="utf-8" />
@@ -13,53 +13,14 @@
     <link rel="stylesheet" type="text/css" href="dist/custom.css" />
     <script src="assets/library/jquery.min.js"></script>
     <script src="dist/semantic.min.js"></script>
+    <script src="dist/angular/angular.min.js"></script>
+    <script src="dist/app.js"></script>
+    <script src="dist/sidebar.js"></script>
 
-    <script>
-        $(document)
-            .ready(function () {
-
-                // fix menu when passed
-                $('.masthead')
-                    .visibility({
-                        once: false,
-                        onBottomPassed: function () {
-                            $('.borderless.fixed.menu').transition('fade in');
-                        },
-                        onBottomPassedReverse: function () {
-                            $('.borderless.fixed.menu').transition('fade out');
-                        }
-                    })
-                    ;
-
-                // create sidebar and attach to menu open
-                $('.ui.sidebar')
-                    .sidebar('attach events', '.toc.item')
-                    ;
-
-            })
-            ;
-    </script>
 </head>
 
 <body>
-    <!-- Following Menu -->
-    <div class="ui large top borderless fixed hidden menu">
-        <div class="ui container">
-            <a class="item" href="#">
-                <img class="ui small image" src="assets/images/logo-cloud-dds.png">
-            </a>
-            <div class="right menu">
-                <a class="item" href="layanan.html">LAYANAN &amp; HARGA</a>
-                <a class="item" href="bantuan.html">BANTUAN</a>
-                <div class="item">
-                    <a class="ui teal button" href="login.html">LOGIN</a>
-                </div>
-                <div class="item">
-                    <a class="ui teal button" href="signup.html">SIGNUP</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    <following-header></following-header>
 
     <!-- Sidebar Menu -->
     <div class="ui vertical teal inverted sidebar borderless menu">
@@ -74,6 +35,7 @@
 
     <!-- Page Contents -->
     <div class="pusher">
+        <!-- Menu -->
         <div class="ui teal inverted vertical masthead center aligned segment">
 
             <div class="ui container">
@@ -94,9 +56,9 @@
                     </div>
                 </div>
             </div>
-
         </div>
 
+        <!-- Banner -->
         <div class="ui teal inverted vertical segment" id="banner">
             <div class="ui middle aligned stackable grid container">
                 <div class="row">
