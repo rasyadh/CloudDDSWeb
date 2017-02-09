@@ -11,16 +11,20 @@
     <link rel="stylesheet" type="text/css" href="dist/semantic.min.css" />
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="dist/custom.css" />
-    <script src="assets/library/jquery.min.js"></script>
+    <script src="dist/js/jquery.min.js"></script>
     <script src="dist/semantic.min.js"></script>
-    <script src="dist/angular/angular.min.js"></script>
-    <script src="dist/app.js"></script>
-    <script src="dist/sidebar.js"></script>
-
+    <script src="dist/js/angular.min.js"></script>
+    <script src="dist/js/angular-route.min.js"></script>
+    <script src="dist/js/app.js"></script>
+    <script src="dist/js/directives/home-directives.js"></script>
+    <script src="dist/js/controllers/home-controllers.js"></script>
+    <script src="dist/js/controllers/layanan-controllers.js"></script>
+    <script src="dist/js/sidebar.js"></script>
+    <script src="dist/js/routes.js"></script>
 </head>
 
 <body>
-    <following-header></following-header>
+    <main-following></main-following>
 
     <!-- Sidebar Menu -->
     <div class="ui vertical teal inverted sidebar borderless menu">
@@ -44,183 +48,27 @@
                         <i class="sidebar icon"></i>
                     </a>
                     <div class="left item">
-                        <a class="item" href="#">
+                        <a class="item" href="#!home">
                             <img class="ui small image" src="assets/images/logo-cloud-dds.png">
                         </a>
                     </div>
                     <div class="right item">
-                        <a class="item" href="layanan.html">LAYANAN &amp; HARGA</a>
-                        <a class="item" href="bantuan.html">BANTUAN</a>
-                        <a class="ui inverted teal basic button" href="login.html">LOGIN</a>
-                        <a class="ui inverted teal basic button" href="signup.html">SIGNUP</a>
+                        <a class="item" href="#!layanan">LAYANAN &amp; HARGA</a>
+                        <a class="item" href="#!bantuan">BANTUAN</a>
+                        <a class="ui inverted teal basic button" href="template/login/login.html">LOGIN</a>
+                        <a class="ui inverted teal basic button" href="template/signup/signup.html">SIGNUP</a>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Banner -->
-        <div class="ui teal inverted vertical segment" id="banner">
-            <div class="ui middle aligned stackable grid container">
-                <div class="row">
-                    <div class="seven wide column">
-                        <h2 class="ui left aligned inverted header">Layanan Cloud Computing DDS Telkom</h2>
-                        <div class="ui fluid input">
-                            <input type="email" placeholder="Email Address">
-                        </div>
-                        </br>
-                        <div class="ui fluid input">
-                            <input type="password" placeholder="Password">
-                        </div>
-                        </br>
-                        <a class="ui inverted teal fluid button">Sign Up</a>
-                    </div>
-                    <div class="six wide right floated column">
-                        <img src="assets/images/dds-logo.png" class="ui large rounded image">
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div ng-view></div>  
 
-        <div class="ui vertical stripe segment">
-            <div class="ui centered page grid">
-                <div class="fourteen wide column">
-                    <div class="ui two column center aligned stackable divided grid">
-                        <div class="column">
-                            <div class="ui header">
-                                <img class="ui tiny image" src="assets/images/cloud-computing.png">
-                            </div>
-                            <h3 class="ui header">Layanan Cloud Cepat dan Handal</h3>
-                            <p>Dengan penggunaan layanan yang berbasis OpenStack dan layanan support yang selalu tersedia.</p>
-                        </div>
-                        <div class="column">
-                            <div class="ui header">
-                                <img class="ui tiny image" src="assets/images/list.png">
-                            </div>
-                            <h3 class="ui header">Mendukung Semua yang Dibutuhkan</h3>
-                            <p>Layanan kami mendukung semua fitur dan kebutuhan yang anda perlukan untuk cloud anda.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div class="ui divider"></div>
 
-        <div class="ui vertical stripe flavor segment">
-            <div class="ui text container center aligned">
-                <h3 class="ui header">Aktifasi Mudah dan Cepat</h3>
-                <p>Ragam pilihan sesuai kebutuhan.</p>
-            </div>
+        <main-vendor></main-vendor>
 
-            <div class="ui container plans">
-                <div class="ui four column grid">
-                    <div class="column">
-                        <div class="ui raised segment">
-                            <a class="ui green ribbon label">Small</a>
-                            <div class="ui list">
-                                <div class="item">1 GB Memori</div>
-                                <div class="item">1 Core Processor</div>
-                                <div class="item">20 GB Disk</div>
-                            </div>
-                            <div class="ui right aligned container">
-                                <a class="ui teal button">Detail</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="column">
-                        <div class="ui raised segment">
-                            <a class="ui teal ribbon label">Medium</a>
-                            <div class="ui list">
-                                <div class="item">1 GB Memori</div>
-                                <div class="item">1 Core Processor</div>
-                                <div class="item">20 GB Disk</div>
-                            </div>
-                            <div class="ui right aligned container">
-                                <a class="ui teal button">Detail</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="column">
-                        <div class="ui raised segment">
-                            <a class="ui blue ribbon label">Large</a>
-                            <div class="ui list">
-                                <div class="item">1 GB Memori</div>
-                                <div class="item">1 Core Processor</div>
-                                <div class="item">20 GB Disk</div>
-                            </div>
-                            <div class="ui right aligned container">
-                                <a class="ui teal button">Detail</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="column">
-                        <div class="ui raised segment">
-                            <a class="ui violet ribbon label">Extra Large</a>
-                            <div class="ui list">
-                                <div class="item">1 GB Memori</div>
-                                <div class="item">1 Core Processor</div>
-                                <div class="item">20 GB Disk</div>
-                            </div>
-                            <div class="ui right aligned container">
-                                <a class="ui teal button">Detail</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="ui vertical stripe pesan segment">
-            <div class="ui middle aligned stackable grid container">
-                <div class="row pesan">
-                    <div class="seven wide column">
-                        <h2 class="ui header">Langganan Sekarang</h2>
-                        <h3 class="ui header">Langsung Nikmati Layanan Kami</h3>
-                        </br>
-                        <a class="ui teal large button">Pesan Sekarang</a>
-                    </div>
-                    <div class="five wide right floated column">
-                        <img src="assets/images/database.png" class="ui small rounded image">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="ui vertical vendor center aligned segment">
-            <div class="ui text container">
-                <div class="ui small images">
-                    <img class="ui image logo" src="assets/images/logo-telkom-corpu.png">
-                    <img class="ui image logo" src="assets/images/dds-logo.png">
-                    <img class="ui image logo" src="assets/images/OpenStack-Logo.png">
-                </div>
-            </div>
-        </div>
-
-        <div class="ui inverted vertical footer segment">
-            <div class="ui container">
-                <div class="ui stackable inverted divided equal height stackable grid">
-                    <div class="three wide column">
-                        <h4 class="ui inverted header">LAYANAN</h4>
-                        <div class="ui inverted link list">
-                            <a href="#" class="item">Infrastruktur</a>
-                            <a href="#" class="item">Platform</a>
-                            <a href="#" class="item">Tambahan</a>
-                        </div>
-                    </div>
-                    <div class="three wide column">
-                        <h4 class="ui inverted header">RUJUKAN</h4>
-                        <div class="ui inverted link list">
-                            <a href="#" class="item">Basis Pengetahuan</a>
-                            <a href="#" class="item">FAQ</a>
-                            <a href="#" class="item">Kontak</a>
-                        </div>
-                    </div>
-                    <div class="seven wide column">
-                        <h4 class="ui inverted header">PT. Telekomunikasi Indonesia, Tbk</h4>
-                        <p>DDS Telkom.</br> Jl. Gegerkalong Hilir No. 47. Bandung 40152.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <main-footer></main-footer>
     </div>
 
 </body>
