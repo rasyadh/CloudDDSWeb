@@ -1,17 +1,19 @@
 var app = angular.module('layanan-controllers', []);
 
 app.controller('FlavorlayananController', function(){
+    this.tab = 0;
+
     this.lFlavor = layananFlavor;
 
-    this.flav = 1;
+    this.getTab = this.tab;
 
-    this.setFlav = function(flav){
+    /* this.setFlav = function(flav){
         this.flav = flav;
     };
 
-    this.getFlav = function(get){
-        return this.flav = get;
-    };
+    this.getFlav = function(){
+        return this.flav;
+    }; */
 });
 
 var layananFlavor = [
