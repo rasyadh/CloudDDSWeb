@@ -106,13 +106,21 @@
                 <div class="ui bottom attached active tab segment" data-tab="server">
                     <form class="ui form">
                         <div class="field">
-                            <label>Name</label>
-                            <input type="text" name="name" placeholder="Name">
+                            <label>Instance Name</label>
+                            <input type="text" name="instance_name" placeholder="Instance Name">
                         </div>
                         <div class="field">
-                            <label>Hostname</label>
-                            <input type="text" name="hostname" placeholder="Hostname">
-                            <span>eg. server1(.yourdomain.com)</span>
+                            <label>Availability Zone</label>
+                            <div class="ui selection dropdown">
+                                <input type="hidden" name="Availability Zone">
+                                <i class="dropdown icon"></i>
+                                <div class="default text">Availability Zone</div>
+                                <div class="menu">
+                                    <div class="item" data-value="1">
+                                        Nova
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="field">
                             <label>Root Password</label>
@@ -122,7 +130,7 @@
                 </div>
                 <div class="ui bottom attached tab segment" data-tab="os">
                     <div class="ui form">
-                        <div class="inline field">
+                        <div class="field">
                             <label>Sistem Operasi</label>
                             <div class="ui selection dropdown">
                                 <input type="hidden" name="Sistem Operasi">

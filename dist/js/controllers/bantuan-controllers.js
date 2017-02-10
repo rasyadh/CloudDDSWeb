@@ -1,10 +1,10 @@
 var app = angular.module('bantuan-controllers', []);
 
 app.controller('InfobantuanController', function(){
-    this.bInfo = infoContent;
+    this.bInfo = infoContentBantuan;
 });
 
-var infoContent = [
+var infoContentBantuan = [
     {
         image: "assets/images/question.png",
         title: "FAQ",
