@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <script>
+        $(document)
+            .ready(function () {
+
+                // fix menu when passed
+                $('.masthead')
+                    .visibility({
+                        once: false,
+                        onBottomPassed: function () {
+                            $('.borderless.fixed.menu').transition('fade in');
+                        },
+                        onBottomPassedReverse: function () {
+                            $('.borderless.fixed.menu').transition('fade out');
+                        }
+                    })
+                    ;
+
+                // create sidebar and attach to menu open
+                $('.ui.sidebar')
+                    .sidebar('attach events', '.toc.item')
+                    ;
+
+            })
+            ;
+    </script>
+
+        <div class="ui teal inverted vertical segment" id="banner-other">
+            <div class="ui middle aligned stackable grid container">
+                <h2 class="ui left aligned inverted header">Layanan &amp; Harga</h2>
+            </div>
+        </div>
+
+        <div class="ui vertical stripe infra segment">
+            <div class="ui stackable grid container">
+                <div class="column">
+                    <h3 class="ui header">Infrastruktur</h3>
+                    <p>Didukung arsitektur terdistribusi dengan menggunakan teknologi terkini, membuat layanan infrastruktur
+                        CloudDDS menjadi pilihan tepat bagi Anda yang membutuhkan sumber daya komputasi untuk membangun aplikasi,
+                        menyimpan berkas, atau mempersiapkan arsitektur sistem sesuai kebutuhan.</p>
+                </div>
+            </div>
+
+            <div class="ui stackable grid container">
+                <div class="four wide column">
+                    <div class="ui teal basic button">Virtual Machine</div>
+                    <div class="ui padded segment">
+                        <h1>Rp ###</h1>
+                        <div class="ui list">
+                            <div class="item">
+                                <h4>vCPU
+                                    <span class="ui right floated">1</span>
+                                </h4>
+
+                            </div>
+                            <div class="item">
+                                <h4>RAM
+                                    <span class="ui right floated">1GB</span>
+                                </h4>
+                            </div>
+                            <div class="item">
+                                <h4>Swap
+                                    <span class="ui right floated">1GB</span>
+                                </h4>
+                            </div>
+                            <div class="item">
+                                <h4>Storage
+                                    <span class="ui right floated">20GB</span>
+                                </h4>
+                            </div>
+                            <div class="item">
+                                <h4>Public IP
+                                    <span class="ui right floated">1</span>
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="one wide column">
+                    <div class="ui vertical divider"></div>
+                </div>
+                <div class="eleven wide column">
+                    <div class="row">
+                        <p class="ui container">
+                            Server virtual dengan harga terjangkau dan teknologi komputasi awan terkini yang menjamin kehandalan performa maupun ketersediaan
+                            serta dengan kemampuan skalabilitas yang tinggi. Mendukung berbagai macam OS favorit
+                            serta dapat dipasang berbagai macam aplikasi serta kerangka pemrograman. Cocok untuk Anda yang
+                            membutuhkan server stabil untuk berbagai keperluan.
+                        </p>
+                    </div>
+                    </br>
+                    <div class="row">
+                        <div class="ui horizontal list">
+                            <div class="item"><a class="ui massive button">S</a></div>
+                            <div class="item"><a class="ui massive button">M</a></div>
+                            <div class="item"><a class="ui massive button">L</a></div>
+                            <div class="item"><a class="ui massive button">XL</a></div>
+                            <div class="item"><a class="ui massive button">Custom</a></div>
+                        </div>
+                    </div>
+                    </br>
+                    <div class="row"> <a class="ui teal large button">Berlangganan</a></div>
+                </div>
+            </div>
+        </div>
+
+{% endblock %}
