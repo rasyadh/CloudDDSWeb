@@ -1,11 +1,13 @@
 import os
 
 from functools import wraps
-from flask import Flask,flash, request, Response
+from flask import Flask,flash, request, Response, jsonify, json
 from flask import render_template, url_for, redirect, send_from_directory
 from flask import send_file, make_response, abort, session
 
 from project import app
+from restapi.keystone import keystone as keystoneapi
+from restapi.nova import nova as novaapi
 
 def login_required(test):
     @wraps(test)
@@ -49,6 +51,39 @@ def bantuan():
 @app.route('/about')
 def about():
     return "about PAGE"
+
+@app.route('/restapi/keystone')
+@app.route('/restapi/keystone/')
+def keystone(): 
+    keystone = keystoneapi()
+    respJSON = keystone.myRequest()
+
+    return respJSON
+
+@app.route('/restapi/nova')
+@app.route('/restapi/nova/')
+def nova():
+    nova = novaapi()
+    url = nova.getUrl()
+
+    return url
+
+@app.route('/restapi/nova/flavorlist')
+@app.route('/restapi/nova/flavorlist/')
+def flavorlist():
+    nova = novaapi()
+    respJSON = nova.flavorList(0)
+    #resp = json.loads(respJSON)
+    
+    return str(respJSON)
+
+@app.route('/restapi/nova/flavorlist/<flavor_id>')
+def flavorlistdetail(flavor_id):
+    flavorid = flavor_id
+    nova = novaapi()
+    respJSON = nova.flavorList(str(flavorid))
+
+    return str(respJSON)
 
 # error handler
 @app.errorhandler(404)
