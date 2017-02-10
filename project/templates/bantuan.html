@@ -1,59 +1,28 @@
-{% extends "base.html" %}
+{% extends "base.html" %} 
 {% block content %}
 
-    <script>
-        $(document)
-            .ready(function () {
+<!-- Bantuan Banner -->
+<div class="ui teal inverted vertical segment" id="banner-other">
+    <div class="ui middle aligned stackable grid container">
+        <h2 class="ui left aligned inverted header">Bantuan</h2>
+    </div>
+</div>
 
-                // fix menu when passed
-                $('.masthead')
-                    .visibility({
-                        once: false,
-                        onBottomPassed: function () {
-                            $('.borderless.fixed.menu').transition('fade in');
-                        },
-                        onBottomPassedReverse: function () {
-                            $('.borderless.fixed.menu').transition('fade out');
-                        }
-                    })
-                    ;
-
-                // create sidebar and attach to menu open
-                $('.ui.sidebar')
-                    .sidebar('attach events', '.toc.item')
-                    ;
-
-            })
-            ;
-    </script>
-
-        <div class="ui teal inverted vertical segment" id="banner-other">
-            <div class="ui middle aligned stackable grid container">
-                <h2 class="ui left aligned inverted header">Bantuan</h2>
-            </div>
-        </div>
-
-        <div class="ui vertical stripe bantuan segment">
-            <div class="ui centered page grid">
-                <div class="fourteen wide column">
-                    <div class="ui two column center aligned stackable divided grid">
-                        <div class="column">
-                            <div class="ui header">
-                                <img class="ui tiny image" src="../static/img//cloud-computing.png">
-                            </div>
-                            <h3 class="ui header">Layanan Cloud Cepat dan Handal</h3>
-                            <p>Dengan penggunaan layanan yang berbasis OpenStack dan layanan support yang selalu tersedia.</p>
-                        </div>
-                        <div class="column">
-                            <div class="ui header">
-                                <img class="ui tiny image" src="../static/img//list.png">
-                            </div>
-                            <h3 class="ui header">Mendukung Semua yang Dibutuhkan</h3>
-                            <p>Layanan kami mendukung semua fitur dan kebutuhan yang anda perlukan untuk cloud anda.</p>
-                        </div>
+<!-- Bantuan Content -->
+<div class="ui vertical stripe bantuan segment" ng-controller="InfobantuanController as ibCtrl">
+    <div class="ui centered page grid">
+        <div class="fourteen wide column">
+            <div class="ui two column center aligned stackable divided grid">
+                <div class="column" ng-repeat="bantuan in ibCtrl.bInfo">
+                    <div class="ui header">
+                        <img class="ui tiny image" ng-src="{{ '{{ bantuan.image }}' }}">
                     </div>
+                    <h3 class="ui header">{{ '{{ bantuan.title }}' }}</h3>
+                    <p>{{ '{{ bantuan.description }}' }}</p>
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
 {% endblock %}

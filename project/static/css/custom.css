@@ -40,7 +40,7 @@ html body {
     font-size: 2em;
 }
 .ui.vertical.stripe.infra p {
-    font-size: 1.33em;
+    font-size: 1.2em;
 }
 
 .ui.vertical.stripe .button + h3,
@@ -51,7 +51,7 @@ html body {
     clear: both;
 }
 .ui.vertical.stripe p {
-    font-size: 1.33em;
+    font-size: 1.2em;
 }
 .ui.vertical.stripe .horizontal.divider {
     margin: 3em 0em;

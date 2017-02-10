@@ -25,12 +25,12 @@ def index():
 
 @app.route('/registration')
 def registration():
-    return "registration PAGE"
+    return render_template('signup.html')
 
 @app.route('/login')
 @login_required
 def login():
-    return "login PAGE"
+    return render_template('login.html')
 
 @app.route('/logout')
 @login_required
@@ -49,6 +49,10 @@ def bantuan():
 @app.route('/about')
 def about():
     return "about PAGE"
+
+#@app.route('/static/<path:filanename>')
+#def img(filename):
+ #   return send_from_directory(img,filename,as_attachment=)
 
 # error handler
 @app.errorhandler(404)

@@ -1,13 +1,4 @@
 (function(){
-    var app = angular.module("CloudDDS", []);
-
-    app.directive('followingHeader', function(){
-        return {
-            restrict: 'E',
-            templateUrl: 'template/views/following-header.html'
-        };
-    });
-
-    
-
+    var app = angular.module("CloudDDS", 
+    ['main-controllers', 'layanan-controllers', 'bantuan-controllers']);
 })();
