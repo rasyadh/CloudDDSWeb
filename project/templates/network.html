@@ -1,0 +1,68 @@
+{% extends "manage.html" %} {% block content %}
+
+<div class="ui vertical stripe network container">
+    <div class="ui stackable grid container">
+        <div class="row">
+            <h3 class="ui header">Networking</h3>
+            <div class="ui top attached tabular menu network">
+                <a class="item active" data-tab="domains">Domains</a>
+                <a class="item" data-tab="floatingip">Floating IPs</a>
+                <a class="item" data-tab="ptr">PTR Records</a>
+            </div>
+            <div class="ui bottom attached active tab segment" data-tab="domains">
+                <h2>Add a domain</h2>
+                <p>Enter a domain that you own below and start managing your DNS within your account.</p>
+                <form class="ui large form">
+                    <div class="field">
+                        <div class="ui fluid action input">
+                            <input type="text" placeholder="Enter Domain">
+                            <div class="ui teal button">Add Domain</div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="ui bottom attached tab segment" data-tab="floatingip">
+                <div class="ui center aligned container">
+                    <h2>Looks like you have no floating IPs</h2>
+                    <form class="ui large form">
+                        <div class="field">
+                            <div class="ui fluid action input">
+                                <input type="text" placeholder="Search for a Instances">
+                                <div class="ui teal button">Assign Floating IP</div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="ui bottom attached tab segment" data-tab="ptr">
+                <div class="ui center aligned container">
+                    <h2>PTR Records</h2>
+                    <div class="ui info message">
+                        <i class="close icon"></i>
+                        <div class="header">
+                            You have no PTR Records
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('.menu.network .item')
+        .tab()
+        ;
+
+    $('.message .close')
+        .on('click', function () {
+            $(this)
+                .closest('.message')
+                .transition('fade')
+                ;
+        })
+        ;
+
+</script>
+
+{% endblock %}

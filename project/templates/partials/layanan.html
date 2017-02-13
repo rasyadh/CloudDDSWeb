@@ -1,5 +1,4 @@
-{% extends "base.html" %} 
-{% block content %}
+{% extends "base.html" %} {% block content %}
 
 <!-- Banner Layanan -->
 <div class="ui teal inverted vertical segment" id="banner-other">
@@ -23,7 +22,7 @@
         <div class="four wide column">
             <div class="ui teal basic button">Virtual Machine</div>
             <div class="ui padded segment">
-                <h1>{{ '{{ flCtrl.lFlavor[flCtrl.tab].price | currency:"Rp ":0 }}' }}K / Bulan</h1>
+                <h1>Spesifikasi Flavor</h1>
                 <div class="ui list">
                     <div class="item">
                         <h4>vCPU
@@ -110,7 +109,7 @@
                 <div class="column" ng-repeat="app in alCtrl.lApps">
                     <div class="ui center aligned segment">
                         <i class="linux icon"></i></br>
-                        {{ '{{ app.nama }}' }}
+                        {{ '{{ app.name }}' }}
                     </div>
                 </div>
             </div>

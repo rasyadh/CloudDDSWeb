@@ -7,25 +7,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <meta name="description" content="Layanan cloud DDS Telkom" />
     <title>Cloud Computing - DDS Telkom</title>
-    <link rel="icon" href="{{url_for('static', filename='favicon.png') }}">
+    <link rel="icon" href="{{url_for('static', filename='favicon.png') }}"> 
     <link rel="stylesheet" type="text/css" href="../static/css/semantic.min.css" />
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../static/css/custom.css" />
     <script src="../static/js/jquery.min.js"></script>
     <script src="../static/js/semantic.min.js"></script>
-    <script src="../static/js/angular/angular.min.js"></script>
-    <script src="../static/js/app.js"></script>
     <script src="../static/js/sidebar.js"></script>
-    <script src="../static/js/angular/main-controllers.js"></script>
-    <script src="../static/js/angular/layanan-controllers.js"></script>
-    <script src="../static/js/angular/bantuan-controllers.js"></script>
+    <script src="../static/js/angular/angular.min.js"></script>
+    <script src="../static/js/angular/angular-route.min.js"></script>
+    <script src="../static/js/angular/app.js"></script>
+    <script src="../static/js/angular/AppControllers.js"></script>
+
 
 </head>
 
 <body>
     <!-- Sidebar Menu -->
     <div class="ui vertical teal inverted sidebar borderless menu">
-        <a class="item" href="#">
+        <a class="item" href="/">
             <img class="ui small image" src="../static/img/logo-cloud-dds.png">
         </a>
         <a class="item" href="{{ url_for('layanan') }}">LAYANAN</a>
@@ -37,7 +37,7 @@
     <!-- Following Menu -->
     <div class="ui large top borderless fixed hidden menu">
         <div class="ui container">
-            <a class="item" href="#">
+            <a class="item" href="/">
                 <img class="ui small image" src="../static/img/logo-cloud-dds.png">
             </a>
             <div class="right menu">
@@ -53,30 +53,30 @@
         </div>
     </div>
 
-        <!-- Page Contents -->
-        <div class="pusher">
-            <!-- Menu -->
-            <div class="ui teal inverted vertical masthead center aligned segment">
+    <!-- Page Contents -->
+    <div class="pusher">
+        <!-- Menu -->
+        <div class="ui teal inverted vertical masthead center aligned segment">
 
-                <div class="ui container">
-                    <div class="ui secondary inverted pointing menu">
-                        <a class="toc item">
-                            <i class="sidebar icon"></i>
+            <div class="ui container">
+                <div class="ui secondary inverted pointing menu">
+                    <a class="toc item">
+                        <i class="sidebar icon"></i>
+                    </a>
+                    <div class="left item">
+                        <a class="item" href="/">
+                            <img class="ui small image" src="../static/img/logo-cloud-dds.png">
                         </a>
-                        <div class="left item">
-                            <a class="item" href="/">
-                                <img class="ui small image" src="../static/img/logo-cloud-dds.png">
-                            </a>
-                        </div>
-                        <div class="right item">
-                            <a class="item" href="{{ url_for('layanan') }}">LAYANAN</a>
+                    </div>
+                    <div class="right item">
+                        <a class="item" href="{{ url_for('layanan') }}">LAYANAN</a>
                             <a class="item" href="{{ url_for('bantuan') }}">BANTUAN</a>
                             <a class="ui inverted teal basic button" href="{{ url_for('login') }}">LOGIN</a>
                             <a class="ui inverted teal basic button" href="{{ url_for('registration') }}">SIGNUP</a>
-                        </div>
                     </div>
                 </div>
             </div>
+        </div>
 
         <!-- Dynamic Content -->
         {% block content %}
