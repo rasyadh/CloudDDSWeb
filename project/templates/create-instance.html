@@ -1,0 +1,73 @@
+{% extends "manage.html" %} {% block content %}
+
+<div class="ui vertical stripe computes container" ng-controller="CreateinstanceController as ciCtrl">
+    <div class="ui stackable grid container">
+        <div class="row">
+            <h3 class="ui header" style="margin-bottom: 1em;">Create Instances</h3>
+            <div class="ui container">
+                <p>Choose an image</p>
+                <div class="ui top attached tabular menu createi">
+                    <a class="item active" data-tab="distribution">Distribution</a>
+                    <a class="item" data-tab="apps">Apps</a>
+                </div>
+                <div class="ui bottom attached active tab segment" data-tab="distribution">
+                    <div class="ui padded container">
+                        <div class="ui horizontal list">
+                            <a class="item" ng-repeat="ins in ciCtrl.createInstance">
+                                <div class="ui center aligned segment">
+                                    <img class="ui small image" ng-src="{{ '{{ ins.image_logo }}' }}"></br>
+                                    <span>Version {{ '{{ ins.version }}' }}</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui bottom attached tab segment" data-tab="apps">
+                    matamu
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="ui container">
+                <p>Choose a size</p>
+                <div class="ui top attached tabular menu createi">
+                    <a class="item active" data-tab="flavor">Flavor</a>
+                    <a class="item" data-tab="custom">Custom</a>
+                </div>
+                <div class="ui bottom attached active tab segment" data-tab="flavor">
+                    jancok Flavor
+                </div>
+                <div class="ui bottom attached tab segment" data-tab="custom">
+                    matamu Custom
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="ui container">
+                <p>Add block storage</p>
+                <a class="ui teal button">Add Volume</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="ui container">
+                <p>Finalize and create</p>
+                <div class="ui form">
+                    <div class="inline field">
+                        <label>Choose a hostname</label>
+                        <input type="text" name="hostname" placeholder="Instance Hostname">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a class="ui fluid teal button">Create</a>
+    </div>
+</div>
+
+<script>
+    $('.menu.createi .item')
+        .tab()
+        ;
+
+</script>
+
+{% endblock %}

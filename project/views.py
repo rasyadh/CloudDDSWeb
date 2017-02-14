@@ -57,6 +57,10 @@ def manage():
 def computes():
     return render_template('computes.html')
 
+@app.route('/manage/create')
+def create_instance():
+    return render_template('create-instance.html')
+
 @app.route('/manage/images')
 def images():
     return render_template('images.html')

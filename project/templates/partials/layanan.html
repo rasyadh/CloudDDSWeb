@@ -81,10 +81,13 @@
                     <div class="item">
                         <a class="ui massive button" ng-click="flCtrl.tab = 3">XL</a>
                     </div>
+                    <div class="item">
+                        <a class="ui massive button" ng-click="flCtrl.tab = 4">Custom</a>
+                    </div>
                 </div>
             </div>
             </br>
-            <div class="row"> <a class="ui teal large berlangganan button">Berlangganan</a></div>
+            <div class="row"> <a class="ui teal large berlangganan button" href="/registration">Berlangganan</a></div>
         </div>
     </div>
 </div>
@@ -106,10 +109,10 @@
         </div>
         <div class="row">
             <div class="ui four column grid">
-                <div class="column" ng-repeat="app in alCtrl.lApps">
+                <div class="column" ng-repeat="appl in alCtrl.lApps">
                     <div class="ui center aligned segment">
                         <i class="linux icon"></i></br>
-                        {{ '{{ app.name }}' }}
+                        <span>{{ '{{ appl.nama }}' }}</span>
                     </div>
                 </div>
             </div>
@@ -248,20 +251,5 @@
         </div>
     </div>
 </div>
-
-<script>
-    $('.ui.berlangganan.modal')
-        .modal('attach events', '.ui.berlangganan.button', 'show')
-        .modal('setting', 'transition', 'fade up');
-
-    $('.menu .item')
-        .tab()
-        ;
-
-    $('.ui.selection.dropdown')
-        .dropdown()
-        ;
-
-</script>
 
 {% endblock %}

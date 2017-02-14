@@ -151,3 +151,9 @@ html body {
     margin: 1em;
 }
 /* ------------------------------------- */
+
+/* Manage Page */
+.ui[class*="center aligned"].container {
+    padding: 1.5em;
+}
+/* ------------------------------------- */

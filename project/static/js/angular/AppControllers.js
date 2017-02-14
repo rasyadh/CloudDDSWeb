@@ -53,7 +53,7 @@ app.controller('VendormainController', function () {
     this.mVendor = [
         {
             /** using flask sintaxis for url */
-            logo_vendor: "static/img/logo-telkom-corpu.png"
+            logo_vendor: "static/img/logo-telkom-indonesia.png"
         },
         {
             logo_vendor: "static/img/dds-logo.png"
@@ -73,10 +73,6 @@ app.controller('FlavorlayananController', function () {
     this.getTab = this.tab;
 });
 
-app.controller('AppslayananController', function () {
-    this.lApps = apps;
-});
-
 var layananFlavor = [
     {
         type: "S",
@@ -84,8 +80,7 @@ var layananFlavor = [
         ram: 1,
         swap: 1,
         disk: 20,
-        public_ip: 1,
-        price: 100
+        public_ip: 1
     },
     {
         type: "M",
@@ -93,8 +88,7 @@ var layananFlavor = [
         ram: 2,
         swap: 1,
         disk: 40,
-        public_ip: 1,
-        price: 200
+        public_ip: 1
     },
     {
         type: "L",
@@ -102,8 +96,7 @@ var layananFlavor = [
         ram: 2,
         swap: 2,
         disk: 60,
-        public_ip: 1,
-        price: 300
+        public_ip: 1
     },
     {
         type: "XL",
@@ -111,10 +104,22 @@ var layananFlavor = [
         ram: 4,
         swap: 2,
         disk: 80,
-        public_ip: 1,
-        price: 400
+        public_ip: 1
+    },
+    {
+        type: "Custom",
+        vcpu: "Custom",
+        ram: "Custom",
+        swap: "Custom",
+        disk: "Custom",
+        public_ip: 1
     }
 ];
+
+app.controller('AppslayananController', function () {
+    this.lApps = apps;
+});
+
 
 var apps = [
     {
@@ -173,6 +178,31 @@ app.controller('InfobantuanController', function () {
             image: "static/img/customer-service.png",
             title: "Customer Service",
             description: "Layanan customer service 24 jam."
+        }
+    ];
+});
+
+app.controller('CreateinstanceController', function(){
+    this.createInstance = [
+        {
+            name: "ubuntu",
+            image_logo: "/static/img/ubuntu.jpg",
+            version: 1
+        },
+        {
+            name: "debian",
+            image_logo: "/static/img/debian.jpg",
+            version: 1
+        },
+        {
+            name: "centOS",
+            image_logo: "/static/img/centOS.jpg",
+            version: 1
+        },
+        {
+            name: "fedora",
+            image_logo: "/static/img/fedora.jpg",
+            version: 1
         }
     ];
 });
