@@ -1,1 +1,1 @@
-var app = angular.module("CloudDDS", ['AppControllers']);
+var app = angular.module("CloudDDS", ['AppControllers', 'CreateControllers']);

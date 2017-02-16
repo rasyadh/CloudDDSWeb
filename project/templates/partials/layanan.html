@@ -31,17 +31,17 @@
                     </div>
                     <div class="item">
                         <h4>RAM
-                            <span class="ui right floated">{{ '{{ flCtrl.lFlavor[flCtrl.tab].ram }}' }}GB</span>
+                            <span class="ui right floated">{{ '{{ flCtrl.lFlavor[flCtrl.tab].ram }}' }} GB</span>
                         </h4>
                     </div>
                     <div class="item">
                         <h4>Swap
-                            <span class="ui right floated">{{ '{{ flCtrl.lFlavor[flCtrl.tab].swap }}' }}GB</span>
+                            <span class="ui right floated">{{ '{{ flCtrl.lFlavor[flCtrl.tab].swap }}' }} GB</span>
                         </h4>
                     </div>
                     <div class="item">
                         <h4>Storage
-                            <span class="ui right floated">{{ '{{ flCtrl.lFlavor[flCtrl.tab].disk }}' }}GB</span>
+                            <span class="ui right floated">{{ '{{ flCtrl.lFlavor[flCtrl.tab].disk }}' }} GB</span>
                         </h4>
                     </div>
                     <div class="item">
@@ -116,138 +116,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
-
-<div class="ui berlangganan modal">
-    <i class="close icon"></i>
-    <div class="header">
-        Konfigurasi Virtual Machine
-        <p class="ui right floated">- Small Flavor</p>
-    </div>
-    <div class="content">
-        <div class="ui grid">
-            <div class="four wide column">
-                <div class="ui vertical fluid tabular menu">
-                    <a class="active item" data-tab="server">Server</a>
-                    <a class="item" data-tab="os">Sistem Operasi</a>
-                    <a class="item" data-tab="biaya">Biaya</a>
-                    <a class="item" data-tab="ringkasan">Ringkasan</a>
-                </div>
-            </div>
-            <div class="twelve wide stretched column">
-                <div class="ui bottom attached active tab segment" data-tab="server">
-                    <form class="ui form">
-                        <div class="field">
-                            <label>Instance Name</label>
-                            <input type="text" name="instance_name" placeholder="Instance Name">
-                        </div>
-                        <div class="field">
-                            <label>Availability Zone</label>
-                            <div class="ui selection dropdown">
-                                <input type="hidden" name="Availability Zone">
-                                <i class="dropdown icon"></i>
-                                <div class="default text">Availability Zone</div>
-                                <div class="menu">
-                                    <div class="item" data-value="1">
-                                        Nova
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="field">
-                            <label>Root Password</label>
-                            <input type="password" name="rootpw" placeholder="Root Password">
-                        </div>
-                    </form>
-                </div>
-                <div class="ui bottom attached tab segment" data-tab="os">
-                    <div class="ui form">
-                        <div class="field">
-                            <label>Sistem Operasi</label>
-                            <div class="ui selection dropdown">
-                                <input type="hidden" name="Sistem Operasi">
-                                <i class="dropdown icon"></i>
-                                <div class="default text">Sistem Operasi</div>
-                                <div class="menu">
-                                    <div class="header">
-                                        <i class="windows icon"></i> Windows
-                                    </div>
-                                    <div class="divider"></div>
-                                    <div class="item" data-value="1">
-                                        Windows Server 2008
-                                    </div>
-                                    <div class="item" data-value="2">
-                                        Windows Server 2008 R2
-                                    </div>
-                                    <div class="item" data-value="3">
-                                        Windows Server 2013
-                                    </div>
-                                    <div class="item" data-value="4">
-                                        Windows Server 2013 R2
-                                    </div>
-                                    <div class="header">
-                                        <i class="linux icon"></i> linux
-                                    </div>
-                                    <div class="divider"></div>
-                                    <div class="item" data-value="5">
-                                        Ubuntu
-                                    </div>
-                                    <div class="item" data-value="6">
-                                        Debian
-                                    </div>
-                                    <div class="item" data-value="7">
-                                        CentOS
-                                    </div>
-                                    <div class="item" data-value="8">
-                                        Fendora
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="ui bottom attached tab segment" data-tab="biaya">
-                    <div class="ui form">
-                        <div class="inline field">
-                            <label>Biaya</label>
-                            <div class="ui selection dropdown">
-                                <input type="hidden" name="Biaya">
-                                <i class="dropdown icon"></i>
-                                <div class="default text">Rp 100K / Bulan</div>
-                                <div class="menu">
-                                    <div class="item" data-value="1">
-                                        Rp 100K / Bulan
-                                    </div>
-                                    <div class="item" data-value="2">
-                                        Rp 400K / 4 Bulan
-                                    </div>
-                                    <div class="item" data-value="3">
-                                        Rp 600K / 6 Bulan
-                                    </div>
-                                    <div class="item" data-value="4">
-                                        Rp 1200K / Tahun
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="ui bottom attached tab segment" data-tab="ringkasan">
-                    LALALA
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="actions">
-        <div class="ui red cancel right labeled icon button">
-            Batal
-            <i class="remove icon"></i>
-        </div>
-        <div class="ui teal ok right labeled icon button">
-            Langganan
-            <i class="checkmark icon"></i>
         </div>
     </div>
 </div>

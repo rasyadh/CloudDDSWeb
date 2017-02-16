@@ -26,10 +26,6 @@
                                     {
                                         type: 'empty',
                                         prompt: 'Please enter your e-mail'
-                                    },
-                                    {
-                                        type: 'email',
-                                        prompt: 'Please enter a valid e-mail'
                                     }
                                 ]
                             },
@@ -60,7 +56,7 @@
         <img class="ui medium image logo" id="logo" src="static/img/logo-cloud-dds.png"></a>
     <div class="ui middle aligned center aligned grid">
         <div class="login-signup column">
-            <form class="ui large form">
+            <form class="ui large form" method="POST">
                 <div class="ui segment">
                     <h1 class="ui text header logo">
                         Log In
@@ -76,6 +72,7 @@
                             <div class="ui left icon input">
                                 <i class="at icon"></i>
                                 <input type="text" name="text" disabled placeholder="telkom.co.id">
+                                <input type="hidden" name="email_domain" value="@telkom.co.id">
                             </div>
                         </div>
                     </div>
@@ -85,7 +82,7 @@
                             <input type="password" name="password" placeholder="Password">
                         </div>
                     </div>
-                    <a class="ui fluid large teal submit button" href="/manage">Login</a>
+                    <a class="ui fluid large teal submit button" type="submit">Login</a>
                 </div>
 
                 <div class="ui error message"></div>

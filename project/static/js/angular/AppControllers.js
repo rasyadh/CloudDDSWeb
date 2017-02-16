@@ -181,28 +181,3 @@ app.controller('InfobantuanController', function () {
         }
     ];
 });
-
-app.controller('CreateinstanceController', function(){
-    this.createInstance = [
-        {
-            name: "ubuntu",
-            image_logo: "/static/img/ubuntu.jpg",
-            version: 1
-        },
-        {
-            name: "debian",
-            image_logo: "/static/img/debian.jpg",
-            version: 1
-        },
-        {
-            name: "centOS",
-            image_logo: "/static/img/centOS.jpg",
-            version: 1
-        },
-        {
-            name: "fedora",
-            image_logo: "/static/img/fedora.jpg",
-            version: 1
-        }
-    ];
-});

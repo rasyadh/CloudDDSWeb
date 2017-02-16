@@ -139,7 +139,7 @@ html body {
 }
 
 #logo {
-    padding-top: 6em;
+    padding-top: 4em;
     margin: 0 auto 30px;
 }
 
@@ -157,3 +157,9 @@ html body {
     padding: 1.5em;
 }
 /* ------------------------------------- */
+
+
+/* Slider Flavor */
+#slider {
+    padding: 1.5em;
+}

@@ -25,24 +25,20 @@
                                 rules: [
                                     {
                                         type: 'empty',
-                                        prompt: 'Please enter your e-mail'
-                                    },
-                                    {
-                                        type: 'email',
-                                        prompt: 'Please enter a valid e-mail'
+                                        prompt: 'Masukkan alamat email'
                                     }
                                 ]
                             },
-                            password: {
-                                identifier: 'password',
+                            phone: {
+                                identifier: 'phone',
                                 rules: [
                                     {
                                         type: 'empty',
-                                        prompt: 'Please enter your password'
+                                        prompt: 'Masukkan nomor telefon'
                                     },
                                     {
-                                        type: 'length[6]',
-                                        prompt: 'Your password must be at least 6 characters'
+                                        type: 'number',
+                                        prompt: 'Nomor telefon haruslah angka'
                                     }
                                 ]
                             }
@@ -60,38 +56,41 @@
         <img class="ui medium image logo" id="logo" src="static/img/logo-cloud-dds.png"></a>
     <div class="ui middle aligned center aligned grid">
         <div class="login-signup column">
-            <form class="ui large form">
+            <form class="ui large form" method="POST">
                 <div class="ui segment">
                     <h1 class="ui text header logo">
                         Sign Up
                     </h1>
                     <div class="field">
                         <div class="ui left icon input">
-                            <i class="user icon"></i>
-                            <input type="text" name="name" placeholder="Full Name">
+                            <i class="font icon"></i>
+                            <input type="text" name="name" placeholder="Nama">
                         </div>
                     </div>
                     <div class="two fields">
                         <div class="field">
                             <div class="ui left icon input">
                                 <i class="user icon"></i>
-                                <input type="text" name="email" placeholder="E-mail address">
+                                <input type="text" name="email" placeholder="Alamat Email">
                             </div>
                         </div>
                         <div class="field">
                             <div class="ui left icon input">
                                 <i class="at icon"></i>
                                 <input type="text" name="text" disabled placeholder="telkom.co.id">
+                                <input type="hidden" name="email_domain" value="@telkom.co.id">
                             </div>
                         </div>
                     </div>
+
                     <div class="field">
                         <div class="ui left icon input">
-                            <i class="lock icon"></i>
-                            <input type="password" name="password" placeholder="Password">
+                            <i class="text telephone icon"></i>
+                            <input type="text" name="nomorhp" placeholder="Nomor Telefon">
                         </div>
                     </div>
-                    <div class="ui fluid large teal submit button">Sign Up</div>
+
+                    <button class="ui fluid large teal submit button" type="submit">Sign Up</button>
                 </div>
 
                 <div class="ui error message"></div>
@@ -103,6 +102,23 @@
             </div>
         </div>
     </div>
+
+    <div class="ui basic modal">
+        <div class="ui icon header">
+            <i class="mail icon"></i>Email Verifikasi Telah terkirim
+            <p>Cek email anda untuk melakukan aktifasi akun.</p>
+        </div>
+    </div>
+
+    <script>
+        $('.ui.basic.modal')
+            .modal('show')
+            ;
+
+        $('.ui.submit.button').on('click', function () {
+            $('.ui.hidden.positive.message').removeClass('hidden');
+        });
+    </script>
 </body>
 
 </html>

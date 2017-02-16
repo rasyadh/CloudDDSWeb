@@ -1,6 +1,6 @@
 {% extends "manage.html" %} {% block content %}
 
-<div class="ui vertical stripe computes container" ng-controller="CreateinstanceController as ciCtrl">
+<div class="ui vertical stripe computes container">
     <div class="ui stackable grid container">
         <div class="row">
             <h3 class="ui header" style="margin-bottom: 1em;">Create Instances</h3>
@@ -10,7 +10,7 @@
                     <a class="item active" data-tab="distribution">Distribution</a>
                     <a class="item" data-tab="apps">Apps</a>
                 </div>
-                <div class="ui bottom attached active tab segment" data-tab="distribution">
+                <div class="ui bottom attached active tab segment" data-tab="distribution" ng-controller="CreateinstanceController as ciCtrl">
                     <div class="ui padded container">
                         <div class="ui horizontal list">
                             <a class="item" ng-repeat="ins in ciCtrl.createInstance">
@@ -22,11 +22,21 @@
                         </div>
                     </div>
                 </div>
-                <div class="ui bottom attached tab segment" data-tab="apps">
-                    matamu
+                <div class="ui bottom attached tab segment" data-tab="apps" ng-controller="CreateappsController as caCtrl">
+                    <div class="ui padded container">
+                        <div class="ui five column grid">
+                            <a class="column" ng-repeat="appc in caCtrl.createApps">
+                                <div class="ui center aligned segment">
+                                    <i class="linux icon"></i></br>
+                                    <span>{{ '{{ appc.nama }}' }}</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
         <div class="row">
             <div class="ui container">
                 <p>Choose a size</p>
@@ -34,14 +44,46 @@
                     <a class="item active" data-tab="flavor">Flavor</a>
                     <a class="item" data-tab="custom">Custom</a>
                 </div>
-                <div class="ui bottom attached active tab segment" data-tab="flavor">
-                    jancok Flavor
+                <div class="ui bottom attached active tab segment" data-tab="flavor" ng-controller="CreateflavorController as cfCtrl">
+                    <div class="ui padded container">
+                        <div class="ui four column grid">
+                            <div class="column" ng-repeat="cflav in cfCtrl.cFlavor">
+                                <div class="ui center aligned segment">
+                                    <p>{{ '{{ cflav.type }}' }}</p>
+                                    <div class="ui divider"></div>
+                                    <p>{{ '{{ cflav.processor }}' }} CPU</p>
+                                    <p>{{ '{{ cflav.memori }}' }}GB RAM</p>
+                                    <p>{{ '{{ cflav.disk }}' }}GB Disk</p>
+                                    <a class="ui teal button">Choose</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="ui bottom attached tab segment" data-tab="custom">
-                    matamu Custom
+                    <div class="ui very padded container">
+                        <div class="ui form">
+                            <div class="field" id="slider">
+                                <label for="vcpu">CPU : </label>
+                                <input type="number" id="vcpu" readonly style="border:0; color:#00b5ad; font-weight:bold;">
+                                <div id="slider-range-max-vcpu"></div>
+                            </div>
+                            <div class="field" id="slider">
+                                <label for="memory">Memory : </label>
+                                <input type="number" id="memory" readonly style="border:0; color:#00b5ad; font-weight:bold;">
+                                <div id="slider-range-max-memory"></div>
+                            </div>
+                            <div class="field" id="slider">
+                                <label for="disk">Disk : </label>
+                                <input type="number" id="disk" readonly style="border:0; color:#00b5ad; font-weight:bold;">
+                                <div id="slider-range-max-disk"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
         <div class="row">
             <div class="ui container">
                 <p>Add block storage</p>
@@ -67,6 +109,45 @@
     $('.menu.createi .item')
         .tab()
         ;
+
+    $(function () {
+        $("#slider-range-max-vcpu").slider({
+            range: "max",
+            min: 1,
+            max: 2,
+            value: 1,
+            slide: function (event, ui) {
+                $("#vcpu").val(ui.value);
+            }
+        });
+        $("#vcpu").val($("#slider-range-max-vcpu").slider("value"));
+    });
+
+    $(function () {
+        $("#slider-range-max-memory").slider({
+            range: "max",
+            min: 1,
+            max: 4,
+            value: 1,
+            slide: function (event, ui) {
+                $("#memory").val(ui.value);
+            }
+        });
+        $("#memory").val($("#slider-range-max-memory").slider("value"));
+    });
+
+    $(function () {
+        $("#slider-range-max-disk").slider({
+            step: 20,
+            min: 20,
+            max: 80,
+            value: 20,
+            slide: function (event, ui) {
+                $("#disk").val(ui.value);
+            }
+        });
+        $("#disk").val($("#slider-range-max-disk").slider("value"));
+    });
 
 </script>
 

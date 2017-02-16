@@ -1,4 +1,4 @@
-import os
+import os, binascii
 
 from functools import wraps
 from flask import Flask,flash, request, Response, jsonify, json
@@ -6,8 +6,11 @@ from flask import render_template, url_for, redirect, send_from_directory
 from flask import send_file, make_response, abort, session
 
 from project import app
+from project.core   import db, encrypt
+from project.email import send_email
 from restapi import keystone as keystoneapi
 from restapi import nova as novaapi
+from models import *
 
 # Client Side
 
@@ -26,14 +29,109 @@ def index():
     session['logged_in']=True
     return render_template('partials/content.html')
 
-@app.route('/registration')
+@app.route('/registration',methods=['POST','GET'])
 def registration():
+    activationcodetmp = ""
+
+    if request.method == 'POST':
+        try:
+            users = User(
+                name=request.form['name'],
+                #email=request.form['email']+request.form['email_domain'],
+                email=request.form['email']+"@gmail.com",
+                #password= encrypt.generate_password_hash(request.form['password']),
+                status=0,
+                nomorhp=request.form['nomorhp']
+            )
+
+            activationcodetmp = binascii.b2a_hex(os.urandom(15))
+
+            activationcode = ActivationCode(
+                #email_user=request.form['email']+request.form['email_domain'],
+                email_user=request.form['email']+"@gmail.com",
+                activationcode=activationcodetmp,
+                
+            )
+
+            db.session.add(users)
+            db.session.add(activationcode)
+            db.session.commit()
+
+            confirm_url = "localhost:5000/registration/activate_account/"+activationcodetmp
+            html = render_template('activation.html',confirm_url = confirm_url)
+            subject = "Please confirm your email"
+            send_email(users.email,subject,html)
+            
+            return redirect(url_for('registration')) 
+        
+        except:
+            return "gagal"
+
     return render_template('signup.html')
 
-@app.route('/login')
+@app.route('/registration/')
+def registrationred():
+    return redirect(url_for('registration'))
+
+
+@app.route('/login',methods=['GET','POST'])
 @login_required
 def login():
+    errormsg = []
+    
+    if request.method == 'POST' :
+        try:
+            users = User.query.filter_by(email=request.form['email']+request.form['email_domain']).first()
+            #users = User.query.filter_by(email=request.form['email']+"@gmail.com").first()
+
+            if users is None :
+                errormsg = "Email tidak terdaftar"
+                print(errormsg)
+                return render_template('login.html', errormsg=errormsg)
+            else :
+                if users.status == 0:
+                    errormsg = "Akun anda belum terverifikasi"
+                    print(errormsg)
+                else:
+                    if encrypt.check_password_hash(users.password,request.form['password']) :
+                        return redirect(url_for('manage'))
+                    else :
+                        errormsg = "Password mu salah"
+                        print(errormsg)
+                        return render_template('login.html', errormsg=errormsg)
+
+        except:
+            return "gagal"
+
     return render_template('login.html')
+
+@app.route('/registration/activate_account',methods=["GET","POST"])
+def activate_account():
+    codetemp = []
+    
+    if request.method == 'POST':
+        try:
+            activationcode = ActivationCode.query.filter_by(activationcode=request.form['actemp']).first()
+            users = User.query.filter_by(email=request.form['email']).first()
+            users.status = 1
+            users.password = encrypt.generate_password_hash(request.form['password'])
+            db.session.delete(activationcode)
+            db.session.commit()
+        
+        except:
+            return "gagal"
+    else:
+        activation_code = request.args.get('actemp')
+        activationcode = ActivationCode.query.filter_by(activationcode=activation_code).first()
+        if activationcode is None:
+            return "kode tidak ditemukan"
+        else :
+            users = User.query.filter_by(email=activationcode.email_user).first()
+            return render_template('verifikasi.html',codetemp=activationcode.activationcode,users=users)
+
+@app.route('/registration/activate_account/<activation_code>/')
+def activation_accountred(activation_code):
+    return redirect(url_for('activate_account'))
 
 @app.route('/logout')
 @login_required
