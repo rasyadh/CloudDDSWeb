@@ -12,7 +12,6 @@ from restapi import keystone as keystoneapi
 from restapi import nova as novaapi
 from models import *
 
-
 #login session handler
 def login_required(test):
     @wraps(test)
@@ -32,7 +31,6 @@ def index():
 @app.route('/registration',methods=['POST','GET'])
 def registration():
     activationcodetmp = ""
-
     if request.method == 'POST':
         try:
             users = User(
@@ -118,7 +116,7 @@ def activate_account():
                 activationcode = ActivationCode.query.filter_by(activationcode=request.form['actemp']).first()
                 users = User.query.filter_by(email=request.form['email']).first()
                 users.status = 1
-                users.password = encrypt.generate_password_hash(request.form['password'])
+                users.password = request.form['password']
                 db.session.delete(activationcode)
                 db.session.commit()
                 return redirect(url_for('login'))
