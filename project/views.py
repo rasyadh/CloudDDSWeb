@@ -37,8 +37,8 @@ def registration():
         try:
             users = User(
                 name=request.form['name'],
-                #email=request.form['email']+request.form['email_domain'],
-                email=request.form['email']+"@gmail.com",
+                email=request.form['email']+request.form['email_domain'],
+                #email=request.form['email']+"@gmail.com",
                 #password= encrypt.generate_password_hash(request.form['password']),
                 status=0,
                 nomorhp=request.form['nomorhp']
@@ -47,8 +47,8 @@ def registration():
             activationcodetmp = binascii.b2a_hex(os.urandom(15))
 
             activationcode = ActivationCode(
-                #email_user=request.form['email']+request.form['email_domain'],
-                email_user=request.form['email']+"@gmail.com",
+                email_user=request.form['email']+request.form['email_domain'],
+                #email_user=request.form['email']+"@gmail.com",
                 activationcode=activationcodetmp,
                 
             )
@@ -57,11 +57,12 @@ def registration():
             db.session.add(activationcode)
             db.session.commit()
 
-            confirm_url = "localhost:5000/registration/activate_account/"+activationcodetmp
+            confirm_url = "localhost:5000/registration/activate_account?actemp="+activationcodetmp
             html = render_template('activation.html',confirm_url = confirm_url)
             subject = "Please confirm your email"
-            send_email(users.email,subject,html)
-            
+            #send_email(users.email,subject,html)
+            send_email("gravpokemongo@gmail.com",subject,html)
+
             return redirect(url_for('registration')) 
         
         except:
@@ -110,16 +111,20 @@ def activate_account():
     codetemp = []
     
     if request.method == 'POST':
-        try:
-            activationcode = ActivationCode.query.filter_by(activationcode=request.form['actemp']).first()
-            users = User.query.filter_by(email=request.form['email']).first()
-            users.status = 1
-            users.password = encrypt.generate_password_hash(request.form['password'])
-            db.session.delete(activationcode)
-            db.session.commit()
-        
-        except:
-            return "gagal"
+        if request.form['actemp'] is None :
+            return redirect(url_for('login'))
+        else :
+            try:
+                activationcode = ActivationCode.query.filter_by(activationcode=request.form['actemp']).first()
+                users = User.query.filter_by(email=request.form['email']).first()
+                users.status = 1
+                users.password = encrypt.generate_password_hash(request.form['password'])
+                db.session.delete(activationcode)
+                db.session.commit()
+                return redirect(url_for('login'))
+            
+            except:
+                return "gagal"
     else:
         activation_code = request.args.get('actemp')
         activationcode = ActivationCode.query.filter_by(activationcode=activation_code).first()

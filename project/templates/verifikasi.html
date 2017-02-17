@@ -78,14 +78,15 @@
                                 <div class="field">
                                     <div class="ui left icon input">
                                         <i class="font icon"></i>
-                                        <input type="text" name="name" disable value="{{users.name}}">
+                                        <input type="text" name="name" disabled value="{{users.name}}">
                                         <input type="text" name="actemp" hidden value="{{codetemp}}">
                                     </div>
                                 </div>
                                 <div class="field">
                                     <div class="ui left icon input">
                                         <i class="user icon"></i>
-                                        <input type="text" name="email" disable value="{{users.email}}">
+                                        <input type="text" name="email_view" disabled value="{{users.email}}">
+                                        <input type="text" name="email" hidden="" value="{{users.email}}">
                                     </div>
                                 </div>
                                 <div class="field">
@@ -103,7 +104,7 @@
                                 <div class="field">
                                     <div class="ui left icon input">
                                         <i class="text telephone icon"></i>
-                                        <input type="text" name="phone" disable value="{{users.nomorhp}}">
+                                        <input type="text" name="phone" disabled value="{{users.nomorhp}}">
                                     </div>
                                 </div>
                                 <button class="ui fluid large teal submit button" type="submit">Verifikasi</button>
