@@ -3,7 +3,7 @@ Website Cloud DDS base on OpenStack
 
 Build by Flask and AngularJS
 
-Reccommended using Linux Operating System
+Recommended using Linux Operating System
 
 1. Use Virtual Enviroment with this commands
    virtualenv env
