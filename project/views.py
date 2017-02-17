@@ -180,6 +180,10 @@ def settings():
 def request_flav():
     return render_template('request.html')
 
+@app.route('/manage/instance')
+def manage_instance():
+    return render_template('manage-instance.html')
+
 # error handler
 @app.errorhandler(404)
 def page_not_found(e):

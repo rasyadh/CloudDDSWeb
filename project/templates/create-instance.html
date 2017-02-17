@@ -43,17 +43,21 @@
                 <div class="ui top attached tabular menu createi">
                     <a class="item active" data-tab="flavor">Flavor</a>
                     <a class="item" data-tab="custom">Custom</a>
+                    <a class="item" data-tab="request_flav">Request</a>
                 </div>
                 <div class="ui bottom attached active tab segment" data-tab="flavor" ng-controller="CreateflavorController as cfCtrl">
                     <div class="ui padded container">
                         <div class="ui four column grid">
                             <div class="column" ng-repeat="cflav in cfCtrl.cFlavor">
                                 <div class="ui center aligned segment">
-                                    <p>{{ '{{ cflav.type }}' }}</p>
-                                    <div class="ui divider"></div>
-                                    <p>{{ '{{ cflav.processor }}' }} CPU</p>
-                                    <p>{{ '{{ cflav.memori }}' }}GB RAM</p>
-                                    <p>{{ '{{ cflav.disk }}' }}GB Disk</p>
+                                    <div class="ul list">
+                                        <div class="item">{{ '{{ cflav.type }}' }}</div>
+                                        <div class="ui divider"></div>
+                                        <div class="item">{{ '{{ cflav.processor }}' }} CPU</div>
+                                        <div>{{ '{{ cflav.memori }}' }}GB RAM</div>
+                                        <div>{{ '{{ cflav.disk }}' }}GB Disk</div>
+                                    </div>
+                                    </br>
                                     <a class="ui teal button">Choose</a>
                                 </div>
                             </div>
@@ -61,7 +65,7 @@
                     </div>
                 </div>
                 <div class="ui bottom attached tab segment" data-tab="custom">
-                    <div class="ui very padded container">
+                    <div class="ui very padded container" style="padding: 1em;">
                         <div class="ui form">
                             <div class="field" id="slider">
                                 <label for="vcpu">CPU : </label>
@@ -78,9 +82,20 @@
                                 <input type="number" id="disk" readonly style="border:0; color:#00b5ad; font-weight:bold;">
                                 <div id="slider-range-max-disk"></div>
                             </div>
+                            <div class="ui center aligned container">
+                                <button class="ui fluid teal button">Choose</button>
+                            </div>
                         </div>
-                        </br>
-                        <p><a href="/manage/request">Request your own flavor.</a></p>
+                    </div>
+                </div>
+                <div class="ui bottom attached tab segment" data-tab="request_flav">
+                    <div class="ui very padded container">
+                        <div class="ui center aligned container">
+                            <h3>Request flavor</h3>
+                            <p>if there is no flavor that suit your needed.</p>
+                            </br>
+                            <button class="ui fluid teal button" href="/manage/request">Request</button>
+                        </div>
                     </div>
                 </div>
             </div>

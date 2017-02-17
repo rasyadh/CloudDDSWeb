@@ -9,9 +9,33 @@
                 <a class="item" data-tab="volumes">Volumes</a>
             </div>
             <div class="ui bottom attached active tab segment" data-tab="instances">
-                <div class="ui center aligned container">
-                    <h2>Looks like you don't have any instances</h2>
-                    <a class="ui teal button" href="/manage/create">Create Instances</a>
+                <div class="ui vertical stripe center aligned container">
+                    <h2>List Instances</h2>
+                    <table class="ui teal table">
+                        <thead>
+                            <tr>
+                                <th>Hostname</th>
+                                <th>Status</th>
+                                <th>Uptime</th>
+                                <th>Manage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Tes OS</td>
+                                <td>Pending</td>
+                                <td>dd/mm/yyyy</td>
+                                <td><a class="ui teal button" href="/manage/instance">Manage Instance</a></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="4">
+                                    <a class="ui right floated teal button" href="/manage/create">Create Instance</a>
+                                </th>
+                            </tr>
+                        </tfoot>
+                    </table>
                 </div>
             </div>
             <div class="ui bottom attached tab segment" data-tab="volumes">
@@ -28,7 +52,6 @@
     $('.menu.computes .item')
         .tab()
         ;
-
 </script>
 
 {% endblock %}
