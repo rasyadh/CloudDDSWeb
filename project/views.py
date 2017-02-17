@@ -12,21 +12,21 @@ from restapi import keystone as keystoneapi
 from restapi import nova as novaapi
 from models import *
 
-# Client Side
 
+#login session handler
 def login_required(test):
     @wraps(test)
     def wrap(*args, **kwargs):
         if 'logged_in' in session:
             return test(*args,**kwargs)
         else:
-            flash('You need to login first')
-            return redirect(url_for('login'))
+            abort(403)
     return wrap
+
+# Client Side
 
 @app.route('/')
 def index():
-    session['logged_in']=True
     return render_template('partials/content.html')
 
 @app.route('/registration',methods=['POST','GET'])
@@ -50,7 +50,7 @@ def registration():
                 email_user=request.form['email']+request.form['email_domain'],
                 #email_user=request.form['email']+"@gmail.com",
                 activationcode=activationcodetmp,
-                
+
             )
 
             db.session.add(users)
@@ -63,8 +63,8 @@ def registration():
             #send_email(users.email,subject,html)
             send_email("gravpokemongo@gmail.com",subject,html)
 
-            return redirect(url_for('registration')) 
-        
+            return redirect(url_for('registration'))
+
         except:
             return "gagal"
 
@@ -76,10 +76,9 @@ def registrationred():
 
 
 @app.route('/login',methods=['GET','POST'])
-@login_required
 def login():
     errormsg = []
-    
+
     if request.method == 'POST' :
         try:
             users = User.query.filter_by(email=request.form['email']+request.form['email_domain']).first()
@@ -95,6 +94,7 @@ def login():
                     print(errormsg)
                 else:
                     if encrypt.check_password_hash(users.password,request.form['password']) :
+                        session['logged_in'] = True
                         return redirect(url_for('manage'))
                     else :
                         errormsg = "Password mu salah"
@@ -109,7 +109,7 @@ def login():
 @app.route('/registration/activate_account',methods=["GET","POST"])
 def activate_account():
     codetemp = []
-    
+
     if request.method == 'POST':
         if request.form['actemp'] is None :
             return redirect(url_for('login'))
@@ -122,7 +122,7 @@ def activate_account():
                 db.session.delete(activationcode)
                 db.session.commit()
                 return redirect(url_for('login'))
-            
+
             except:
                 return "gagal"
     else:
@@ -141,8 +141,8 @@ def activation_accountred(activation_code):
 @app.route('/logout')
 @login_required
 def logout():
-    session.pop('logged_in')
-    return "logout PAGE"
+    session.pop('logged_in',None)
+    return redirect(url_for('index'))
 
 @app.route('/layanan')
 def layanan():
@@ -153,30 +153,37 @@ def bantuan():
     return render_template('partials/bantuan.html')
 
 @app.route('/manage')
+@login_required
 def manage():
     return redirect(url_for('computes'))
 
 @app.route('/manage/computes')
+@login_required
 def computes():
     return render_template('computes.html')
 
 @app.route('/manage/create')
+@login_required
 def create_instance():
     return render_template('create-instance.html')
 
 @app.route('/manage/images')
+@login_required
 def images():
     return render_template('images.html')
 
 @app.route('/manage/network')
+@login_required
 def network():
     return render_template('network.html')
 
 @app.route('/manage/settings')
+@login_required
 def settings():
     return render_template('settings.html')
 
 @app.route('/manage/request')
+@login_required
 def request_flav():
     return render_template('request.html')
 
@@ -185,11 +192,15 @@ def request_flav():
 def page_not_found(e):
     return render_template('404.html'),404
 
+@app.errorhandler(403)
+def page_login_required(e):
+    return render_template('login-required.html'),403
+
 # back-end side
 
 @app.route('/restapi/keystone')
 @app.route('/restapi/keystone/')
-def keystone(): 
+def keystone():
     keystone = keystoneapi()
     respJSON = keystone.myRequest()
 
@@ -209,7 +220,7 @@ def flavorlist():
     nova = novaapi()
     respJSON = nova.flavorList(0)
     #resp = json.loads(respJSON)
-    
+
     return str(respJSON)
 
 @app.route('/restapi/nova/flavorlist/<flavor_id>')
