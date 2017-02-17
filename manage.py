@@ -3,7 +3,7 @@ import os
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 from project import app
-from project.core import db
+from project.core import db, encrypt
 from project.models import User
 
 #migrate = Migrate(app,db)
@@ -17,7 +17,7 @@ def createdb():
 
 @manager.command
 def create_admin():
-	admin = User(name = 'Admin', email='admin@telkom.co.id', password="admintelkom", status=1, nomorhp="081234567", role=1)
+	admin = User(name = 'Admin', email='admin@telkom.co.id',password=encrypt.generate_password_hash("admintelkom"), status=1, nomorhp="081234567", role=1)
 	db.session.add(admin)
 	db.session.commit()
 
