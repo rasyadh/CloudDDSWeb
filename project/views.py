@@ -32,7 +32,7 @@ def index():
 def registration():
     activationcodetmp = ""
     if request.method == 'POST':
-        try:
+    #    try:
             users = User(
                 name=request.form['name'],
                 email=request.form['email']+request.form['email_domain'],
@@ -43,7 +43,6 @@ def registration():
             )
 
             activationcodetmp = binascii.b2a_hex(os.urandom(15))
-
             activationcode = ActivationCode(
                 email_user=request.form['email']+request.form['email_domain'],
                 #email_user=request.form['email']+"@gmail.com",
@@ -61,10 +60,10 @@ def registration():
             #send_email(users.email,subject,html)
             send_email("gravpokemongo@gmail.com",subject,html)
 
-            return redirect(url_for('registration'))
+            return redirect(url_for('login'))
 
-        except:
-            return "gagal"
+    #    except:
+            #return "gagal"
 
     return render_template('signup.html')
 
@@ -80,29 +79,25 @@ def login():
     if request.method == 'POST' :
         try:
             users = User.query.filter_by(email=request.form['email']+request.form['email_domain']).first()
-            #users = User.query.filter_by(email=request.form['email']+"@gmail.com").first()
-
+    
             if users is None :
-                errormsg = "Email tidak terdaftar"
-                print(errormsg)
-                return render_template('login.html', errormsg=errormsg)
+                errormsg = "Email Tidak Terdaftar"
+                return redirect('login', errormsg=errormsg)
             else :
                 if users.status == 0:
-                    errormsg = "Akun anda belum terverifikasi"
-                    print(errormsg)
+                    errormsg = "Akun Anda Belum TERVERIFIKASI"
+                    return redirect('login',errormsg=errormsg)
                 else:
                     if encrypt.check_password_hash(users.password,request.form['password']) :
                         session['logged_in'] = True
                         return redirect(url_for('manage'))
                     else :
-                        errormsg = "Password mu salah"
-                        print(errormsg)
-                        return render_template('login.html', errormsg=errormsg)
-
+                        errormsg = "Password Anda Salah !"
+                        return redirect('login', errormsg=errormsg)
         except:
-            return "gagal"
+            return "Gagal bos"
 
-    return render_template('login.html')
+    return redirect('login')
 
 @app.route('/registration/activate_account',methods=["GET","POST"])
 def activate_account():
@@ -116,7 +111,7 @@ def activate_account():
                 activationcode = ActivationCode.query.filter_by(activationcode=request.form['actemp']).first()
                 users = User.query.filter_by(email=request.form['email']).first()
                 users.status = 1
-                users.password = request.form['password']
+                users.password = encrypt.generate_password_hash(request.form['password'])
                 db.session.delete(activationcode)
                 db.session.commit()
                 return redirect(url_for('login'))

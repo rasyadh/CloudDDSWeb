@@ -11,7 +11,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False, unique=True)
-    password = db.Column(db.String, default="")
+    password = db.Column(db.String, default=None, nullable=True)
     status = db.Column(db.Integer, default=0)
     nomorhp = db.Column(db.String, nullable=False)
     role = db.Column(db.Integer, default='0')
@@ -19,14 +19,14 @@ class User(db.Model):
     def __init__(self, name=None, email=None, password=None, status=0, nomorhp=None, role=0):
         self.name = name
         self.email = email
-        self.password = encrypt.generate_password_hash(password)
+        self.password = password
         self.status = status
         self.nomorhp = nomorhp
         self.role = role
 
     def get_id(self):
         return self.id
-        
+
     def __repr__(self):
         return '<User {0}>'.format(self.name)
 

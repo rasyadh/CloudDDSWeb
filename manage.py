@@ -21,4 +21,5 @@ def create_admin():
 	db.session.add(admin)
 	db.session.commit()
 
-manager.run()
+if __name__ == '__main__':
+	manager.run()
