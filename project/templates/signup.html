@@ -111,9 +111,11 @@
     </div>
 
     <script>
-        $('.ui.basic.modal')
-            .modal('show')
-            ;
+         $('.ui.submit.button').on('click', function () {
+            $('.ui.basic.modal')
+                .modal('show')
+                ;
+        });
 
         $('.ui.submit.button').on('click', function () {
             $('.ui.hidden.positive.message').removeClass('hidden');

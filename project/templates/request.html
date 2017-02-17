@@ -1,0 +1,51 @@
+{% extends "manage.html" %} {% block content %}
+
+<div class="ui vertical stripe network container">
+    <div class="ui stackable grid container">
+        <div class="row">
+            <h3 class="ui header">Request Flavor</h3>
+        </div>
+        </br>
+        <div class="row">
+            <div class="column">
+                <div class="ui form">
+                    <h4 class="ui dividing header">Instance Information</h4>
+                    <div class="field">
+                        <label>Operating System</label>
+                        <input type="text" name="os" placeholder="Operating System">
+                    </div>
+                    <div class="field">
+                        <label>CPU</label>
+                        <input type="text" name="cpu" placeholder="CPU">
+                    </div>
+                    <div class="field">
+                        <label>RAM</label>
+                        <input type="text" name="ram" placeholder="RAM">
+                    </div>
+                    <div class="field">
+                        <label>Harddisk</label>
+                        <input type="text" name="disk" placeholder="Harddisk">
+                    </div>
+                    <h4 class="ui dividing header">Personal Information</h4>
+                    <div class="field">
+                        <label>Usage Purpose</label>
+                        <textarea rows="3"></textarea>
+                    </div>
+                    <div class="fields">
+                        <div class="field">
+                            <label>Person in Charge Name</label>
+                            <input type="text" name="pic_name" placeholder="Name">
+                        </div>
+                        <div class="field">
+                            <label>Person in Charge Phone Number</label>
+                            <input type="text" name="pic_telp" placeholder="Phone Number">
+                        </div>
+                    </div>
+                </div>
+                <button class="ui fluid teal button">Send Request</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

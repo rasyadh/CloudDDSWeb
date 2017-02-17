@@ -176,6 +176,10 @@ def network():
 def settings():
     return render_template('settings.html')
 
+@app.route('/manage/request')
+def request():
+    return render_template('request.html')
+
 # error handler
 @app.errorhandler(404)
 def page_not_found(e):

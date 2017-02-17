@@ -19,7 +19,64 @@
     <script src="../../static/js/angular/angular.min.js"></script>
     <script src="../../static/js/angular/app.js"></script>
     <script src="../../static/js/angular/AppControllers.js"></script>
-    <script src="../../static/js/angular/CreateControllers.js"></script>   
+    <script src="../../static/js/angular/CreateControllers.js"></script>
+
+    <script>
+        $(document)
+            .ready(function () {
+                $('.ui.large.form')
+                    .form({
+                        fields: {
+                            email: {
+                                identifier: 'email',
+                                rules: [
+                                    {
+                                        type: 'empty',
+                                        prompt: 'Masukkan alamat email'
+                                    }
+                                ]
+                            },
+                            password: {
+                                identifier: 'password',
+                                rules: [
+                                    {
+                                        type: 'empty',
+                                        prompt: 'Masukkan password'
+                                    },
+                                    {
+                                        type: 'length[6]',
+                                        prompt: 'Password minimal 6 karakter'
+                                    }
+                                ]
+                            },
+                            match: {
+                                identifier: 'confirm_password',
+                                rules: [
+                                    {
+                                        type: 'match[password]',
+                                        prompt: 'Password tidak sama'
+                                    }
+                                ]
+                            },
+                            phone: {
+                                identifier: 'phone',
+                                rules: [
+                                    {
+                                        type: 'empty',
+                                        prompt: 'Masukkan nomor telefon'
+                                    },
+                                    {
+                                        type: 'number',
+                                        prompt: 'Nomor telefon haruslah angka'
+                                    }
+                                ]
+                            }
+                        }
+                    })
+                    ;
+            })
+            ;
+    </script>
 </head>
 
 <body>
@@ -114,12 +171,21 @@
                 </div>
             </div>
         </div>
-
     </div>
 
-    <script>
+    <div class="ui basic modal">
+        <div class="ui icon header">
+            <i class="mail icon"></i>Email Telah Terverifikasi
+        </div>
+    </div>
+
+   <script>
         $('.ui.dropdown')
             .dropdown();
+
+        $('.ui.basic.modal')
+            .modal('show')
+            ;
     </script>
 
 </body>
