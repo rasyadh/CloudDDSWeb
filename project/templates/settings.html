@@ -1,0 +1,108 @@
+{% extends "manage.html" %} {% block content %}
+
+<div class="ui vertical stripe settings container">
+    <div class="ui stackable grid container">
+        <div class="row">
+            <h3 class="ui header">Settings</h3>
+        </div>
+    </div>
+    <div class="ui grid">
+        <div class="three wide column">
+            <div class="ui secondary vertical menu">
+                <div class="item">Username</div>
+                <a class="active item" data-tab="profile">Profile</a>
+                <a class="item" data-tab="billing">Billing</a>
+                <a class="item" data-tab="notifications">Notifications</a>
+            </div>
+        </div>
+        <div class="thirteen wide stretched column">
+            <div class="ui active tab container" data-tab="profile">
+                <div class="ui segment">
+                    <div class="ui padded grid container">
+                        <div class="three wide column">
+                            <img class="ui small avatar image" src="../static/img/avatar/tom.jpg">
+                        </div>
+                        <div class="ten wide stretched column">
+                            <h3>Username</h3>
+                            <div class="ui list">
+                                <div class="item">email@telkom.co.id</div>
+                                <div class="item">Member Since</div>
+                                <div class="item">Address</div>
+                                <div class="item">Instances Created</div>
+                            </div>
+                        </div>
+                        <div class="three wide column">
+                            <a class="ui teal editprofile button">Edit Profile</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui very padded segment">
+                    <p>This will permanently delete all instances and backups.</p>
+                    <a class="ui right aligned red button">Deactive Account</a>
+                </div>
+            </div>
+            <div class="ui very padded tab segment" data-tab="billing">
+                <h3>Usage
+                    <span class="ui right floated"></span>
+                </h3>
+                <a class="ui teal fluid button">View Usage Detail</a>
+            </div>
+            <div class="ui very padded tab segment" data-tab="notifications">
+                <h3>Email Subscriptions</h3>
+                <p>By subscribing to our newsletter, you will be opting to receive updates about new feature releases, security
+                    updates, and more.</p>
+                </br>
+                <p>If you're not interested in receiving this content, please uncheck the box to unsubscribe.</p>
+                </br>
+                <div class="ui checkbox">
+                    <input type="checkbox" name="subscribe">
+                    <label>Subscribe to newsletter</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="ui editprofile modal">
+    <i class="close icon"></i>
+    <div class="header">
+        Edit your profile
+    </div>
+    <div class="content">
+        <form class="ui form">
+            <div class="field">
+                <label>Full Name</label>
+                <input type="text" name="full-name" placeholder="Full Name">
+            </div>
+            <div class="field">
+                <label>Email Address</label>
+                <input type="email" name="email" placeholder="Email Address">
+            </div>
+            <div class="field">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Password">
+            </div>
+            <div class="field">
+                <label>Phone Number</label>
+                <input type="number" name="phone-number" placeholder="Phone Number">
+            </div>
+            <div class="field">
+                <label>Address</label>
+                <input type="text" name="text" placeholder="Address">
+            </div>
+            <button class="ui teal button" type="submit">Update Profile</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    $('.menu .item')
+        .tab();
+
+    $('.ui.editprofile.modal')
+        .modal('attach events', '.ui.editprofile.button', 'show')
+        .modal('setting', 'transition', 'fade up');
+
+</script>
+
+{% endblock %}

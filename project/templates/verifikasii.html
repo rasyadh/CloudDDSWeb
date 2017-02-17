@@ -1,0 +1,134 @@
+<!DOCTYPE Html>
+<html ng-app="CloudDDS">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <meta name="description" content="Layanan cloud DDS Telkom" />
+    <title>Cloud Computing - DDS Telkom</title>
+    <link rel="icon" href="{{url_for('static', filename='favicon.png') }}">
+    <link rel="stylesheet" type="text/css" href="../static/css/semantic.min.css" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../static/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../static/js/jquery-ui.min.css" />
+    <script src="../static/js/jquery.min.js"></script>
+    <script src="../static/js/jquery-ui.min.js"></script>
+    <script src="../static/js/semantic.min.js"></script>
+    <script src="../static/js/sidebar.js"></script>
+    <script src="../static/js/angular/angular.min.js"></script>
+    <script src="../static/js/angular/angular-route.min.js"></script>
+    <script src="../static/js/angular/app.js"></script>
+    <script src="../static/js/angular/AppControllers.js"></script>
+    <script src="../static/js/angular/CreateControllers.js"></script>   
+</head>
+
+<body>
+    <!-- Sidebar Menu -->
+    <div class="ui vertical teal inverted sidebar borderless menu">
+        <a class="item" href="/verifikasi">
+            <img class="ui small image" src="../static/img/logo-cloud-dds.png">
+        </a>
+        <a class="item" href="/verifikasi">Akun</a>
+    </div>
+
+    <!-- Page Contents -->
+    <div class="pusher">
+        <!-- Menu -->
+        <div class="ui teal inverted vertical masthead center aligned segment">
+
+            <div class="ui container">
+                <div class="ui secondary inverted pointing menu">
+                    <a class="toc item">
+                        <i class="sidebar icon"></i>
+                    </a>
+                    <div class="left item">
+                        <a class="item" href="/verifikasi">
+                            <img class="ui small image" src="../static/img/logo-cloud-dds.png">
+                        </a>
+                    </div>
+                    <div class="right item">
+                        <a class="item" href="/verifikasi">AKUN</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dynamic Content -->
+        <div class="ui vertica; stripe verifikasi container">
+            <div class="ui stackable grid container">
+                <div class="row">
+                    <div class="ui center aligned container">
+                        <div class="ui two top attached steps">
+                            <div class="completed step">
+                                <i class="mail icon"></i>
+                                <div class="content">
+                                    <div class="title">Verifikasi Email</div>
+                                </div>
+                            </div>
+                            <div class="active step">
+                                <i class="user icon"></i>
+                                <div class="content">
+                                    <div class="title">Akun User</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui attached segment">
+                            <h3>Pengaturan akun user</h3>
+                            <form class="ui large form">
+                                <div class="field">
+                                    <div class="ui left icon input">
+                                        <i class="font icon"></i>
+                                        <input type="text" name="name" placeholder="Nama">
+                                    </div>
+                                </div>
+                                <div class="two fields">
+                                    <div class="field">
+                                        <div class="ui left icon input">
+                                            <i class="user icon"></i>
+                                            <input type="text" name="email" placeholder="Alamat Email">
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="ui left icon input">
+                                            <i class="at icon"></i>
+                                            <input type="text" name="domain_email" disabled placeholder="telkom.co.id">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="ui left icon input">
+                                        <i class="lock icon"></i>
+                                        <input type="password" name="password" placeholder="Password">
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="ui left icon input">
+                                        <i class="lock icon"></i>
+                                        <input type="password" name="confirm_password" placeholder="Confirm Password">
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="ui left icon input">
+                                        <i class="text telephone icon"></i>
+                                        <input type="text" name="phone" placeholder="Nomor Telefon">
+                                    </div>
+                                </div>
+                                <a class="ui fluid teal button">Simpan</a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        $('.ui.dropdown')
+            .dropdown();
+    </script>
+
+</body>
+
+</html>

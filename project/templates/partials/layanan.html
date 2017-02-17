@@ -1,0 +1,123 @@
+{% extends "base.html" %} {% block content %}
+
+<!-- Banner Layanan -->
+<div class="ui teal inverted vertical segment" id="banner-other">
+    <div class="ui middle aligned stackable grid container">
+        <h2 class="ui left aligned inverted header">Layanan</h2>
+    </div>
+</div>
+
+<!-- Layanan Content -->
+<div class="ui vertical stripe infra segment" ng-controller="FlavorlayananController as flCtrl">
+    <div class="ui stackable grid container">
+        <div class="column">
+            <h3 class="ui header">Infrastruktur</h3>
+            <p>Didukung arsitektur terdistribusi dengan menggunakan teknologi terkini, membuat layanan infrastruktur CloudDDS
+                menjadi pilihan tepat bagi Anda yang membutuhkan sumber daya komputasi untuk membangun aplikasi, menyimpan
+                berkas, atau mempersiapkan arsitektur sistem sesuai kebutuhan.</p>
+        </div>
+    </div>
+
+    <div class="ui stackable grid container">
+        <div class="four wide column">
+            <div class="ui teal basic button">Virtual Machine</div>
+            <div class="ui padded segment">
+                <h1>Spesifikasi Flavor</h1>
+                <div class="ui list">
+                    <div class="item">
+                        <h4>vCPU
+                            <span class="ui right floated">{{ '{{ flCtrl.lFlavor[flCtrl.tab].vcpu }}' }}</span>
+                        </h4>
+                    </div>
+                    <div class="item">
+                        <h4>RAM
+                            <span class="ui right floated">{{ '{{ flCtrl.lFlavor[flCtrl.tab].ram }}' }} GB</span>
+                        </h4>
+                    </div>
+                    <div class="item">
+                        <h4>Swap
+                            <span class="ui right floated">{{ '{{ flCtrl.lFlavor[flCtrl.tab].swap }}' }} GB</span>
+                        </h4>
+                    </div>
+                    <div class="item">
+                        <h4>Storage
+                            <span class="ui right floated">{{ '{{ flCtrl.lFlavor[flCtrl.tab].disk }}' }} GB</span>
+                        </h4>
+                    </div>
+                    <div class="item">
+                        <h4>Public IP
+                            <span class="ui right floated">{{ '{{ flCtrl.lFlavor[flCtrl.tab].public_ip }}' }}</span>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="one wide column">
+            <div class="ui vertical divider"></div>
+        </div>
+        <div class="eleven wide column">
+            <div class="row">
+                <p class="ui container">
+                    Server virtual dengan harga terjangkau dan teknologi komputasi awan terkini yang menjamin kehandalan performa maupun ketersediaan
+                    serta dengan kemampuan skalabilitas yang tinggi. Mendukung berbagai macam OS favorit serta dapat dipasang
+                    berbagai macam aplikasi serta kerangka pemrograman. Cocok untuk Anda yang membutuhkan server stabil untuk
+                    berbagai keperluan.
+                </p>
+            </div>
+            </br>
+            <div class="row">
+                <div class="ui horizontal list">
+                    <div class="item">
+                        <!-- ng-class="{active: flCtrl.getFlav(1) }" -->
+                        <a class="ui massive button" ng-click="flCtrl.tab = 0">S</a>
+                        <!-- ng-click="flCtrl.setTab(1)" -->
+                    </div>
+                    <div class="item">
+                        <a class="ui massive button" ng-click="flCtrl.tab = 1">M</a>
+                    </div>
+                    <div class="item">
+                        <a class="ui massive button" ng-click="flCtrl.tab = 2">L</a>
+                    </div>
+                    <div class="item">
+                        <a class="ui massive button" ng-click="flCtrl.tab = 3">XL</a>
+                    </div>
+                    <div class="item">
+                        <a class="ui massive button" ng-click="flCtrl.tab = 4">Custom</a>
+                    </div>
+                </div>
+            </div>
+            </br>
+            <div class="row"> <a class="ui teal large berlangganan button" href="/registration">Berlangganan</a></div>
+        </div>
+    </div>
+</div>
+
+<div class="ui vertical stripe apps segment" ng-controller="AppslayananController as alCtrl">
+    <div class="ui stackable grid container">
+        <div class="row">
+            <div class="column">
+                <h3 class="ui header">Apps</h3>
+                <p>Didukung arsitektur terdistribusi dengan menggunakan teknologi terkini, membuat layanan infrastruktur CloudDDS
+                    menjadi pilihan tepat bagi Anda yang membutuhkan sumber daya komputasi untuk membangun aplikasi, menyimpan
+                    berkas, atau mempersiapkan arsitektur sistem sesuai kebutuhan.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="column">
+                <div class="ui teal basic button">One Click Apps</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="ui four column grid">
+                <div class="column" ng-repeat="appl in alCtrl.lApps">
+                    <div class="ui center aligned segment">
+                        <i class="linux icon"></i></br>
+                        <span>{{ '{{ appl.nama }}' }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

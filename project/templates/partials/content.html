@@ -1,0 +1,88 @@
+{% extends "base.html" %} {% block content %}
+
+<!-- Banner -->
+<div class="ui teal inverted vertical segment" id="banner">
+    <div class="ui middle aligned stackable grid container">
+        <div class="row">
+            <div class="seven wide column">
+                <h2 class="ui left aligned inverted header">Layanan Cloud Computing DDS Telkom</h2>
+                <div class="ui fluid input">
+                    <input type="email" placeholder="Email Address">
+                </div>
+                </br>
+                <div class="ui fluid input">
+                    <input type="password" placeholder="Password">
+                </div>
+                </br>
+                <a class="ui inverted teal fluid button">Sign Up</a>
+            </div>
+            <div class="six wide right floated column">
+                <img src="static/img/dds-logo.png" class="ui large rounded image">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Info Main Content -->
+<div class="ui vertical stripe info segment" ng-controller="InfomainController as imCtrl">
+    <div class="ui centered page grid">
+        <div class="fourteen wide column">
+            <div class="ui two column center aligned stackable divided grid">
+                <div class="column" ng-repeat="info in imCtrl.mInfo">
+                    <div class="ui header">
+                        <img class="ui tiny image" ng-src="{{ '{{ info.image }}' }}">
+                    </div>
+                    <h3 class="ui header">{{ '{{ info.title }}' }}</h3>
+                    <p>{{ '{{ info.description }}' }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Flavor Main Content -->
+<div class="ui vertical stripe flavor segment">
+    <div class="ui text container center aligned">
+        <h3 class="ui header">Aktifasi Mudah dan Cepat</h3>
+        <p>Ragam pilihan sesuai kebutuhan.</p>
+    </div>
+
+    <div class="ui container plans" ng-controller="FlavormainController as fmCtrl">
+        <div class="ui four column grid">
+            <div class="column" ng-repeat="flav in fmCtrl.mFlavor">
+                <div class="ui raised segment">
+                    <a ng-class="'ui ribbon label ' + flav.color">{{ '{{ flav.type }}' }}</a>
+                    <div class="ui list">
+                        <div class="item">{{ '{{ flav.memori }}' }} GB Memori</div>
+                        <div class="item">{{ '{{ flav.processor }}' }} Core Processor</div>
+                        <div class="item">{{ '{{ flav.disk }}' }} GB Disk</div>
+                    </div>
+                    <div class="ui right aligned container">
+                        <a class="ui teal button" href="\layanan">Detail</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Pesan Main Content -->
+<div class="ui vertical stripe pesan segment">
+    <div class="ui middle aligned stackable grid container">
+        <div class="row pesan">
+            <div class="seven wide column">
+                <h2 class="ui header">Langganan Sekarang</h2>
+                <h3 class="ui header">Langsung Nikmati Layanan Kami</h3>
+                </br>
+                <a class="ui teal large button" href="/layanan">Pesan Sekarang</a>
+            </div>
+            <div class="five wide right floated column">
+                <img src="static/img/database.png" class="ui small rounded image">
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

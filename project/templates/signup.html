@@ -1,0 +1,124 @@
+<!DOCTYPE Html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <meta name="description" content="Layanan cloud DDS Telkom" />
+    <title>Registration Cloud - DDS Telkom</title>
+    <link rel="icon" href="{{url_for('static', filename='favicon.png') }}">
+    <link rel="stylesheet" type="text/css" href="../static/css/semantic.min.css" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../static/css/custom.css" />
+    <script src="../static/js/jquery.min.js"></script>
+    <script src="../static/js/semantic.min.js"></script>
+
+    <script>
+        $(document)
+            .ready(function () {
+                $('.ui.form')
+                    .form({
+                        fields: {
+                            email: {
+                                identifier: 'email',
+                                rules: [
+                                    {
+                                        type: 'empty',
+                                        prompt: 'Masukkan alamat email'
+                                    }
+                                ]
+                            },
+                            phone: {
+                                identifier: 'phone',
+                                rules: [
+                                    {
+                                        type: 'empty',
+                                        prompt: 'Masukkan nomor telefon'
+                                    },
+                                    {
+                                        type: 'number',
+                                        prompt: 'Nomor telefon haruslah angka'
+                                    }
+                                ]
+                            }
+                        }
+                    })
+                    ;
+            })
+            ;
+    </script>
+
+</head>
+
+<body class="login-signup">
+    <a href="/">
+        <img class="ui medium image logo" id="logo" src="static/img/logo-cloud-dds.png"></a>
+    <div class="ui middle aligned center aligned grid">
+        <div class="login-signup column">
+            <form class="ui large form" method="POST">
+                <div class="ui segment">
+                    <h1 class="ui text header logo">
+                        Sign Up
+                    </h1>
+                    <div class="field">
+                        <div class="ui left icon input">
+                            <i class="font icon"></i>
+                            <input type="text" name="name" placeholder="Nama">
+                        </div>
+                    </div>
+                    <div class="two fields">
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="user icon"></i>
+                                <input type="text" name="email" placeholder="Alamat Email">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="at icon"></i>
+                                <input type="text" name="text" disabled placeholder="telkom.co.id">
+                                <input type="hidden" name="email_domain" value="@telkom.co.id">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="ui left icon input">
+                            <i class="text telephone icon"></i>
+                            <input type="text" name="nomorhp" placeholder="Nomor Telefon">
+                        </div>
+                    </div>
+
+                    <button class="ui fluid large teal submit button" type="submit">Sign Up</button>
+                </div>
+
+                <div class="ui error message"></div>
+
+            </form>
+
+            <div class="ui message">
+                Sudah punya akun ? <a href="/login">Log In</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui basic modal">
+        <div class="ui icon header">
+            <i class="mail icon"></i>Email Verifikasi Telah terkirim
+            <p>Cek email anda untuk melakukan aktifasi akun.</p>
+        </div>
+    </div>
+
+    <script>
+        $('.ui.basic.modal')
+            .modal('show')
+            ;
+
+        $('.ui.submit.button').on('click', function () {
+            $('.ui.hidden.positive.message').removeClass('hidden');
+        });
+    </script>
+</body>
+
+</html>
