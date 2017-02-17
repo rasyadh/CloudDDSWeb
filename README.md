@@ -1,9 +1,4 @@
 # CloudDDSWeb
-<<<<<<< HEAD
-Web based Openstack GUI
-
-Build by Flask and AngularJS
-=======
 Website Cloud DDS base on OpenStack
 
 Build by Flask and AngularJS
@@ -20,4 +15,3 @@ Reccommended using Linux Operating System
    pip install -r requirements.txt
    
    NB : Make sure your virtual environment activated before install requirements.txt
->>>>>>> flask-version
