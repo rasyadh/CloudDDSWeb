@@ -177,7 +177,7 @@ def settings():
     return render_template('settings.html')
 
 @app.route('/manage/request')
-def request():
+def request_flav():
     return render_template('request.html')
 
 # error handler
