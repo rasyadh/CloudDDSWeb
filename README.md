@@ -16,12 +16,12 @@ Reccommended using Linux Operating System
    /env/Scripts/activate
    
 3. Install requirements for this project
-   pip install -r requirements.txt
+   $ pip install -r requirements.txt
    
    NB : Make sure your virtual environment activated before install requirements.txt
    
 4. Create the database
-   python manage.py createdb
+   $ python manage.py createdb
    
 5. Create user admin
-   python manage.py create_admin
+   $ python manage.py create_admin
