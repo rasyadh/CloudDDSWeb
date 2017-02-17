@@ -71,7 +71,6 @@ def registration():
 def registrationred():
     return redirect(url_for('registration'))
 
-
 @app.route('/login',methods=['GET','POST'])
 def login():
     errormsg = []
@@ -79,25 +78,26 @@ def login():
     if request.method == 'POST' :
         try:
             users = User.query.filter_by(email=request.form['email']+request.form['email_domain']).first()
-    
+
             if users is None :
                 errormsg = "Email Tidak Terdaftar"
-                return redirect('login', errormsg=errormsg)
+
             else :
                 if users.status == 0:
                     errormsg = "Akun Anda Belum TERVERIFIKASI"
-                    return redirect('login',errormsg=errormsg)
+
                 else:
                     if encrypt.check_password_hash(users.password,request.form['password']) :
                         session['logged_in'] = True
                         return redirect(url_for('manage'))
+
                     else :
                         errormsg = "Password Anda Salah !"
-                        return redirect('login', errormsg=errormsg)
+
         except:
             return "Gagal bos"
 
-    return redirect('login')
+    return render_template('login.html',errormsg=errormsg)
 
 @app.route('/registration/activate_account',methods=["GET","POST"])
 def activate_account():
