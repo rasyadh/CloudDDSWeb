@@ -11,6 +11,7 @@ from project.email import send_email
 from restapi.keystone import keystone as keystoneapi
 from restapi.nova import nova as novaapi
 from restapi.neutron import neutron as neutronapi
+from restapi.glance import glance as glanceapi
 from models import *
 
 #login session handler
@@ -175,7 +176,16 @@ def computes():
 def create_instance():
     email = session['email']
     users = User.query.filter_by(email=email).first()
-    return render_template('create-instance.html',users=users)
+    nova = novaapi()
+    glance = glanceapi()
+    flavorJSON = nova.flavorList(0)
+    flavorJSON = json.loads(flavorJSON)
+    keyJSON = nova.keyList("yj34f8r7j34t79j38jgygvf3")
+    keyJSON = json.loads(keyJSON)
+    imageJSON = glance.imageList("yj34f8r7j34t79j38jgygvf3")
+    imageJSON = json.loads(imageJSON)
+    return render_template('create-instance.html',flavorlist = flavorJSON,keylist=keyJSON,imagelist=imageJSON)
+    #return str(respJSON['flavors'])
 
 @app.route('/manage/images')
 @login_required
@@ -265,6 +275,15 @@ def imagelist():
 
     return respJSON
 
+@app.route('/restapi/glance/imagelist')
+@app.route('/restapi/glance/imagelist/')
+def gimagelist():
+    glance = glanceapi()
+    respJSON = glance.imageList("yj34f8r7j34t79j38jgygvf3")
+    #resp = json.loads(respJSON)
+
+    return respJSON
+
 @app.route('/restapi/nova/keylist')
 @app.route('/restapi/nova/keylist/')
 def keylist():
@@ -335,6 +354,7 @@ def floatiplist():
     return respJSON
 
 
-# @app.route('/favicon.ico')
-# def favicon():
-#     return send_from_directory(os.path.join(app.root_path,'static'),'favicon.png')
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path,'static'),'favicon.png')
+    
