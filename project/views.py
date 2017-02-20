@@ -290,8 +290,12 @@ def keylistnew():
             nova = novaapi()
             respJSON = nova.keyNew(key_name)
             resp = json.loads(respJSON)
-            pk = resp['keypair']['private_key'].replace("\n","<br>")
-            return pk
+            #pk = resp['keypair']['private_key'].replace("\n","<br>")
+            pk = resp['keypair']['private_key']
+            r = Response(response=pk, status=200, mimetype="text/plain")
+            r.headers["Content-Type"] = "text/plain; charset=utf-8"
+            r.headers["Content-Disposition"] = "attachment; filename="+ key_name +".pem"
+            return r
     else:
         return "Bad Request"
 
