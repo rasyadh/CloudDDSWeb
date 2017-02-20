@@ -184,7 +184,7 @@ def create_instance():
     keyJSON = json.loads(keyJSON)
     imageJSON = glance.imageList("yj34f8r7j34t79j38jgygvf3")
     imageJSON = json.loads(imageJSON)
-    return render_template('create-instance.html',flavorlist = flavorJSON,keylist=keyJSON,imagelist=imageJSON)
+    return render_template('create-instance.html',flavorlist = flavorJSON,keylist=keyJSON,imagelist=imageJSON,users=users)
     #return str(respJSON['flavors'])
 
 @app.route('/manage/images')
@@ -357,4 +357,3 @@ def floatiplist():
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(os.path.join(app.root_path,'static'),'favicon.png')
-    
