@@ -100,6 +100,7 @@ def login():
                 else:
                     if encrypt.check_password_hash(users.password,request.form['password']) :
                         session['logged_in'] = True
+                        session['email'] = users.email
                         return redirect(url_for('manage'))
 
                     else :
@@ -146,6 +147,7 @@ def activation_accountred(activation_code):
 @login_required
 def logout():
     session.pop('logged_in',None)
+    session.pop('email',None)
     return redirect(url_for('index'))
 
 @app.route('/layanan')
@@ -164,36 +166,50 @@ def manage():
 @app.route('/manage/computes')
 @login_required
 def computes():
-    return render_template('computes.html')
+    email = session['email']
+    users = User.query.filter_by(email=email).first()
+    return render_template('computes.html',users=users)
 
 @app.route('/manage/create')
 @login_required
 def create_instance():
-    return render_template('create-instance.html')
+    email = session['email']
+    users = User.query.filter_by(email=email).first()
+    return render_template('create-instance.html',users=users)
 
 @app.route('/manage/images')
 @login_required
 def images():
-    return render_template('images.html')
+    email = session['email']
+    users = User.query.filter_by(email=email).first()
+    return render_template('images.html',users=users)
 
 @app.route('/manage/network')
 @login_required
 def network():
-    return render_template('network.html')
+    email = session['email']
+    users = User.query.filter_by(email=email).first()
+    return render_template('network.html',users=users)
 
 @app.route('/manage/settings')
 @login_required
 def settings():
-    return render_template('settings.html')
+    email = session['email']
+    users = User.query.filter_by(email=email).first()
+    return render_template('settings.html',users=users)
 
 @app.route('/manage/request')
 @login_required
 def request_flav():
-    return render_template('request.html')
+    email = session['email']
+    users = User.query.filter_by(email=email).first()
+    return render_template('request.html',users=users)
 
 @app.route('/manage/instance')
 def manage_instance():
-    return render_template('manage-instance.html')
+    email = session['email']
+    users = User.query.filter_by(email=email).first()
+    return render_template('manage-instance.html',users=users)
 
 # error handler
 @app.errorhandler(404)
@@ -319,7 +335,6 @@ def floatiplist():
     return respJSON
 
 
-@app.route('/favicon.ico')
-def favicon():
-    return send_from_directory(os.path.join(app.root_path,'static'),'favicon.png')
-    
+# @app.route('/favicon.ico')
+# def favicon():
+#     return send_from_directory(os.path.join(app.root_path,'static'),'favicon.png')
