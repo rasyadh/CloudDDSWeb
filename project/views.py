@@ -248,6 +248,31 @@ def nova():
 
     return url
 
+@app.route('/restapi/nova/server/create')
+@app.route('/restapi/nova/server/create/')
+def serverCreate():
+    nova = novaapi()
+    name = "Tes-Web"
+    imageRef = "04e2143e-a72a-4157-b744-0ae1c48377b1"
+    flavorRef = "2"
+    key_name = "fatih-debian"
+    networks_uuid = "4740af3d-582e-432f-9286-92b9c943e1cf"
+    availability_zone = "nova"
+
+    respJSON = nova.serverCreate(name,imageRef,flavorRef,availability_zone,key_name,networks_uuid)
+
+
+    return respJSON
+
+@app.route('/restapi/nova/server/list')
+@app.route('/restapi/nova/server/list/')
+def serverList():
+    nova = novaapi()
+    respJSON = nova.serverList()
+
+
+    return respJSON
+
 @app.route('/restapi/nova/flavorlist')
 @app.route('/restapi/nova/flavorlist/')
 def flavorlist():
