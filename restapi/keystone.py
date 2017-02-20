@@ -28,9 +28,9 @@ class keystone():
 		# make a json object for keystone authentication
 		# all in-commented value are default by keystone parameter
 		self.domain['name'] = 'default'
-		self.user['name'] = 'master' #username
+		self.user['name'] = 'web-app' #username
 		self.user['domain'] = self.domain
-		self.user['password'] = 'master' #password
+		self.user['password'] = '9f5e197ac3049979074c5d1ee983ed' #password
 		self.password['user'] = self.user
 		self.methods = ["password"]
 		self.identity['methods'] = self.methods

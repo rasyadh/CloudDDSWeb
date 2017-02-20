@@ -197,7 +197,7 @@ def page_login_required(e):
 
 @app.route('/restapi/keystone')
 @app.route('/restapi/keystone/')
-def keystone():
+def keystone(): 
     keystone = keystoneapi()
     respJSON = keystone.myRequest()
 
@@ -217,16 +217,91 @@ def flavorlist():
     nova = novaapi()
     respJSON = nova.flavorList(0)
     #resp = json.loads(respJSON)
-
-    return str(respJSON)
+    
+    return respJSON
 
 @app.route('/restapi/nova/flavorlist/<flavor_id>')
+@app.route('/restapi/nova/flavorlist/<flavor_id>/')
 def flavorlistdetail(flavor_id):
     flavorid = flavor_id
     nova = novaapi()
     respJSON = nova.flavorList(str(flavorid))
 
     return str(respJSON)
+
+@app.route('/restapi/nova/imagelist')
+@app.route('/restapi/nova/imagelist/')
+def imagelist():
+    nova = novaapi()
+    respJSON = nova.imageList(0)
+    #resp = json.loads(respJSON)
+    
+    return respJSON
+
+@app.route('/restapi/nova/keylist')
+@app.route('/restapi/nova/keylist/')
+def keylist():
+    nova = novaapi()
+    respJSON = nova.keyList("yj34f8r7j34t79j38jgygvf3")
+    
+    
+    return respJSON
+
+@app.route('/restapi/nova/keylist/<key_name>')
+@app.route('/restapi/nova/keylist/<key_name>/')
+def keylistdetail(key_name):
+    nova = novaapi()
+    respJSON = nova.keyList(key_name)
+
+    return str(respJSON)
+
+@app.route('/restapi/nova/keylist/delete',methods=["GET"])
+def keylistdelete():
+    if request.method == "GET":
+        if request.args.get('keyname') is None:
+            return "Bad Parameter"
+        else:            
+            key_name = request.args.get('keyname')
+            nova = novaapi()
+            respJSON = nova.keyDel(key_name)
+            #resp = json.loads(respJSON)
+
+            return redirect(url_for('keylist'))
+    else:
+        return "Bad Request"
+
+@app.route('/restapi/nova/keylist/new',methods=["GET"])
+def keylistnew():
+    if request.method == "GET":
+        if request.args.get('keyname') is None:
+            return "Bad Parameter"
+        else:            
+            key_name = request.args.get('keyname')
+            nova = novaapi()
+            respJSON = nova.keyNew(key_name)
+            resp = json.loads(respJSON)
+            pk = resp['keypair']['private_key'].replace("\n","<br>")
+            return pk
+    else:
+        return "Bad Request"
+
+@app.route('/restapi/nova/netlist')
+@app.route('/restapi/nova/netlist/')
+def netlist():
+    nova = novaapi()
+    respJSON = nova.netList("yj34f8r7j34t79j38jgygvf3")
+    #resp = json.loads(respJSON)
+    
+    return respJSON
+
+@app.route('/restapi/neutron/floatiplist')
+@app.route('/restapi/neutron/floatiplist/')
+def floatiplist():
+    neutron = neutronapi()
+    respJSON = neutron.floatipList("yj34f8r7j34t79j38jgygvf3")
+    #resp = json.loads(respJSON)
+    
+    return respJSON
 
 
 '''
