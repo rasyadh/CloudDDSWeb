@@ -52,10 +52,12 @@
 </head>
 
 <body class="login-signup">
+
     <a href="/">
         <img class="ui medium image logo" id="logo" src="static/img/logo-cloud-dds.png"></a>
     <div class="ui middle aligned center aligned grid">
         <div class="login-signup column">
+            <div class="ui hidden floating message"></div>
             <form class="ui large form" method="POST">
                 <div class="ui segment">
                     <h1 class="ui text header logo">
@@ -63,14 +65,14 @@
                     </h1>
                     <div class="field">
                         <div class="ui left icon input">
-                            <i class="font icon"></i>
+                            <i class="user icon"></i>
                             <input type="text" name="name" placeholder="Nama">
                         </div>
                     </div>
                     <div class="two fields">
                         <div class="field">
                             <div class="ui left icon input">
-                                <i class="user icon"></i>
+                                <i class="mail icon"></i>
                                 <input type="text" name="email" placeholder="Alamat Email">
                             </div>
                         </div>
@@ -111,14 +113,10 @@
     </div>
 
     <script>
-         $('.ui.submit.button').on('click', function () {
+        $('.ui.submit.button').on('click', function () {
             $('.ui.basic.modal')
                 .modal('show')
                 ;
-        });
-
-        $('.ui.submit.button').on('click', function () {
-            $('.ui.hidden.positive.message').removeClass('hidden');
         });
     </script>
 </body>

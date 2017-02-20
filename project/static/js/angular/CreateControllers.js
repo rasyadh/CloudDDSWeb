@@ -1,30 +1,32 @@
 var app = angular.module('CreateControllers', []);
 
-app.controller('CreateinstanceController', function () {
+app.controller('CreateinstanceController', function ($scope) {
     this.createInstance = [
         {
             name: "ubuntu",
             image_logo: "/static/img/ubuntu.jpg",
-            version: 1
+            id: 1
         },
         {
             name: "debian",
             image_logo: "/static/img/debian.jpg",
-            version: 1
+            id: 2
         },
         {
             name: "centOS",
             image_logo: "/static/img/centOS.jpg",
-            version: 1
+            id: 3
         },
         {
             name: "fedora",
             image_logo: "/static/img/fedora.jpg",
-            version: 1
+            id: 4
         }
     ];
 
-
+    $scope.select = function(i){
+        $scope.selectedIndex = i;
+    };
 });
 
 app.controller('CreateappsController', function () {
@@ -76,7 +78,7 @@ var apps = [
     }
 ];
 
-app.controller('CreateflavorController', function () {
+app.controller('CreateflavorController', function ($scope) {
     this.cFlavor = [
         {
             type: "Small",
@@ -107,6 +109,10 @@ app.controller('CreateflavorController', function () {
             disk: 80
         }
     ];
+
+     $scope.select = function(i){
+        $scope.selectedIndex = i;
+    };
 });
 
 app.controller('CreatecustomflavorController', function () {
