@@ -57,7 +57,9 @@
 
     <div class="ui middle aligned center aligned grid">
         <div class="login-signup column">
-            <div class="ui hidden floating message"></div>
+            {% if errormsg %}
+            <div class="ui floating message">{{errormsg}}</div>
+            {% endif %}
             <form class="ui large form" method="POST">
                 <div class="ui segment">
                     <h1 class="ui text header logo">

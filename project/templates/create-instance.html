@@ -15,7 +15,7 @@
                     <div class="ui padded container">
                         <div class="ui horizontal list">
                             <a class="item" ng-repeat="ins in ciCtrl.createInstance">
-                                <div class="ui center aligned segment instance" 
+                                <div class="ui center aligned segment instance"
                                 ng-click="select($index)" ng-class="{{ '{ teal: $index === selectedIndex }' }}">
                                     <img class="ui small image" ng-src="{{ '{{ ins.image_logo }}' }}"></br>
                                 </div>
@@ -27,7 +27,7 @@
                     <div class="ui padded container">
                         <div class="ui five column grid">
                             <a class="column" ng-repeat="appc in caCtrl.createApps">
-                                <div class="ui center aligned segment apps" 
+                                <div class="ui center aligned segment apps"
                                 ng-click="select($index)" ng-class="{{ '{ teal: $index === selectedIndex }' }}">
                                     <i class="linux icon"></i></br>
                                     <p>{{ '{{ appc.nama }}' }}</p>
@@ -60,7 +60,7 @@
                                         <div>{{ '{{ cflav.disk }}' }}GB Disk</div>
                                     </div>
                                     </br>
-                                    <button class="ui fluid teal button" 
+                                    <button class="ui fluid teal button"
                                     ng-click="select($index)">Choose</button>
                                 </div>
                             </div>
