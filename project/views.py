@@ -31,41 +31,51 @@ def index():
 @app.route('/registration',methods=['POST','GET'])
 def registration():
     activationcodetmp = ""
+    errormsg = []
+
+
     if request.method == 'POST':
-    #    try:
-            users = User(
-                name=request.form['name'],
-                email=request.form['email']+request.form['email_domain'],
-                #email=request.form['email']+"@gmail.com",
-                #password= encrypt.generate_password_hash(request.form['password']),
-                status=0,
-                nomorhp=request.form['nomorhp']
-            )
+        users = User.query.filter_by(email=request.form['email']+request.form['email_domain']).first()
 
-            activationcodetmp = binascii.b2a_hex(os.urandom(15))
-            activationcode = ActivationCode(
-                email_user=request.form['email']+request.form['email_domain'],
-                #email_user=request.form['email']+"@gmail.com",
-                activationcode=activationcodetmp,
+        if users is not None :
+            errormsg = "Email telah terdaftar"
 
-            )
+        else:
+            try:
+                users = User(
+                    name=request.form['name'],
+                    email=request.form['email']+request.form['email_domain'],
+                    #email=request.form['email']+"@gmail.com",
+                    #password= encrypt.generate_password_hash(request.form['password']),
+                    status=0,
+                    nomorhp=request.form['nomorhp']
+                )
 
-            db.session.add(users)
-            db.session.add(activationcode)
-            db.session.commit()
+                activationcodetmp = binascii.b2a_hex(os.urandom(15))
+                activationcode = ActivationCode(
+                    email_user=request.form['email']+request.form['email_domain'],
+                    #email_user=request.form['email']+"@gmail.com",
+                    activationcode=activationcodetmp,
 
-            confirm_url = "localhost:5000/registration/activate_account?actemp="+activationcodetmp
-            html = render_template('activation.html',confirm_url = confirm_url)
-            subject = "Please confirm your email"
-            #send_email(users.email,subject,html)
-            send_email("gravpokemongo@gmail.com",subject,html)
+                )
 
-            return redirect(url_for('login'))
+                db.session.add(users)
+                db.session.add(activationcode)
+                db.session.commit()
 
-    #    except:
-            #return "gagal"
+                confirm_url = "localhost:5000/registration/activate_account?actemp="+activationcodetmp
+                html = render_template('activation.html',confirm_url = confirm_url)
+                subject = "Please confirm your email"
+                #send_email(users.email,subject,html)
+                send_email("gravpokemongo@gmail.com",subject,html)
 
-    return render_template('signup.html')
+                return redirect(url_for('login'))
+
+            except:
+                errormsg = "Terdapat kesalahan pada sistem"
+                return render_template('signup.html',errormsg=errormsg)
+
+    return render_template('signup.html',errormsg=errormsg)
 
 @app.route('/registration/')
 def registrationred():
@@ -197,7 +207,7 @@ def page_login_required(e):
 
 @app.route('/restapi/keystone')
 @app.route('/restapi/keystone/')
-def keystone(): 
+def keystone():
     keystone = keystoneapi()
     respJSON = keystone.myRequest()
 
@@ -217,7 +227,7 @@ def flavorlist():
     nova = novaapi()
     respJSON = nova.flavorList(0)
     #resp = json.loads(respJSON)
-    
+
     return respJSON
 
 @app.route('/restapi/nova/flavorlist/<flavor_id>')
@@ -235,7 +245,7 @@ def imagelist():
     nova = novaapi()
     respJSON = nova.imageList(0)
     #resp = json.loads(respJSON)
-    
+
     return respJSON
 
 @app.route('/restapi/nova/keylist')
@@ -243,8 +253,8 @@ def imagelist():
 def keylist():
     nova = novaapi()
     respJSON = nova.keyList("yj34f8r7j34t79j38jgygvf3")
-    
-    
+
+
     return respJSON
 
 @app.route('/restapi/nova/keylist/<key_name>')
@@ -260,7 +270,7 @@ def keylistdelete():
     if request.method == "GET":
         if request.args.get('keyname') is None:
             return "Bad Parameter"
-        else:            
+        else:
             key_name = request.args.get('keyname')
             nova = novaapi()
             respJSON = nova.keyDel(key_name)
@@ -275,7 +285,7 @@ def keylistnew():
     if request.method == "GET":
         if request.args.get('keyname') is None:
             return "Bad Parameter"
-        else:            
+        else:
             key_name = request.args.get('keyname')
             nova = novaapi()
             respJSON = nova.keyNew(key_name)
@@ -291,7 +301,7 @@ def netlist():
     nova = novaapi()
     respJSON = nova.netList("yj34f8r7j34t79j38jgygvf3")
     #resp = json.loads(respJSON)
-    
+
     return respJSON
 
 @app.route('/restapi/neutron/floatiplist')
@@ -300,7 +310,7 @@ def floatiplist():
     neutron = neutronapi()
     respJSON = neutron.floatipList("yj34f8r7j34t79j38jgygvf3")
     #resp = json.loads(respJSON)
-    
+
     return respJSON
 
 
