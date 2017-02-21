@@ -1,0 +1,60 @@
+{% extends "admin-page.html" %} {% block content %}
+
+<div class="ui vertical stripe computes container">
+    <div class="ui stackable grid container">
+        <div class="row">
+            <h3 class="ui header">Manage User</h3>
+            <div class="ui vertical stripe center aligned container">
+                <h2>List User</h2>
+                <table class="ui teal table center aligned">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>User ID</th>
+                            <th>Status</th>
+                            <th>Instance</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>user</td>
+                            <td>user@telkom.co.id</td>
+                            <td>user id</td>
+                            <td>Active</td>
+                            <td>1</td>
+                            <td>
+                                <button class="ui yellow button">Status</button>
+                                <div class="ui flowing popup top left transition hidden">
+                                    <div class="ui three column divided center aligned grid">
+                                        <div class="column">
+                                            <button class="ui button">Active</button>
+                                        </div>
+                                        <div class="column">
+                                            <button class="ui button">Pending</button>
+                                        </div>
+                                        <div class="column">
+                                            <button class="ui button">Suspend</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="ui red button">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('.ui.yellow.button').popup({
+        popup: $('.ui.flowing.popup'),
+        on: 'click'
+    });
+
+</script>
+
+{% endblock %}

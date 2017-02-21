@@ -1,0 +1,175 @@
+{% extends "admin-page.html" %} {% block content %}
+
+<div class="ui vertical stripe computes container">
+    <div class="ui stackable grid container">
+        <div class="column">
+            <h3 class="ui header">Manage Resource</h3>
+        </div>
+    </div>
+
+    <div class="ui stackable grid container">
+        </br>
+        <h2>Overview</h2>
+        <div class="ui stackable grid container">
+            <div class="four wide column">
+                <table class="ui teal table">
+                    <tbody>
+                        <tr>
+                            <td>Users</td>
+                            <td>...</td>
+                        </tr>
+                        <tr>
+                            <td>Instances</td>
+                            <td>...</td>
+                        </tr>
+                        <tr>
+                            <td>Floating IPs</td>
+                            <td>...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="twelve wide column">
+                <table class="ui teal fixed table">
+                    <thead class="ui center aligned">
+                        <tr>
+                            <th>CPU</th>
+                            <th>RAM</th>
+                            <th>Storage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <canvas id="cpu_chart"></canvas>
+                            </td>
+                            <td>
+                                <canvas id="ram_chart"></canvas>
+                            </td>
+                            <td>
+                                <canvas id="storage_chart"></canvas>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </br>
+        <div class="row">
+            <h2>Manage Flavor</h2>
+            <table class="ui teal fixed table center aligned">
+                <thead>
+                    <th>Name</th>
+                    <th>CPU</th>
+                    <th>RAM</th>
+                    <th>Storage</th>
+                    <th>Action</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Small</td>
+                        <td>1 CPU</td>
+                        <td>1 GB</td>
+                        <td>20 GB</td>
+                        <td>
+                            <div class="ui checkbox">
+                                <input type="checkbox" name="set_default">
+                                <label>Set as default</label>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('.menu.computes .item')
+        .tab()
+        ;
+
+    var cpu_pie = document.getElementById("cpu_chart").getContext("2d");
+    var cpu_chart = new Chart(cpu_pie, {
+        type: 'pie',
+        data: {
+            labels: [
+                "CPU Used Space",
+                "CPU Free Space"
+            ],
+            datasets: [
+                {
+                    label: '%',
+                    data: [3, 5],
+                    backgroundColor: [
+                        "#00B5AD",
+                        "#A0A0A0"
+                    ]
+                }
+            ]
+        },
+        options: {
+            animation: {
+                animateScale: true
+            },
+            responsive: true
+        }
+    });
+
+    var ram_pie = document.getElementById("ram_chart").getContext("2d");
+    var ram_chart = new Chart(ram_pie, {
+        type: 'pie',
+        data: {
+            labels: [
+                "RAM Used Space",
+                "RAM Free Space"
+            ],
+            datasets: [
+                {
+                    label: 'GB',
+                    data: [12, 20],
+                    backgroundColor: [
+                        "#00B5AD",
+                        "#A0A0A0"
+                    ]
+                }
+            ]
+        },
+        options: {
+            animation: {
+                animateScale: true
+            },
+            responsive: true
+        }
+    });
+
+    var storage_pie = document.getElementById("storage_chart").getContext("2d");
+    var storage_chart = new Chart(storage_pie, {
+        type: 'pie',
+        data: {
+            labels: [
+                "storage Used Space",
+                "storage Free Space"
+            ],
+            datasets: [
+                {
+                    label: 'GB',
+                    data: [20, 12],
+                    backgroundColor: [
+                        "#00B5AD",
+                        "#A0A0A0"
+                    ]
+                }
+            ]
+        },
+        options: {
+            animation: {
+                animateScale: true
+            },
+            responsive: true
+        }
+    });
+
+</script>
+
+{% endblock %}

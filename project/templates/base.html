@@ -71,17 +71,16 @@
                     </div>
                     <div class="right item">
                         <a class="item" href="{{ url_for('layanan') }}">LAYANAN</a>
-                            <a class="item" href="{{ url_for('bantuan') }}">BANTUAN</a>
-                            <a class="ui inverted teal basic button" href="{{ url_for('login') }}">LOGIN</a>
-                            <a class="ui inverted teal basic button" href="{{ url_for('registration') }}">SIGNUP</a>
+                        <a class="item" href="{{ url_for('bantuan') }}">BANTUAN</a>
+                        <a class="ui inverted teal basic button" href="{{ url_for('login') }}">LOGIN</a>
+                        <a class="ui inverted teal basic button" href="{{ url_for('registration') }}">SIGNUP</a>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Dynamic Content -->
-        {% block content %}
-        {% endblock %}
+        {% block content %} {% endblock %}
 
         <!-- Vendor -->
         <div class="ui vertical vendor center aligned segment" ng-controller="VendormainController as vmCtrl">

@@ -32,13 +32,12 @@
 <div class="ui vertical stripe info segment" ng-controller="InfomainController as imCtrl">
     <div class="ui centered page grid">
         <div class="fourteen wide column">
-            <div class="ui two column center aligned stackable divided grid">
+            <div class="ui three column center aligned stackable grid">
                 <div class="column" ng-repeat="info in imCtrl.mInfo">
                     <div class="ui header">
                         <img class="ui tiny image" ng-src="{{ '{{ info.image }}' }}">
                     </div>
                     <h3 class="ui header">{{ '{{ info.title }}' }}</h3>
-                    <p>{{ '{{ info.description }}' }}</p>
                 </div>
             </div>
         </div>
