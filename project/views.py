@@ -209,16 +209,26 @@ def settings():
     users = User.query.filter_by(email=email).first()
 
     if request.method == 'POST':
-        if encrypt.check_password_hash(users.password,request.form['password']) :
-            users.name = request.form['name']
-            users.nomorhp = request.form['phone-number']
-            db.session.commit()
+        if 'updateprofile' in request.form.values():
+            if encrypt.check_password_hash(users.password,request.form['password']) :
+                users.name = request.form['name']
+                users.nomorhp = request.form['phone-number']
+                db.session.commit()
+                message = "Data berhasil dirubah"
 
-            message = "Data berhasil dirubah"
-        else:
-            message = "Password anda salah"
+            else:
+                message = "Password anda salah"
 
-    return render_template('settings.html',users=users, message=message)
+        elif 'changepassword' in request.form.values():
+            if encrypt.check_password_hash(users.password,request.form['old-password']) :
+                 users.password = encrypt.generate_password_hash(request.form['confirm-password'])
+                 db.session.commit()
+                 message = "Password telah berubah"
+                 
+            else:
+                 message = "Password anda salah"
+
+    return render_template('settings.html',users=users,message=message)
 
 @app.route('/manage/request')
 @login_required
@@ -259,31 +269,6 @@ def nova():
     url = nova.getUrl()
 
     return url
-
-@app.route('/restapi/nova/server/create')
-@app.route('/restapi/nova/server/create/')
-def serverCreate():
-    nova = novaapi()
-    name = "Tes-Web"
-    imageRef = "04e2143e-a72a-4157-b744-0ae1c48377b1"
-    flavorRef = "2"
-    key_name = "fatih-debian"
-    networks_uuid = "4740af3d-582e-432f-9286-92b9c943e1cf"
-    availability_zone = "nova"
-
-    respJSON = nova.serverCreate(name,imageRef,flavorRef,availability_zone,key_name,networks_uuid)
-
-
-    return respJSON
-
-@app.route('/restapi/nova/server/list')
-@app.route('/restapi/nova/server/list/')
-def serverList():
-    nova = novaapi()
-    respJSON = nova.serverList()
-
-
-    return respJSON
 
 @app.route('/restapi/nova/flavorlist')
 @app.route('/restapi/nova/flavorlist/')
