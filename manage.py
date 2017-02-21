@@ -6,10 +6,10 @@ from project import app
 from project.core import db, encrypt
 from project.models import User
 
-#migrate = Migrate(app,db)
+migrate = Migrate(app,db)
 manager = Manager(app)
 
-#manager.add_command('db',MigrateCommand)
+manager.add_command('db',MigrateCommand)
 
 @manager.command
 def createdb():
