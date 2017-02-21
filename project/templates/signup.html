@@ -57,7 +57,9 @@
         <img class="ui medium image logo" id="logo" src="static/img/logo-cloud-dds.png"></a>
     <div class="ui middle aligned center aligned grid">
         <div class="login-signup column">
-            <div class="ui hidden floating message"></div>
+            {% if errormsg %}
+            <div class="ui negative message">{{errormsg}}</div>
+            {% endif %}
             <form class="ui large form" method="POST">
                 <div class="ui segment">
                     <h1 class="ui text header logo">

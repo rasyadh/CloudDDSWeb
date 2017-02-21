@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <meta name="description" content="Layanan cloud DDS Telkom" />
     <title>Cloud Computing - DDS Telkom</title>
-    <link rel="icon" href="{{url_for('static', filename='favicon.png') }}">
+    <!-- <link rel="icon" href="{{url_for('static', filename='favicon.png') }}"> -->
     <link rel="stylesheet" type="text/css" href="../static/css/semantic.min.css" />
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../static/css/custom.css" />
@@ -22,6 +22,20 @@
     <script src="../static/js/angular/CreateControllers.js"></script>
     <script src="../static/js/moment.js"></script>
     <script src="../static/js/Chart.min.js"></script>
+    <script type="text/javascript">
+    var flavorid = null;
+    var imageid = "";
+
+    function selectedflavorid(selectedflavorid) {
+        flavorid = selectedflavorid;
+        alert(flavorid);
+    };
+
+    function selectedimageid(selectedimageid) {
+        imageid = selectedimageid;
+        alert(imageid);
+    };
+    </script>
 
 </head>
 
@@ -35,7 +49,7 @@
         <a class="item" href="/manage/images">Images</a>
         <a class="item" href="/manage/network">Networking</a>
         <a><img class="ui avatar image" src="../static/img/avatar/tom.jpg">
-            <span>username</span>
+            span>{{users.name}}</span>
         </a>
     </div>
 
@@ -64,7 +78,7 @@
                             <div class="menu">
                                 <a class="item">
                                     <img class="ui avatar image" src="../static/img/avatar/tom.jpg">
-                                    <span>username</span>
+                                    <span>{{users.name}}</span>
                                 </a>
                                 <div class="divider"></div>
                                 <a class="item" href="/manage/settings">Settings</a>

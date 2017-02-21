@@ -5,13 +5,17 @@ import requests
 class nova():
 
 	headers = {}
-	post_data = {}
+	data = {}
+	post_data = ""
 	get_param = {}
 	urlJSON = ""
 	headJSON = ""
 	contJSON = {}
 	respJSON = ""
-	keypair = {}
+	server = {}
+	networks = {}
+	network = []
+	OS_SCH_HNT = {}
 
 	def _init_(self):
 		self.token = 190997 #not important
@@ -61,6 +65,50 @@ class nova():
 		#print(respJSON)
 
 		return str(respJSON)
+
+	def serverCreate(self,name,imageRef,flavorRef,availability_zone, key_name, networks_uuid):
+		#self.urlJSON = self.getUrl()
+		self.urlJSON = json.loads(self.getUrl())
+
+		self.headers['Content-Type'] = 'application/json'
+		self.headers['X-Auth-Token'] = self.urlJSON['x-token']
+		self.headJSON = json.dumps(self.headers)
+
+		self.server['name'] = name
+		self.server['imageRef'] = imageRef
+		self.server['flavorRef'] = flavorRef
+		self.server['availability_zone'] = availability_zone
+		self.server['key_name'] = key_name
+		self.networks['uuid'] = networks_uuid
+		self.network.append(self.networks)
+		self.server['networks'] = self.network
+		self.OS_SCH_HNT['same_host'] = "48e6a9f6-30af-47e0-bc04-acaed113bb4e"
+		self.data['server'] = self.server
+		self.data['OS-SCH-HNT:scheduler_hints'] = self.OS_SCH_HNT
+
+		self.post_data = json.dumps(self.data)
+
+		self.urlJSON['url'] = self.urlJSON['url']+"/servers"
+		respJSON = self.postRequest(self.urlJSON['url'],str(self.headJSON),self.post_data)
+
+		#print(respJSON)
+
+		return respJSON
+
+	def serverList(self):
+		self.urlJSON = json.loads(self.getUrl())
+
+		self.headers['Content-Type'] = 'application/json'
+		self.headers['X-Auth-Token'] = self.urlJSON['x-token']
+		self.headJSON = json.dumps(self.headers)
+
+		self.urlJSON['url'] = self.urlJSON['url']+"/servers"
+		respJSON = self.getRequest(self.urlJSON['url'],str(self.headJSON),self.get_param)
+
+		return respJSON
+
+
+
 
 	def keyList(self,keyname):
 		#self.urlJSON = self.getUrl()

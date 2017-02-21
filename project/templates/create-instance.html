@@ -11,13 +11,24 @@
                     <a class="item active" data-tab="distribution">Distribution</a>
                     <a class="item" data-tab="apps">Apps</a>
                 </div>
-                <div class="ui bottom attached active tab segment" data-tab="distribution" ng-controller="CreateinstanceController as ciCtrl">
+                <div class="ui bottom attached active tab segment" data-tab="distribution">
                     <div class="ui padded container">
+<<<<<<< HEAD
                         <div class="ui horizontal list">
                             <a class="item" ng-repeat="ins in ciCtrl.createInstance">
                                 <div class="ui center aligned segment instance" ng-click="select($index)" ng-class="{{ '{ teal: $index === selectedIndex }' }}">
                                     <img class="ui small image" ng-src="{{ '{{ ins.image_logo }}' }}"></br>
+=======
+                        <div class="ui four column grid">                        
+                            {% for image in imagelist['images'] %}
+                                <a class="column">
+                                <div id="image-{{image['id']}}" class="ui center aligned segment instance">
+                                    <p>{{image['name']}}</p></br>
+                                    <button class="ui fluid teal button"
+                                    onclick="selectedimageid('{{image['id']}}')">Choose</button>
+>>>>>>> 7ff8d7864997181bf98c85d8332646ea7eac3012
                                 </div>
+                            {% endfor %}
                             </a>
                         </div>
                     </div>
@@ -26,7 +37,12 @@
                     <div class="ui padded container">
                         <div class="ui five column grid">
                             <a class="column" ng-repeat="appc in caCtrl.createApps">
+<<<<<<< HEAD
                                 <div class="ui center aligned segment apps" ng-click="select($index)" ng-class="{{ '{ teal: $index === selectedIndex }' }}">
+=======
+                                <div class="ui center aligned segment apps"
+                                ng-click="select($index)" ng-class="{{ '{ teal: $index === selectedIndex }' }}">
+>>>>>>> 7ff8d7864997181bf98c85d8332646ea7eac3012
                                     <i class="linux icon"></i></br>
                                     <p>{{ '{{ appc.nama }}' }}</p>
                                 </div>
@@ -36,7 +52,6 @@
                 </div>
             </div>
         </div>
-
         <div class="row">
             <div class="ui container">
                 <h2 class="ui dividing header">Choose a size</h2>
@@ -48,19 +63,30 @@
                 <div class="ui bottom attached active tab segment" data-tab="flavor" ng-controller="CreateflavorController as cfCtrl">
                     <div class="ui padded container">
                         <div class="ui four column grid">
-                            <div class="column" ng-repeat="cflav in cfCtrl.cFlavor">
-                                <div class="ui center aligned segment" ng-class="{{ '{ teal: $index === selectedIndex }' }}">
+                            {% for flavor in flavorlist['flavors'] %}
+                            <div class="column">
+                                <div id="flavor-{{flavor['id']}}" class="ui center aligned segment">
                                     <div class="ul list">
-                                        <div class="item">{{ '{{ cflav.type }}' }}</div>
+                                        <div class="item">{{ flavor['name'] }}</div>
                                         <div class="ui divider"></div>
-                                        <div class="item">{{ '{{ cflav.processor }}' }} CPU</div>
-                                        <div>{{ '{{ cflav.memori }}' }}GB RAM</div>
-                                        <div>{{ '{{ cflav.disk }}' }}GB Disk</div>
+                                        <div class="item">{{ flavor['vcpus'] }} vCPU</div>
+                                        {% if flavor['ram']|int >= 1024 %}
+                                            <div>{{ ((flavor['ram']|int/1024)|string).rstrip(".0") }} GB of RAM</div>
+                                        {% else %}
+                                            <div>{{ flavor['ram']|int }}MB RAM</div>
+                                        {% endif %}
+                                        <div>{{ flavor['disk'] }}GB Disk</div>
                                     </div>
                                     </br>
+<<<<<<< HEAD
                                     <button class="ui fluid teal button" ng-click="select($index)">Choose</button>
+=======
+                                    <button class="ui fluid teal button"
+                                    onclick="selectedflavorid({{flavor['id']}})">Choose</button>
+>>>>>>> 7ff8d7864997181bf98c85d8332646ea7eac3012
                                 </div>
                             </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -128,8 +154,10 @@
                             <i class="dropdown icon"></i>
                             <div class="default text">Key Pair</div>
                             <div class="menu">
-                                <div class="item" data-value="1">key pair 1</div>
-                                <div class="item" data-value="0">key pair 2</div>
+                                {% for keypair in keylist['keypairs'] %}
+                                <div class="item" data-value="{{ keypair['keypair']['name'] }}">{{ keypair['keypair']['name'] }}</div>
+                                {% endfor %}
+                                
                             </div>
                         </div>
                     </div>
@@ -144,13 +172,19 @@
             </div>
         </div>
 
+        <form method="POST">
+
+        <input id="imageRef" type="text" name="imageRef" hidden value="">
+        <input id="flavorRef" type="text" name="imageRef" hidden value="">
+        <input id="imageRef" type="text" name="imageRef" hidden value="">
+
         <div class="row">
             <div class="ui container">
                 <h2 class="ui dividing header">Finalize and create</h2>
                 <div class="ui form">
                     <div class="field">
-                        <label>Choose a hostname</label>
-                        <input type="text" name="hostname" placeholder="Instance Hostname">
+                        <label>Choose a name</label>
+                        <input type="text" name="name" placeholder="Instance Name">
                     </div>
                     <div class="field">
                         <label>Usage Purpose</label>
@@ -169,6 +203,8 @@
                 </div>
             </div>
         </div>
+
+        </form>
 
         </br>
         <a class="ui fluid teal button">Create</a>

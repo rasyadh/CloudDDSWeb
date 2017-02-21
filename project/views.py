@@ -8,8 +8,10 @@ from flask import send_file, make_response, abort, session
 from project import app
 from project.core   import db, encrypt
 from project.email import send_email
-from restapi import keystone as keystoneapi
-from restapi import nova as novaapi
+from restapi.keystone import keystone as keystoneapi
+from restapi.nova import nova as novaapi
+from restapi.neutron import neutron as neutronapi
+from restapi.glance import glance as glanceapi
 from models import *
 
 #login session handler
@@ -31,41 +33,51 @@ def index():
 @app.route('/registration',methods=['POST','GET'])
 def registration():
     activationcodetmp = ""
+    errormsg = []
+
+
     if request.method == 'POST':
-    #    try:
-            users = User(
-                name=request.form['name'],
-                email=request.form['email']+request.form['email_domain'],
-                #email=request.form['email']+"@gmail.com",
-                #password= encrypt.generate_password_hash(request.form['password']),
-                status=0,
-                nomorhp=request.form['nomorhp']
-            )
+        users = User.query.filter_by(email=request.form['email']+request.form['email_domain']).first()
 
-            activationcodetmp = binascii.b2a_hex(os.urandom(15))
-            activationcode = ActivationCode(
-                email_user=request.form['email']+request.form['email_domain'],
-                #email_user=request.form['email']+"@gmail.com",
-                activationcode=activationcodetmp,
+        if users is not None :
+            errormsg = "Email telah terdaftar"
 
-            )
+        else:
+            try:
+                users = User(
+                    name=request.form['name'],
+                    email=request.form['email']+request.form['email_domain'],
+                    #email=request.form['email']+"@gmail.com",
+                    #password= encrypt.generate_password_hash(request.form['password']),
+                    status=0,
+                    nomorhp=request.form['nomorhp']
+                )
 
-            db.session.add(users)
-            db.session.add(activationcode)
-            db.session.commit()
+                activationcodetmp = binascii.b2a_hex(os.urandom(15))
+                activationcode = ActivationCode(
+                    email_user=request.form['email']+request.form['email_domain'],
+                    #email_user=request.form['email']+"@gmail.com",
+                    activationcode=activationcodetmp,
 
-            confirm_url = "localhost:5000/registration/activate_account?actemp="+activationcodetmp
-            html = render_template('activation.html',confirm_url = confirm_url)
-            subject = "Please confirm your email"
-            #send_email(users.email,subject,html)
-            send_email("gravpokemongo@gmail.com",subject,html)
+                )
 
-            return redirect(url_for('login'))
+                db.session.add(users)
+                db.session.add(activationcode)
+                db.session.commit()
 
-    #    except:
-            #return "gagal"
+                confirm_url = "localhost:5000/registration/activate_account?actemp="+activationcodetmp
+                html = render_template('activation.html',confirm_url = confirm_url)
+                subject = "Please confirm your email"
+                #send_email(users.email,subject,html)
+                send_email("gravpokemongo@gmail.com",subject,html)
 
-    return render_template('signup.html')
+                return redirect(url_for('login'))
+
+            except:
+                errormsg = "Terdapat kesalahan pada sistem"
+                return render_template('signup.html',errormsg=errormsg)
+
+    return render_template('signup.html',errormsg=errormsg)
 
 @app.route('/registration/')
 def registrationred():
@@ -89,6 +101,7 @@ def login():
                 else:
                     if encrypt.check_password_hash(users.password,request.form['password']) :
                         session['logged_in'] = True
+                        session['email'] = users.email
                         return redirect(url_for('manage'))
 
                     else :
@@ -135,6 +148,7 @@ def activation_accountred(activation_code):
 @login_required
 def logout():
     session.pop('logged_in',None)
+    session.pop('email',None)
     return redirect(url_for('index'))
 
 @app.route('/layanan')
@@ -153,36 +167,71 @@ def manage():
 @app.route('/manage/computes')
 @login_required
 def computes():
-    return render_template('computes.html')
+    email = session['email']
+    users = User.query.filter_by(email=email).first()
+    return render_template('computes.html',users=users)
 
 @app.route('/manage/create')
 @login_required
 def create_instance():
-    return render_template('create-instance.html')
+    email = session['email']
+    users = User.query.filter_by(email=email).first()
+    nova = novaapi()
+    glance = glanceapi()
+    flavorJSON = nova.flavorList(0)
+    flavorJSON = json.loads(flavorJSON)
+    keyJSON = nova.keyList("yj34f8r7j34t79j38jgygvf3")
+    keyJSON = json.loads(keyJSON)
+    imageJSON = glance.imageList("yj34f8r7j34t79j38jgygvf3")
+    imageJSON = json.loads(imageJSON)
+    return render_template('create-instance.html',flavorlist = flavorJSON,keylist=keyJSON,imagelist=imageJSON,users=users)
+    #return str(respJSON['flavors'])
 
 @app.route('/manage/images')
 @login_required
 def images():
-    return render_template('images.html')
+    email = session['email']
+    users = User.query.filter_by(email=email).first()
+    return render_template('images.html',users=users)
 
 @app.route('/manage/network')
 @login_required
 def network():
-    return render_template('network.html')
+    email = session['email']
+    users = User.query.filter_by(email=email).first()
+    return render_template('network.html',users=users)
 
-@app.route('/manage/settings')
+@app.route('/manage/settings',methods=["GET","POST"])
 @login_required
 def settings():
-    return render_template('settings.html')
+    message = []
+    email = session['email']
+    users = User.query.filter_by(email=email).first()
+
+    if request.method == 'POST':
+        if encrypt.check_password_hash(users.password,request.form['password']) :
+            users.name = request.form['name']
+            users.nomorhp = request.form['phone-number']
+            db.session.commit()
+
+            message = "Data berhasil dirubah"
+        else:
+            message = "Password anda salah"
+
+    return render_template('settings.html',users=users, message=message)
 
 @app.route('/manage/request')
 @login_required
 def request_flav():
-    return render_template('request.html')
+    email = session['email']
+    users = User.query.filter_by(email=email).first()
+    return render_template('request.html',users=users)
 
 @app.route('/manage/instance')
 def manage_instance():
-    return render_template('manage-instance.html')
+    email = session['email']
+    users = User.query.filter_by(email=email).first()
+    return render_template('manage-instance.html',users=users)
 
 @app.route('/admin')
 @app.route('/admin/manage')
@@ -214,7 +263,7 @@ def page_login_required(e):
 
 @app.route('/restapi/keystone')
 @app.route('/restapi/keystone/')
-def keystone(): 
+def keystone():
     keystone = keystoneapi()
     respJSON = keystone.myRequest()
 
@@ -228,13 +277,38 @@ def nova():
 
     return url
 
+@app.route('/restapi/nova/server/create')
+@app.route('/restapi/nova/server/create/')
+def serverCreate():
+    nova = novaapi()
+    name = "Tes-Web"
+    imageRef = "04e2143e-a72a-4157-b744-0ae1c48377b1"
+    flavorRef = "2"
+    key_name = "fatih-debian"
+    networks_uuid = "4740af3d-582e-432f-9286-92b9c943e1cf"
+    availability_zone = "nova"
+
+    respJSON = nova.serverCreate(name,imageRef,flavorRef,availability_zone,key_name,networks_uuid)
+
+
+    return respJSON
+
+@app.route('/restapi/nova/server/list')
+@app.route('/restapi/nova/server/list/')
+def serverList():
+    nova = novaapi()
+    respJSON = nova.serverList()
+
+
+    return respJSON
+
 @app.route('/restapi/nova/flavorlist')
 @app.route('/restapi/nova/flavorlist/')
 def flavorlist():
     nova = novaapi()
     respJSON = nova.flavorList(0)
     #resp = json.loads(respJSON)
-    
+
     return respJSON
 
 @app.route('/restapi/nova/flavorlist/<flavor_id>')
@@ -252,7 +326,16 @@ def imagelist():
     nova = novaapi()
     respJSON = nova.imageList(0)
     #resp = json.loads(respJSON)
-    
+
+    return respJSON
+
+@app.route('/restapi/glance/imagelist')
+@app.route('/restapi/glance/imagelist/')
+def gimagelist():
+    glance = glanceapi()
+    respJSON = glance.imageList("yj34f8r7j34t79j38jgygvf3")
+    #resp = json.loads(respJSON)
+
     return respJSON
 
 @app.route('/restapi/nova/keylist')
@@ -260,8 +343,8 @@ def imagelist():
 def keylist():
     nova = novaapi()
     respJSON = nova.keyList("yj34f8r7j34t79j38jgygvf3")
-    
-    
+
+
     return respJSON
 
 @app.route('/restapi/nova/keylist/<key_name>')
@@ -277,7 +360,7 @@ def keylistdelete():
     if request.method == "GET":
         if request.args.get('keyname') is None:
             return "Bad Parameter"
-        else:            
+        else:
             key_name = request.args.get('keyname')
             nova = novaapi()
             respJSON = nova.keyDel(key_name)
@@ -292,7 +375,7 @@ def keylistnew():
     if request.method == "GET":
         if request.args.get('keyname') is None:
             return "Bad Parameter"
-        else:            
+        else:
             key_name = request.args.get('keyname')
             nova = novaapi()
             respJSON = nova.keyNew(key_name)
@@ -312,7 +395,7 @@ def netlist():
     nova = novaapi()
     respJSON = nova.netList("yj34f8r7j34t79j38jgygvf3")
     #resp = json.loads(respJSON)
-    
+
     return respJSON
 
 @app.route('/restapi/neutron/floatiplist')
@@ -321,12 +404,10 @@ def floatiplist():
     neutron = neutronapi()
     respJSON = neutron.floatipList("yj34f8r7j34t79j38jgygvf3")
     #resp = json.loads(respJSON)
-    
+
     return respJSON
 
 
-'''
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(os.path.join(app.root_path,'static'),'favicon.png')
-    '''

@@ -1,6 +1,11 @@
 {% extends "manage.html" %} {% block content %}
 
 <div class="ui vertical stripe settings container">
+    {% if message %}
+    <div class="ui negative message">
+        <i class="close icon"></i>
+        {{message}}</div>
+    {% endif %}
     <div class="ui stackable grid container">
         <div class="row">
             <h3 class="ui header">Settings</h3>
@@ -21,17 +26,20 @@
                         <div class="three wide column">
                             <img class="ui small avatar image" src="../static/img/avatar/tom.jpg">
                         </div>
-                        <div class="ten wide stretched column">
-                            <h3>Username</h3>
+                        <div class="nine wide stretched column">
+                            <h3>{{users.name}}</h3>
                             <div class="ui list">
-                                <div class="item">email@telkom.co.id</div>
-                                <div class="item">Member Since</div>
-                                <div class="item">Address</div>
+                                <div class="item">{{users.email}}</div>
+                                <div class="item">{{users.registered_on.date()}}</div>
+                                <div class="item">{{users.nomorhp}}</div>
                                 <div class="item">Instances Created</div>
                             </div>
                         </div>
-                        <div class="three wide column">
-                            <a class="ui teal editprofile button">Edit Profile</a>
+                        <div class="four wide column">
+                            <div class="ui right aligned container">
+                                <a class="ui fluid teal editprofile button" style="margin-bottom: .5em;">Edit Profile</a>
+                                <a class="ui fluid teal changepassword button">Change Password</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -68,24 +76,49 @@
         Edit your profile
     </div>
     <div class="content">
-        <form class="ui form">
+        <form class="ui form" method="POST" action="">
             <div class="field">
                 <label>Name</label>
-                <input type="text" name="name" placeholder="Full Name">
+                <input type="text" name="name"  value="{{users.name}}" >
             </div>
             <div class="field">
                 <label>Email Address</label>
-                <input type="email" name="email" placeholder="Email Address">
+                <input type="email" name="email" value="{{users.email}}" disabled>
+            </div>
+            <div class="field">
+                <label>Phone Number</label>
+                <input type="text" name="phone-number" value="{{users.nomorhp}}" >
             </div>
             <div class="field">
                 <label>Password</label>
                 <input type="password" name="password" placeholder="Password">
             </div>
+            <button class="ui teal submit button" type="submit">Update Profile</button>
+        </form>
+    </div>
+</div>
+
+<div class="ui changepassword modal">
+    <i class="close icon"></i>
+    <div class="header">
+        Edit your profile
+    </div>
+    <div class="content">
+        <form class="ui form" method="POST" action="">
             <div class="field">
-                <label>Phone Number</label>
-                <input type="number" name="phone-number" placeholder="Phone Number">
+                <label>Old Password</label>
+                <input type="password" name="old-password" placeholder="Old Password" >
             </div>
-            <button class="ui teal button" type="submit">Update Profile</button>
+            <div class="field">
+                <label>New Password</label>
+                <input type="password" name="new-password" placeholder="New Password">
+            </div>
+            <div class="field">
+                <label>Confirm Password</label>
+                <input type="password" name="confirm-password" placeholder="Confirm Password" >
+            </div>
+
+            <button class="ui teal submit button" type="submit">Change Password</button>
         </form>
     </div>
 </div>
@@ -98,6 +131,18 @@
         .modal('attach events', '.ui.editprofile.button', 'show')
         .modal('setting', 'transition', 'fade up');
 
+    $('.ui.changepassword.modal')
+        .modal('attach events', '.ui.changepassword.button', 'show')
+        .modal('setting', 'transition', 'fade up');
+
+        $('.ui.negative.message .close')
+          .on('click', function() {
+            $(this)
+              .closest('.message')
+              .transition('fade')
+            ;
+          })
+        ;
 </script>
 
 {% endblock %}
