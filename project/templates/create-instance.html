@@ -13,7 +13,7 @@
                 </div>
                 <div class="ui bottom attached active tab segment" data-tab="distribution">
                     <div class="ui padded container">
-                        <div class="ui four column grid">                        
+                        <div class="ui four column grid">
                             {% for image in imagelist['images'] %}
                                 <a class="column">
                                 <div id="image-{{image['id']}}" class="ui center aligned segment instance">
@@ -137,7 +137,7 @@
                                 {% for keypair in keylist['keypairs'] %}
                                 <div class="item" data-value="{{ keypair['keypair']['name'] }}">{{ keypair['keypair']['name'] }}</div>
                                 {% endfor %}
-                                
+
                             </div>
                         </div>
                     </div>
