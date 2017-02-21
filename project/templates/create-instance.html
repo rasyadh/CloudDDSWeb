@@ -18,8 +18,7 @@
                                 <a class="column">
                                 <div id="image-{{image['id']}}" class="ui center aligned segment instance">
                                     <p>{{image['name']}}</p></br>
-                                    <button class="ui fluid teal button"
-                                    onclick="selectedimageid('{{image['id']}}')">Choose</button>
+                                    <button class="ui fluid teal button" onclick="selectedimageid('{{image['id']}}')">Choose</button>
                                 </div>
                             {% endfor %}
                             </a>
@@ -30,8 +29,7 @@
                     <div class="ui padded container">
                         <div class="ui five column grid">
                             <a class="column" ng-repeat="appc in caCtrl.createApps">
-                                <div class="ui center aligned segment apps"
-                                ng-click="select($index)" ng-class="{{ '{ teal: $index === selectedIndex }' }}">
+                                <div class="ui center aligned segment apps" ng-click="select($index)" ng-class="{{ '{ teal: $index === selectedIndex }' }}">
                                     <i class="linux icon"></i></br>
                                     <p>{{ '{{ appc.nama }}' }}</p>
                                 </div>
@@ -67,8 +65,7 @@
                                         <div>{{ flavor['disk'] }}GB Disk</div>
                                     </div>
                                     </br>
-                                    <button class="ui fluid teal button"
-                                    onclick="selectedflavorid({{flavor['id']}})">Choose</button>
+                                    <button class="ui fluid teal button" onclick="selectedflavorid({{flavor['id']}})">Choose</button>
                                 </div>
                             </div>
                             {% endfor %}
@@ -93,16 +90,21 @@
                                 <input type="number" id="memory" readonly style="border:0; color:#00b5ad; font-weight:bold;">
                                 <div id="slider-range-max-memory"></div>
                                 <div class="ui grid" style="margin-top: .5em;">
-                                    <div class="left floated four wide column">1 GB</div>
-                                    <div class="left floated four wide column">2 GB</div>
-                                    <div class="left floated four wide column">3 GB</div>
-                                    <div class="right floated four wide column">4 GB</div>
+                                    <div class="left floated five wide column">1 GB</div>
+                                    <div class="left floated five wide column">2 GB</div>
+                                    <div class="left floated five wide column">3 GB</div>
+                                    <div class="right floated wide column">4 GB</div>
                                 </div>
                             </div>
                             <div class="field" id="slider">
                                 <label for="disk">Disk : </label>
                                 <input type="number" id="disk" readonly style="border:0; color:#00b5ad; font-weight:bold;">
                                 <div id="slider-range-max-disk"></div>
+                                <div class="ui grid" style="margin-top: .5em;">
+                                    <div class="left floated five wide column">20 GB</div>
+                                    <div class="left floated five wide column">40 GB</div>
+                                    <div class="left floated five wide column">80 GB</div>
+                                </div>
                             </div>
                             <div class="ui center aligned container">
                                 <button class="ui fluid teal button">Choose</button>

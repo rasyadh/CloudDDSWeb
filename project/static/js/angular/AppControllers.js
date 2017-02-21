@@ -5,13 +5,15 @@ app.controller('InfomainController', function () {
     this.mInfo = [
         {
             image: "../static/img/cloud-computing.png",
-            title: "Layanan Cloud Cepat dan Handal",
-            description: "Dengan penggunaan layanan yang berbasis OpenStack dan layanan support yang selalu tersedia."
+            title: "Freedom at VM Level"
         },
         {
             image: "../static/img/list.png",
-            title: "Mendukung Semua yang Dibutuhkan",
-            description: "Layanan kami mendukung semua fitur dan kebutuhan yang anda perlukan untuk cloud anda."
+            title: "Easy & On-Demand Activation"
+        },
+        {
+            image: "../static/img/scaleup.png",
+            title: "Scale Resource As You Grow"
         }
     ];
 });

@@ -243,6 +243,23 @@ def manage_instance():
     users = User.query.filter_by(email=email).first()
     return render_template('manage-instance.html',users=users)
 
+@app.route('/admin')
+@app.route('/admin/manage')
+def admin_page():
+    return redirect(url_for('manage_resource'))
+
+@app.route('/admin/manage-resource')
+def manage_resource():
+    return render_template('managing-resource.html')
+
+@app.route('/admin/manage-user')
+def manage_user():
+    return render_template('managing-user.html')
+
+@app.route('/admin/manage-vm')
+def manage_vm():
+    return render_template('managing-vm.html')
+
 # error handler
 @app.errorhandler(404)
 def page_not_found(e):
