@@ -201,12 +201,24 @@ def network():
     users = User.query.filter_by(email=email).first()
     return render_template('network.html',users=users)
 
-@app.route('/manage/settings')
+@app.route('/manage/settings',methods=["GET","POST"])
 @login_required
 def settings():
+    message = []
     email = session['email']
     users = User.query.filter_by(email=email).first()
-    return render_template('settings.html',users=users)
+
+    if request.method == 'POST':
+        if encrypt.check_password_hash(users.password,request.form['password']) :
+            users.name = request.form['name']
+            users.nomorhp = request.form['phone-number']
+            db.session.commit()
+
+            message = "Data berhasil dirubah"
+        else:
+            message = "Password anda salah"
+
+    return render_template('settings.html',users=users, message=message)
 
 @app.route('/manage/request')
 @login_required

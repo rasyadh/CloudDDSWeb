@@ -1,6 +1,11 @@
 {% extends "manage.html" %} {% block content %}
 
 <div class="ui vertical stripe settings container">
+    {% if message %}
+    <div class="ui negative message">
+        <i class="close icon"></i>
+        {{message}}</div>
+    {% endif %}
     <div class="ui stackable grid container">
         <div class="row">
             <h3 class="ui header">Settings</h3>
@@ -33,7 +38,7 @@
                         <div class="four wide column">
                             <div class="ui right aligned container">
                                 <a class="ui fluid teal editprofile button" style="margin-bottom: .5em;">Edit Profile</a>
-                                <a class="ui fluid teal changepass button">Change Password</a>
+                                <a class="ui fluid teal changepassword button">Change Password</a>
                             </div>
                         </div>
                     </div>
@@ -71,24 +76,49 @@
         Edit your profile
     </div>
     <div class="content">
-        <form class="ui form">
+        <form class="ui form" method="POST" action="">
             <div class="field">
                 <label>Name</label>
-                <input type="text" name="name" placeholder="{{users.name}}">
+                <input type="text" name="name"  value="{{users.name}}" >
             </div>
             <div class="field">
                 <label>Email Address</label>
-                <input type="email" name="email" placeholder="{{users.email}}">
+                <input type="email" name="email" value="{{users.email}}" disabled>
             </div>
             <div class="field">
                 <label>Phone Number</label>
-                <input type="number" name="phone-number" placeholder="{{users.nomorhp}}">
+                <input type="text" name="phone-number" value="{{users.nomorhp}}" >
             </div>
             <div class="field">
                 <label>Password</label>
                 <input type="password" name="password" placeholder="Password">
             </div>
-            <button class="ui teal button" type="submit">Update Profile</button>
+            <button class="ui teal submit button" type="submit">Update Profile</button>
+        </form>
+    </div>
+</div>
+
+<div class="ui changepassword modal">
+    <i class="close icon"></i>
+    <div class="header">
+        Edit your profile
+    </div>
+    <div class="content">
+        <form class="ui form" method="POST" action="">
+            <div class="field">
+                <label>Old Password</label>
+                <input type="password" name="old-password" placeholder="Old Password" >
+            </div>
+            <div class="field">
+                <label>New Password</label>
+                <input type="password" name="new-password" placeholder="New Password">
+            </div>
+            <div class="field">
+                <label>Confirm Password</label>
+                <input type="password" name="confirm-password" placeholder="Confirm Password" >
+            </div>
+
+            <button class="ui teal submit button" type="submit">Change Password</button>
         </form>
     </div>
 </div>
@@ -101,6 +131,18 @@
         .modal('attach events', '.ui.editprofile.button', 'show')
         .modal('setting', 'transition', 'fade up');
 
+    $('.ui.changepassword.modal')
+        .modal('attach events', '.ui.changepassword.button', 'show')
+        .modal('setting', 'transition', 'fade up');
+
+        $('.ui.negative.message .close')
+          .on('click', function() {
+            $(this)
+              .closest('.message')
+              .transition('fade')
+            ;
+          })
+        ;
 </script>
 
 {% endblock %}
