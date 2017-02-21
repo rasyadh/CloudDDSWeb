@@ -16,10 +16,10 @@
                         <div class="ui four column grid">                        
                             {% for image in imagelist['images'] %}
                                 <a class="column">
-                                <div class="ui center aligned segment instance">
+                                <div id="image-{{image['id']}}" class="ui center aligned segment instance">
                                     <p>{{image['name']}}</p></br>
                                     <button class="ui fluid teal button"
-                                    onclick="selectedimageid(String({{image['id']}})">Choose</button>
+                                    onclick="selectedimageid('{{image['id']}}')">Choose</button>
                                 </div>
                             {% endfor %}
                             </a>
@@ -54,7 +54,7 @@
                         <div class="ui four column grid">
                             {% for flavor in flavorlist['flavors'] %}
                             <div class="column">
-                                <div id="{{flavor['id']}}" class="ui center aligned segment">
+                                <div id="flavor-{{flavor['id']}}" class="ui center aligned segment">
                                     <div class="ul list">
                                         <div class="item">{{ flavor['name'] }}</div>
                                         <div class="ui divider"></div>
@@ -152,13 +152,19 @@
             </div>
         </div>
 
+        <form method="POST">
+
+        <input id="imageRef" type="text" name="imageRef" hidden value="">
+        <input id="flavorRef" type="text" name="imageRef" hidden value="">
+        <input id="imageRef" type="text" name="imageRef" hidden value="">
+
         <div class="row">
             <div class="ui container">
                 <h2 class="ui dividing header">Finalize and create</h2>
                 <div class="ui form">
                     <div class="field">
-                        <label>Choose a hostname</label>
-                        <input type="text" name="hostname" placeholder="Instance Hostname">
+                        <label>Choose a name</label>
+                        <input type="text" name="name" placeholder="Instance Name">
                     </div>
                     <div class="field">
                         <label>Usage Purpose</label>
@@ -177,6 +183,8 @@
                 </div>
             </div>
         </div>
+
+        </form>
 
         </br>
         <a class="ui fluid teal button">Create</a>
