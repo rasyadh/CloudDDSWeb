@@ -1,29 +1,27 @@
-{% extends "admin-page.html" %} {% block content %}
+{% extends "admin/admin-page.html" %} {% block content %}
 
 <div class="ui vertical stripe computes container">
     <div class="ui stackable grid container">
         <div class="row">
-            <h3 class="ui header">Manage User</h3>
+            <h3 class="ui header">Manage VM</h3>
             <div class="ui vertical stripe center aligned container">
-                <h2>List User</h2>
+                <h2>List VM</h2>
                 <table class="ui teal table center aligned">
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Email</th>
-                            <th>User ID</th>
+                            <th>Operating System</th>
+                            <th>User</th>
                             <th>Status</th>
-                            <th>Instance</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
+                            <td>Instance test</td>
+                            <td>linux</td>
                             <td>user</td>
-                            <td>user@telkom.co.id</td>
-                            <td>user id</td>
                             <td>Active</td>
-                            <td>1</td>
                             <td>
                                 <button class="ui yellow button">Status</button>
                                 <div class="ui flowing popup top left transition hidden">
@@ -39,6 +37,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <button class="ui green button">Detail</button>
                                 <button class="ui red button">Delete</button>
                             </td>
                         </tr>

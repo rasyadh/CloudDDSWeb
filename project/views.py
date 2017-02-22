@@ -24,7 +24,24 @@ def login_required(test):
             abort(403)
     return wrap
 
-# Client Side
+def admin_required(admin):
+    @wraps(admin)
+    def wrap(*args, **kwargs):
+        if 'admin_in' in session:
+            return admin(*args,**kwargs)
+        else:
+            abort(403)
+    return wrap
+
+@app.route('/logout')
+def logout():
+    session.pop('logged_in',None)
+    session.pop('admin_in',None)
+    session.pop('user_id',None)
+    session.pop('admin_id',None)
+    return redirect(url_for('index'))
+
+# Client Side --- USER
 
 @app.route('/')
 def index():
@@ -99,10 +116,15 @@ def login():
                     errormsg = "Akun Anda Belum TERVERIFIKASI"
 
                 else:
-                    if encrypt.check_password_hash(users.password,request.form['password']) :
+                    if encrypt.check_password_hash(users.password,request.form['password']) and users.role == 0:
                         session['logged_in'] = True
-                        session['email'] = users.email
+                        session['user_id'] = users.id
                         return redirect(url_for('manage'))
+
+                    elif encrypt.check_password_hash(users.password,request.form['password']) and users.role == 1:
+                        session['admin_in'] = True
+                        session['admin_id'] = users.id
+                        return redirect(url_for('admin_page'))
 
                     else :
                         errormsg = "Password Anda Salah !"
@@ -144,13 +166,6 @@ def activate_account():
 def activation_accountred(activation_code):
     return redirect(url_for('activate_account'))
 
-@app.route('/logout')
-@login_required
-def logout():
-    session.pop('logged_in',None)
-    session.pop('email',None)
-    return redirect(url_for('index'))
-
 @app.route('/layanan')
 def layanan():
     return render_template('partials/layanan.html')
@@ -160,6 +175,7 @@ def bantuan():
     return render_template('partials/bantuan.html')
 
 @app.route('/manage')
+@app.route('/manage/')
 @login_required
 def manage():
     return redirect(url_for('computes'))
@@ -167,15 +183,14 @@ def manage():
 @app.route('/manage/computes')
 @login_required
 def computes():
-    email = session['email']
-    users = User.query.filter_by(email=email).first()
+    users = User.query.filter_by(id=session['user_id']).first()
     return render_template('computes.html',users=users)
 
 @app.route('/manage/create')
 @login_required
 def create_instance():
-    email = session['email']
-    users = User.query.filter_by(email=email).first()
+    users = User.query.filter_by(id=session['user_id']).first()
+    #ubahteko baris iki
     nova = novaapi()
     glance = glanceapi()
     flavorJSON = nova.flavorList(0)
@@ -190,23 +205,20 @@ def create_instance():
 @app.route('/manage/images')
 @login_required
 def images():
-    email = session['email']
-    users = User.query.filter_by(email=email).first()
+    users = User.query.filter_by(id=session['user_id']).first()
     return render_template('images.html',users=users)
 
 @app.route('/manage/network')
 @login_required
 def network():
-    email = session['email']
-    users = User.query.filter_by(email=email).first()
+    users = User.query.filter_by(id=session['user_id']).first()
     return render_template('network.html',users=users)
 
 @app.route('/manage/settings',methods=["GET","POST"])
 @login_required
 def settings():
     message = []
-    email = session['email']
-    users = User.query.filter_by(email=email).first()
+    users = User.query.filter_by(id=session['user_id']).first()
 
     if request.method == 'POST':
         if 'updateprofile' in request.form.values():
@@ -224,7 +236,7 @@ def settings():
                  users.password = encrypt.generate_password_hash(request.form['confirm-password'])
                  db.session.commit()
                  message = "Password telah berubah"
-                 
+
             else:
                  message = "Password anda salah"
 
@@ -233,32 +245,41 @@ def settings():
 @app.route('/manage/request')
 @login_required
 def request_flav():
-    email = session['email']
-    users = User.query.filter_by(email=email).first()
+    users = User.query.filter_by(id=session['user_id']).first()
     return render_template('request.html',users=users)
 
 @app.route('/manage/instance')
 def manage_instance():
-    email = session['email']
-    users = User.query.filter_by(email=email).first()
+    users = User.query.filter_by(id=session['user_id']).first()
     return render_template('manage-instance.html',users=users)
 
+# Client Side --- ADMIN
+
 @app.route('/admin')
+@app.route('/admin/')
 @app.route('/admin/manage')
+@admin_required
 def admin_page():
     return redirect(url_for('manage_resource'))
 
 @app.route('/admin/manage-resource')
+@admin_required
 def manage_resource():
-    return render_template('managing-resource.html')
+    admin = User.query.filter_by(id=session['admin_id']).first()
+    return render_template('admin/managing-resource.html',admin=admin)
 
-@app.route('/admin/manage-user')
+@app.route('/admin/manage-user',methods=['GET','POST'])
+@admin_required
 def manage_user():
-    return render_template('managing-user.html')
+    admin = User.query.filter_by(id=session['admin_id']).first()
+    allusers = User.query.filter_by(role=0).all()
+    return render_template('admin/managing-user.html',admin=admin,allusers=allusers)
 
 @app.route('/admin/manage-vm')
+@admin_required
 def manage_vm():
-    return render_template('managing-vm.html')
+    admin = User.query.filter_by(id=session['admin_id']).first()
+    return render_template('admin/managing-vm.html',admin=admin)
 
 # error handler
 @app.errorhandler(404)
