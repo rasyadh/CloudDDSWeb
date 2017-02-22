@@ -186,20 +186,24 @@ def computes():
     users = User.query.filter_by(id=session['user_id']).first()
     return render_template('computes.html',users=users)
 
-@app.route('/manage/create')
+@app.route('/manage/create', methods=['GET','POST'])
 @login_required
 def create_instance():
-    users = User.query.filter_by(id=session['user_id']).first()
-    #ubahteko baris iki
-    nova = novaapi()
-    glance = glanceapi()
-    flavorJSON = nova.flavorList(0)
-    flavorJSON = json.loads(flavorJSON)
-    keyJSON = nova.keyList("yj34f8r7j34t79j38jgygvf3")
-    keyJSON = json.loads(keyJSON)
-    imageJSON = glance.imageList("yj34f8r7j34t79j38jgygvf3")
-    imageJSON = json.loads(imageJSON)
-    return render_template('create-instance.html',flavorlist = flavorJSON,keylist=keyJSON,imagelist=imageJSON,users=users)
+    if request.method == 'POST':
+        return "oke"
+
+    else:
+        users = User.query.filter_by(id=session['user_id']).first()
+        #ubahteko baris iki
+        nova = novaapi()
+        glance = glanceapi()
+        flavorJSON = nova.flavorList(0)
+        flavorJSON = json.loads(flavorJSON)
+        keyJSON = nova.keyList("yj34f8r7j34t79j38jgygvf3")
+        keyJSON = json.loads(keyJSON)
+        imageJSON = glance.imageList("yj34f8r7j34t79j38jgygvf3")
+        imageJSON = json.loads(imageJSON)
+        return render_template('create-instance.html',flavorlist = flavorJSON,keylist=keyJSON,imagelist=imageJSON,users=users)
     #return str(respJSON['flavors'])
 
 @app.route('/manage/images')
@@ -307,6 +311,31 @@ def nova():
     url = nova.getUrl()
 
     return url
+
+@app.route('/restapi/nova/server/create')
+@app.route('/restapi/nova/server/create/')
+def serverCreate():
+    nova = novaapi()
+    name = "Tes-Web"
+    imageRef = "04e2143e-a72a-4157-b744-0ae1c48377b1"
+    flavorRef = "2"
+    key_name = "fatih-debian"
+    networks_uuid = "4740af3d-582e-432f-9286-92b9c943e1cf"
+    availability_zone = "nova"
+
+    respJSON = nova.serverCreate(name,imageRef,flavorRef,availability_zone,key_name,networks_uuid)
+
+
+    return respJSON
+
+@app.route('/restapi/nova/server/list')
+@app.route('/restapi/nova/server/list/')
+def serverList():
+    nova = novaapi()
+    respJSON = nova.serverList()
+
+
+    return respJSON
 
 @app.route('/restapi/nova/flavorlist')
 @app.route('/restapi/nova/flavorlist/')
