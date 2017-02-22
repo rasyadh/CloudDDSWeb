@@ -131,15 +131,23 @@
                 <div class="ui form">
                     <div class="field">
                         <label>Available Key Pair</label>
-                        <div class="ui selection dropdown">
-                            <input type="hidden" name="Key Pair">
+                        <div class="ui selection dropdown" id="key_list">
+                            <input type="hidden" name="key_pair" onchange="selectedkeyid();">
                             <i class="dropdown icon"></i>
                             <div class="default text">Key Pair</div>
                             <div class="menu">
+                                {% set n = 1 %}
                                 {% for keypair in keylist['keypairs'] %}
-                                <div class="item" data-value="{{ keypair['keypair']['name'] }}">{{ keypair['keypair']['name'] }}</div>
+                                {% if n == 1 %}
+                                    <div class="item" selected data-value="{{ keypair['keypair']['name'] }}">{{ 
+                                keypair['keypair']['name'] }}</div>
+                                {% else %}
+                                    <div class="item" data-value="{{ keypair['keypair']['name'] }}">{{ 
+                                keypair['keypair']['name'] }}</div>
+                                {% endif %}
+                                {% set n = n+1   %}
                                 {% endfor %}
-
+                                
                             </div>
                         </div>
                     </div>
@@ -166,33 +174,43 @@
                 <div class="ui form">
                     <div class="field">
                         <label>Choose a name</label>
-                        <input type="text" name="name" placeholder="Instance Name">
+                        <input type="text" name="name" placeholder="Instance Name" onchange="selectedname(this.value);">
                     </div>
                     <div class="field">
                         <label>Usage Purpose</label>
-                        <textarea rows="3"></textarea>
+                        <textarea rows="3" onchange="document.getElementById('purpose').value = this.value;"></textarea>
                     </div>
                     <div class="fields">
                         <div class="field">
                             <label>Person in Charge Name</label>
-                            <input type="text" name="pic_name" placeholder="Name">
+                            <input type="text" name="text" placeholder="Name" onchange="document.getElementById('pic_name').value = this.value;">
                         </div>
                         <div class="field">
                             <label>Person in Charge Phone Number</label>
-                            <input type="text" name="pic_telp" placeholder="Phone Number">
+                            <input type="text" name="text" placeholder="Phone Number" onchange="document.getElementById('pic_telp').value = this.value;">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        </form>
-
         </br>
-        <a class="ui fluid teal button">Create</a>
+        <form id="form_create" class="ui large form" method="POST">
+
+            <input id="imageRef" type="text" name="imageRef"  value="yoi">
+            <input id="flavorRef" type="text" name="flavorRef" value="">
+            <input id="availability_zone" type="text" name="availability_zone" value="nova">
+            <input id="network_uuid" type="text" name="network_uuid" value="4740af3d-582e-432f-9286-92b9c943e1cf">
+            <input id="key_name" type="text" name="key_name" value="">
+            <input id="name" type="text" name="name" value="">
+            <input id="purpose" type="text" name="name" value="">
+            <input id="pic_name" type="text" name="pic_name" value="">
+            <input id="pic_telp" type="text" name="pic_telp" value="">
+            
+            <button id="submit_button" class="ui fluid large teal submit button" type="submit" onclick="submit('form_create')">Create</button>
+        </form>
     </div>
 </div>
-
 <script>
     $('.menu.createi .item')
         .tab()
