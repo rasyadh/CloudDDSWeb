@@ -47,6 +47,39 @@ def logout():
 def index():
     return render_template('partials/content.html')
 
+@app.route('/login',methods=['GET','POST'])
+def login():
+    errormsg = []
+
+    if request.method == 'POST' :
+        try:
+            users = User.query.filter_by(email=request.form['email']+request.form['email_domain']).first()
+
+            if users is None :
+                errormsg = "Email Tidak Terdaftar"
+
+            else :
+                if users.status == 0:
+                    errormsg = "Akun Anda Belum TERVERIFIKASI"
+
+                else:
+                    if encrypt.check_password_hash(users.password,request.form['password']) and users.role == 0:
+                        session['logged_in'] = True
+                        session['user_id'] = users.id
+                        return redirect(url_for('manage'))
+
+                    elif encrypt.check_password_hash(users.password,request.form['password']) and users.role == 1:
+                        session['admin_in'] = True
+                        session['admin_id'] = users.id
+                        return redirect(url_for('admin_page'))
+
+                    else :
+                        errormsg = "Password Anda Salah !"
+
+        except:
+            return "Gagal bos"
+
+    return render_template('login.html',errormsg=errormsg)
 
 @app.route('/registration',methods=['POST','GET'])
 def registration():
@@ -97,43 +130,8 @@ def registration():
 
     return render_template('signup.html',errormsg=errormsg)
 
-@app.route('/registration/')
 def registrationred():
     return redirect(url_for('registration'))
-
-@app.route('/login',methods=['GET','POST'])
-def login():
-    errormsg = []
-
-    if request.method == 'POST' :
-        try:
-            users = User.query.filter_by(email=request.form['email']+request.form['email_domain']).first()
-
-            if users is None :
-                errormsg = "Email Tidak Terdaftar"
-
-            else :
-                if users.status == 0:
-                    errormsg = "Akun Anda Belum TERVERIFIKASI"
-
-                else:
-                    if encrypt.check_password_hash(users.password,request.form['password']) and users.role == 0:
-                        session['logged_in'] = True
-                        session['user_id'] = users.id
-                        return redirect(url_for('manage'))
-
-                    elif encrypt.check_password_hash(users.password,request.form['password']) and users.role == 1:
-                        session['admin_in'] = True
-                        session['admin_id'] = users.id
-                        return redirect(url_for('admin_page'))
-
-                    else :
-                        errormsg = "Password Anda Salah !"
-
-        except:
-            return "Gagal bos"
-
-    return render_template('login.html',errormsg=errormsg)
 
 @app.route('/registration/activate_account',methods=["GET","POST"])
 def activate_account():
@@ -141,7 +139,8 @@ def activate_account():
 
     if request.method == 'POST':
         if request.form['actemp'] is None :
-            return redirect(url_for('login'))
+            abort(404)
+
         else :
             try:
                 activationcode = Token.query.filter_by(code=request.form['actemp']).first()
@@ -153,12 +152,13 @@ def activate_account():
                 return redirect(url_for('login'))
 
             except:
-                return "gagal"
+                abort(404)
+
     else:
         activation_code = request.args.get('actemp')
         activationcode = Token.query.filter_by(code=activation_code).first()
         if activationcode is None:
-            return "kode tidak ditemukan"
+            abort(404)
         else :
             users = User.query.filter_by(email=activationcode.email_user).first()
             return render_template('verifikasi.html',codetemp=activationcode.code,users=users)
@@ -168,13 +168,67 @@ def activation_accountred(activation_code):
     return redirect(url_for('activate_account'))
 
 #Check halaman verifikasi forgot password
-@app.route('/forgot_password')
+@app.route('/forgot_password',methods=["GET","POST"])
 def forgot_password():
+    message = []
+    if request.method == 'POST':
+        users = User.query.filter_by(email=request.form['email']+request.form['email_domain']).first()
+        if users is None :
+            message = 'Email tidak ditemukan'
+
+        else:
+            token = binascii.b2a_hex(os.urandom(15))
+            forgot_token = Token(
+                email_user=request.form['email']+request.form['email_domain'],
+                code=tokens,type=1
+            )
+            message = 'Request reset password telah dikirim'
+            db.session.add(forgot_token)
+            db.session.commit()
+
+            confirm_url = "localhost:5000/forgot_password/reset_password?tokens="+token
+            html = render_template('resetpassword.html',confirm_url = confirm_url, users=users)
+            subject = "Please confirm your email"
+            #send_email(users.email,subject,html)
+            send_email("gravpokemongo@gmail.com",subject,html)
     return render_template('forgot-password.html')
 
-@app.route('/new_password')
-def new_password():
-    return render_template('verifikasi-forgotpass.html')
+@app.route('/forgot_password/')
+def forgotredirect():
+    return redirect(url_for('forgot_password'))
+
+@app.route('/forgot_password/reset_password',methods=['GET','POST'])
+def reset_pass():
+    if request.method == 'POST':
+        if request.form['tokens'] is None :
+            abort(404)
+
+        else :
+            try:
+                tokens = Token.query.filter_by(code=request.form['tokens']).first()
+                users = User.query.filter_by(email=request.form['email']).first()
+
+                users.password = encrypt.generate_password_hash(request.form['confirm_new_password'])
+                db.session.delete(tokens)
+                db.session.commit()
+                return redirect(url_for('login'))
+
+            except:
+                abort(404)
+
+    else:
+        token = request.args.get('tokens')
+        resetauth = Token.query.filter_by(code=token).first()
+        if resetauth is None:
+            abort(404)
+
+        else :
+            users = User.query.filter_by(email=resetauth.email_user).first()
+            return render_template('verifikasi-forgotpass.html',reset=resetauth,users=users)
+
+@app.route('/forgot_password/reset_password/<tokens>/')
+def reset_passred(tokens):
+    return redirect(url_for('reset_pass'))
 
 @app.route('/layanan')
 def layanan():
@@ -311,7 +365,7 @@ def manage_admin():
 # error handler
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html'),404
+    return render_template('error/404.html'),404
 
 @app.errorhandler(403)
 def page_login_required(e):
