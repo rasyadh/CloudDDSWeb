@@ -144,6 +144,15 @@ def activate_account():
 def activation_accountred(activation_code):
     return redirect(url_for('activate_account'))
 
+@app.route('/forgot_password')
+def forgot_password():
+    return render_template('forgot-password.html')
+
+#Check halaman verifikasi forgot password
+@app.route('/new_password')
+def new_password():
+    return render_template('verifikasi-forgotpass.html')
+
 @app.route('/logout')
 @login_required
 def logout():
@@ -249,6 +258,10 @@ def manage_user():
 @app.route('/admin/manage-vm')
 def manage_vm():
     return render_template('managing-vm.html')
+
+@app.route('/admin/manage-admin')
+def manage_admin():
+    return render_template('managing-admin.html')
 
 # error handler
 @app.errorhandler(404)

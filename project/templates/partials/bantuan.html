@@ -9,15 +9,24 @@
 
 <!-- Bantuan Content -->
 <div class="ui vertical stripe bantuan segment" ng-controller="InfobantuanController as ibCtrl">
-    <div class="ui centered page grid">
-        <div class="fourteen wide column">
-            <div class="ui two column center aligned stackable divided grid">
-                <div class="column" ng-repeat="bantuan in ibCtrl.bInfo">
-                    <div class="ui header">
-                        <img class="ui tiny image" ng-src="{{ '{{ bantuan.image }}' }}">
+    <div class="ui stackable grid container">
+        <div class="row">
+            <div class="ui center aligned container">
+                <img class="ui centered tiny image" src="static/img/question.png">
+                <h3>Frequently Asked Question</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="ui stackable grid segment">
+                <div class="ui container faq" ng-repeat="info in ibCtrl.bInfo">
+                    <div class="article">
+                        <div class="ui header">
+                            {{ '{{ info.title }}' }}
+                        </div>
+                        <div class="content">
+                            <p>{{ '{{ info.content }}' }}</p>
+                        </div>
                     </div>
-                    <h3 class="ui header">{{ '{{ bantuan.title }}' }}</h3>
-                    <p>{{ '{{ bantuan.description }}' }}</p>
                 </div>
             </div>
         </div>

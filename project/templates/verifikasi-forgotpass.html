@@ -20,17 +20,8 @@
                 $('.ui.form')
                     .form({
                         fields: {
-                            email: {
-                                identifier: 'email',
-                                rules: [
-                                    {
-                                        type: 'empty',
-                                        prompt: 'Masukkan alamat email'
-                                    }
-                                ]
-                            },
                             password: {
-                                identifier: 'password',
+                                identifier: 'new_password',
                                 rules: [
                                     {
                                         type: 'empty',
@@ -39,6 +30,15 @@
                                     {
                                         type: 'length[6]',
                                         prompt: 'Password minimal 6 karakter'
+                                    }
+                                ]
+                            },
+                            match: {
+                                identifier: 'confirm_new_password',
+                                rules: [
+                                    {
+                                        type: 'match[new_password]',
+                                        prompt: 'Password tidak sama'
                                     }
                                 ]
                             }
@@ -63,41 +63,27 @@
             <form class="ui large form" method="POST">
                 <div class="ui segment">
                     <h1 class="ui text header logo">
-                        Log In
+                        Reset Password
                     </h1>
-                    <div class="two fields">
-                        <div class="field">
-                            <div class="ui left icon input">
-                                <i class="mail icon"></i>
-                                <input type="text" name="email" placeholder="E-mail address">
-                            </div>
-                        </div>
-                        <div class="field">
-                            <div class="ui left icon input">
-                                <i class="at icon"></i>
-                                <input type="text" name="text" disabled placeholder="telkom.co.id">
-                                <input type="hidden" name="email_domain" value="@telkom.co.id">
-                            </div>
+                    <div class="field">
+                        <div class="ui left icon input">
+                            <i class="lock icon"></i>
+                            <input type="password" name="new_password" placeholder="New Password">
                         </div>
                     </div>
                     <div class="field">
                         <div class="ui left icon input">
                             <i class="lock icon"></i>
-                            <input type="password" name="password" placeholder="Password">
+                            <input type="password" name="confirm_new_password" placeholder="Confirm New Password">
                         </div>
                     </div>
-                    <button class="ui fluid large teal submit button" type="submit">Login</button>
-                    </br>
-                    <p><a href="/forgot_password">Lupa Password</a></p>
+                    <button class="ui fluid large teal submit button" type="submit">Reset</button>
                 </div>
 
                 <div class="ui error message"></div>
 
             </form>
 
-            <div class="ui message">
-                <p class="ui header">Tidak punya akun ? <a href="/registration">Sign Up</a></p>
-            </div>
         </div>
     </div>
 </body>
