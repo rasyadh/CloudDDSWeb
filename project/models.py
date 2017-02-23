@@ -32,18 +32,20 @@ class User(db.Model):
     def __repr__(self):
         return '<User {0}>'.format(self.name)
 
-class ActivationCode(db.Model):
+class Token(db.Model):
 
-    __tablename__ = 'activationcode'
+    __tablename__ = 'token'
 
     id = db.Column(db.Integer,primary_key=True)
     email_user = db.Column(db.String,nullable=False,unique=True)
-    activationcode = db.Column(db.String,nullable=False,unique=True)
+    code = db.Column(db.String,nullable=False,unique=True)
+    type = db.Column(db.Integer, nullable=False)
 
-    def __init__(self,id=None,email_user=None,activationcode=None):
+    def __init__(self,id=None,email_user=None,code=None, type=None):
         self.id = id
         self.email_user = email_user
-        self.activationcode = activationcode
+        self.code = code
+        self.type = type
 
 class Instance(db.Model):
 

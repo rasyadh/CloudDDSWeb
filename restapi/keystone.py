@@ -3,7 +3,7 @@ import requests
 
 class keystone():
 
-	url = 'http://10.14.36.4:5000/v3/auth/tokens/'
+	url = 'http://10.14.36.107:5000/v3/auth/tokens/'
 	headers = {'Content-Type' : 'application/json'}
 	contentJSON = {}
 	responsepacket = {}
@@ -43,14 +43,14 @@ class keystone():
 		r = requests.post(self.url, data=self.json_data, headers=self.headers)
 
 		self.contentJSON = json.loads(r.text)
-		
+
 		#print(r.headers)
 
 		if r.status_code == 201:
 			self.responsepacket['x-token'] = r.headers['X-Subject-Token']
 		else :
 			self.responsepacket['x-token'] = ""
-		
+
 		self.responsepacket['content'] = self.contentJSON
 
 		self.returnJSON = json.dumps(self.responsepacket)

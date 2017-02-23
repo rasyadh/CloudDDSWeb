@@ -30,7 +30,7 @@ def admin_required(admin):
         if 'admin_in' in session:
             return admin(*args,**kwargs)
         else:
-            abort(403)
+            return redirect(url_for('index'))
     return wrap
 
 @app.route('/logout')
@@ -46,6 +46,7 @@ def logout():
 @app.route('/')
 def index():
     return render_template('partials/content.html')
+
 
 @app.route('/registration',methods=['POST','GET'])
 def registration():
@@ -71,10 +72,10 @@ def registration():
                 )
 
                 activationcodetmp = binascii.b2a_hex(os.urandom(15))
-                activationcode = ActivationCode(
+                activationcode = Token(
                     email_user=request.form['email']+request.form['email_domain'],
                     #email_user=request.form['email']+"@gmail.com",
-                    activationcode=activationcodetmp,
+                    code=activationcodetmp,type=0
 
                 )
 
@@ -143,7 +144,7 @@ def activate_account():
             return redirect(url_for('login'))
         else :
             try:
-                activationcode = ActivationCode.query.filter_by(activationcode=request.form['actemp']).first()
+                activationcode = Token.query.filter_by(code=request.form['actemp']).first()
                 users = User.query.filter_by(email=request.form['email']).first()
                 users.status = 1
                 users.password = encrypt.generate_password_hash(request.form['password'])
@@ -155,12 +156,12 @@ def activate_account():
                 return "gagal"
     else:
         activation_code = request.args.get('actemp')
-        activationcode = ActivationCode.query.filter_by(activationcode=activation_code).first()
+        activationcode = Token.query.filter_by(code=activation_code).first()
         if activationcode is None:
             return "kode tidak ditemukan"
         else :
             users = User.query.filter_by(email=activationcode.email_user).first()
-            return render_template('verifikasi.html',codetemp=activationcode.activationcode,users=users)
+            return render_template('verifikasi.html',codetemp=activationcode.code,users=users)
 
 @app.route('/registration/activate_account/<activation_code>/')
 def activation_accountred(activation_code):
