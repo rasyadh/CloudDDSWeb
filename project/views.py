@@ -180,7 +180,7 @@ def forgot_password():
             token = binascii.b2a_hex(os.urandom(15))
             forgot_token = Token(
                 email_user=request.form['email']+request.form['email_domain'],
-                code=tokens,type=1
+                code=token,type=1
             )
             message = 'Request reset password telah dikirim'
             db.session.add(forgot_token)
