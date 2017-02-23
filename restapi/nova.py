@@ -17,6 +17,8 @@ class nova():
 	networks = {}
 	network = []
 	OS_SCH_HNT = {}
+	returnJSON = ""
+	responsepacket = {}
 
 	def _init_(self):
 		self.token = 190997 #not important
@@ -42,7 +44,8 @@ class nova():
 		self.headers['X-Auth-Token'] = self.urlJSON['x-token']
 		self.headJSON = json.dumps(self.headers)
 
-		respJSON = self.getRequest(self.urlJSON['url'],str(self.headJSON),self.get_param)
+		r = self.getRequest(self.urlJSON['url'],str(self.headJSON),self.get_param)
+		respJSON = r.text
 
 		#print(respJSON)
 
@@ -61,7 +64,8 @@ class nova():
 		self.headers['X-Auth-Token'] = self.urlJSON['x-token']
 		self.headJSON = json.dumps(self.headers)
 
-		respJSON = self.getRequest(self.urlJSON['url'],str(self.headJSON),self.get_param)
+		r = self.getRequest(self.urlJSON['url'],str(self.headJSON),self.get_param)
+		respJSON = r.text
 
 		#print(respJSON)
 
@@ -80,31 +84,37 @@ class nova():
 		self.server['flavorRef'] = flavorRef
 		self.server['availability_zone'] = availability_zone
 		self.server['key_name'] = key_name
-		self.networks['uuid'] = networks_uuid
-		self.network.append(self.networks)
+		self.network = [{"uuid": ""+networks_uuid}]
 		self.server['networks'] = self.network
-		self.OS_SCH_HNT['same_host'] = "48e6a9f6-30af-47e0-bc04-acaed113bb4e"
+		#self.OS_SCH_HNT['same_host'] = "48e6a9f6-30af-47e0-bc04-acaed113bb4e"
 		self.data['server'] = self.server
-		self.data['OS-SCH-HNT:scheduler_hints'] = self.OS_SCH_HNT
+		#self.data['OS-SCH-HNT:scheduler_hints'] = self.OS_SCH_HNT
 
 		self.post_data = json.dumps(self.data)
 
 		self.urlJSON['url'] = self.urlJSON['url']+"/servers"
-		respJSON = self.postRequest(self.urlJSON['url'],str(self.headJSON),self.post_data)
+		r = self.postRequest(self.urlJSON['url'],str(self.headJSON),self.post_data)
+		respJSON = r.text
 
 		#print(respJSON)
 
 		return respJSON
 
-	def serverList(self):
+	def serverList(self,server_id):
 		self.urlJSON = json.loads(self.getUrl())
 
 		self.headers['Content-Type'] = 'application/json'
 		self.headers['X-Auth-Token'] = self.urlJSON['x-token']
 		self.headJSON = json.dumps(self.headers)
 
-		self.urlJSON['url'] = self.urlJSON['url']+"/servers"
-		respJSON = self.getRequest(self.urlJSON['url'],str(self.headJSON),self.get_param)
+		if server_id == "yj34f8r7j34t79j38jgygvf3":
+			self.urlJSON['url'] = self.urlJSON['url']+"/servers"
+			r = self.getRequest(self.urlJSON['url'],str(self.headJSON),self.get_param)
+		else:
+			self.urlJSON['url'] = self.urlJSON['url']+"/servers/"+server_id
+			r = self.getRequest(self.urlJSON['url'],str(self.headJSON),self.get_param)
+
+		respJSON = r.text
 
 		return respJSON
 
@@ -121,10 +131,12 @@ class nova():
 
 		if keyname == "yj34f8r7j34t79j38jgygvf3":
 			self.urlJSON['url'] = self.urlJSON['url']+"/os-keypairs"
-			respJSON = self.getRequest(self.urlJSON['url'],str(self.headJSON),self.get_param)
+			r = self.getRequest(self.urlJSON['url'],str(self.headJSON),self.get_param)
 		else :
 			self.urlJSON['url'] = self.urlJSON['url']+"/os-keypairs/"+str(keyname)
-			respJSON = self.getRequest(self.urlJSON['url'],str(self.headJSON),self.get_param)
+			r = self.getRequest(self.urlJSON['url'],str(self.headJSON),self.get_param)
+
+		respJSON = r.text
 
 		return respJSON
 
@@ -139,9 +151,21 @@ class nova():
 		self.contJSON['keypair'] = self.keypair
 		self.contJSON = json.dumps(self.contJSON)
 		self.urlJSON['url'] = self.urlJSON['url']+"/os-keypairs"
-		respJSON = self.postRequest(self.urlJSON['url'],str(self.headJSON),str(self.contJSON))
+		
+		r = self.postRequest(self.urlJSON['url'],str(self.headJSON),str(self.contJSON))
+		respJSON = r.text
 
-		return respJSON
+		if r.status_code == 200:
+			self.responsepacket['status'] = True
+			self.responsepacket['content'] = respJSON
+			self.returnJSON = json.dumps(self.responsepacket)
+		else :
+			self.responsepacket['status'] = False
+			respJSON = json.loads(respJSON)
+			self.responsepacket['content'] = respJSON
+			self.returnJSON = json.dumps(self.responsepacket)
+
+		return str(self.returnJSON)
 
 	def keyDel(self,keyname):
 		self.urlJSON = json.loads(self.getUrl())
@@ -151,7 +175,8 @@ class nova():
 		self.headJSON = json.dumps(self.headers)
 
 		self.urlJSON['url'] = self.urlJSON['url']+"/os-keypairs/"+str(keyname)
-		respJSON = self.delRequest(self.urlJSON['url'],str(self.headJSON),self.get_param)
+		r = self.delRequest(self.urlJSON['url'],str(self.headJSON),self.get_param)
+		respJSON = r.text
 
 		return respJSON
 
@@ -166,31 +191,57 @@ class nova():
 
 		if netid == "yj34f8r7j34t79j38jgygvf3":
 			self.urlJSON['url'] = self.urlJSON['url']+"/os-networks"
-			respJSON = self.getRequest(self.urlJSON['url'],str(self.headJSON),self.get_param)
+			r = self.getRequest(self.urlJSON['url'],str(self.headJSON),self.get_param)
 		else :
 			self.urlJSON['url'] = self.urlJSON['url']+"/os-networks"+str(netid)
-			respJSON = self.postRequest(self.urlJSON['url'],str(self.headJSON),str(self.contJSON))
+			r = self.postRequest(self.urlJSON['url'],str(self.headJSON),str(self.contJSON))
+
+		respJSON = r.text
 
 		#print(respJSON)
 
 		return str(respJSON)
 
+	addFloatingIp = {}
+
+
+	def setFloatingIp(self,privateip,publicip,serverid):
+		self.urlJSON = json.loads(self.getUrl())
+
+		self.headers['Content-Type'] = 'application/json'
+		self.headers['X-Auth-Token'] = self.urlJSON['x-token']
+		self.headJSON = json.dumps(self.headers)
+
+		self.addFloatingIp['address'] = publicip
+		self.addFloatingIp['fixed_address'] = privateip
+		self.data['addFloatingIp'] = self.addFloatingIp
+
+		self.post_data = json.dumps(self.data)
+
+		self.urlJSON['url'] = self.urlJSON['url']+"/servers/" + str(serverid) + "/action"
+		r = self.postRequest(self.urlJSON['url'],str(self.headJSON),self.post_data)
+		respJSON = r.text
+
+		#print(respJSON)
+
+		return respJSON
+
 	def postRequest(self,url,headers,json_data):
 		headers = json.loads(headers)
 		r = requests.post(url, data=json_data, headers=headers)
 
-		return r.text
+		return r
 
 	def getRequest(self,url,header,param):
 		header = json.loads(header)
 
 		r = requests.get(url, headers = header,params=param)
 
-		return r.text
+		return r
 
 	def delRequest(self,url, header,param):
 		header = json.loads(header)
 
 		r = requests.delete(url, headers = header, params=param)
 
-		return r.text
+		return r

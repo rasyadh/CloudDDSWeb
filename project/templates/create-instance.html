@@ -17,12 +17,8 @@
                             {% for image in imagelist['images'] %}
                             <a class="column">
                                 <div id="image-{{image['id']}}" class="ui center aligned segment instance">
-<<<<<<< HEAD
                                     <p>{{image['name']}}</p>
                                     </br>
-=======
-                                    <p>{{image['name']}}</p></br>
->>>>>>> 877014317f4b7cd2fd0ef3bd3dabce7a92d0b0fc
                                     <button class="ui fluid teal button" onclick="selectedimageid('{{image['id']}}')">Choose</button>
                                 </div>
                                 {% endfor %}
@@ -70,11 +66,7 @@
                                         <div>{{ flavor['disk'] }}GB Disk</div>
                                     </div>
                                     </br>
-<<<<<<< HEAD
-                                    <button class="ui fluid teal button" onclick="selectedflavorid({{flavor['id']}})">Choose</button>                                    >>>>>>> 7ff8d7864997181bf98c85d8332646ea7eac3012
-=======
-                                    <button class="ui fluid teal button" onclick="selectedflavorid({{flavor['id']}})">Choose</button>
->>>>>>> 877014317f4b7cd2fd0ef3bd3dabce7a92d0b0fc
+                                    <button class="ui fluid teal button" onclick="selectedflavorid('{{flavor['id']}}')">Choose</button>
                                 </div>
                             </div>
                             {% endfor %}
@@ -163,43 +155,15 @@
                     <div class="field">
                         <label>Add Key Pair</label>
                         <div class="ui action input">
-                            <input type="text" placeholder="Add key pair">
-                            <button class="ui teal button">Add</button>
+                            <form action="/restapi/nova/keylist/new"  method="GET">
+                            <input type="text" name="keyname" placeholder="Add key pair">
+                            <button class="ui fluid large teal submit button" type="submit" onsubmit="location.reload(true);}">Create</button>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-<<<<<<< HEAD
-
-        <form method="POST">
-
-            <input id="imageRef" type="text" name="imageRef" hidden value="">
-            <input id="flavorRef" type="text" name="imageRef" hidden value="">
-            <input id="imageRef" type="text" name="imageRef" hidden value="">
-
-            <div class="row">
-                <div class="ui container">
-                    <h2 class="ui dividing header">Finalize and create</h2>
-                    <div class="ui form">
-                        <div class="field">
-                            <label>Choose a name</label>
-                            <input type="text" name="name" placeholder="Instance Name">
-                        </div>
-                        <div class="field">
-                            <label>Usage Purpose</label>
-                            <textarea rows="3"></textarea>
-                        </div>
-                        <div class="fields">
-                            <div class="field">
-                                <label>Person in Charge Name</label>
-                                <input type="text" name="pic_name" placeholder="Name">
-                            </div>
-                            <div class="field">
-                                <label>Person in Charge Phone Number</label>
-                                <input type="text" name="pic_telp" placeholder="Phone Number">
-                            </div>
-=======
         <div class="row">
             <div class="ui container">
                 <h2 class="ui dividing header">Finalize and create</h2>
@@ -220,7 +184,6 @@
                         <div class="field">
                             <label>Person in Charge Phone Number</label>
                             <input type="text" name="text" placeholder="Phone Number" onchange="document.getElementById('pic_telp').value = this.value;">
->>>>>>> 877014317f4b7cd2fd0ef3bd3dabce7a92d0b0fc
                         </div>
                     </div>
                 </div>
