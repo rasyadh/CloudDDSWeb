@@ -3,4 +3,4 @@ import os
 from project import app
 
 if __name__ == '__main__':
-    app.run(threaded=True,port=5001)
+    app.run(threaded=True)
