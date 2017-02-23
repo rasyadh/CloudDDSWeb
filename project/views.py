@@ -189,14 +189,24 @@ def computes():
 @app.route('/manage/create', methods=['GET','POST'])
 @login_required
 def create_instance():
-    if request.method == 'POST':
-        return "oke"
+    nova = novaapi()
+    glance = glanceapi()
 
+    if request.method == 'POST':
+        try:
+            imageRef = request.form['imageRef']
+            flavorRef = str(request.form['flavorRef'])
+            availability_zone = request.form['availability_zone']
+            networks_uuid = "daeb34bc-b505-4852-8ad0-8ff693dee13a"
+            key_name = request.form['key_name']
+            name = request.form['name']
+            respJSON = nova.serverCreate(name,imageRef,flavorRef,availability_zone,key_name,networks_uuid)
+            return respJSON
+        except:
+            return "Bad Parameter"
     else:
         users = User.query.filter_by(id=session['user_id']).first()
         #ubahteko baris iki
-        nova = novaapi()
-        glance = glanceapi()
         flavorJSON = nova.flavorList(0)
         flavorJSON = json.loads(flavorJSON)
         keyJSON = nova.keyList("yj34f8r7j34t79j38jgygvf3")
@@ -205,7 +215,6 @@ def create_instance():
         imageJSON = json.loads(imageJSON)
         return render_template('create-instance.html',flavorlist = flavorJSON,keylist=keyJSON,imagelist=imageJSON,users=users)
     #return str(respJSON['flavors'])
-
 @app.route('/manage/images')
 @login_required
 def images():
@@ -317,10 +326,10 @@ def nova():
 def serverCreate():
     nova = novaapi()
     name = "Tes-Web"
-    imageRef = "04e2143e-a72a-4157-b744-0ae1c48377b1"
+    imageRef = "2efaef5b-13d2-439b-bb55-a6e4a3878c2d"
     flavorRef = "2"
-    key_name = "fatih-debian"
-    networks_uuid = "4740af3d-582e-432f-9286-92b9c943e1cf"
+    key_name = "aziz"
+    networks_uuid = "5eb3b761-4a8e-41b3-a512-b0d9e349f743"
     availability_zone = "nova"
 
     respJSON = nova.serverCreate(name,imageRef,flavorRef,availability_zone,key_name,networks_uuid)

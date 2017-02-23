@@ -161,13 +161,6 @@
                 </div>
             </div>
         </div>
-
-        <form method="POST">
-
-        <input id="imageRef" type="text" name="imageRef" hidden value="">
-        <input id="flavorRef" type="text" name="imageRef" hidden value="">
-        <input id="imageRef" type="text" name="imageRef" hidden value="">
-
         <div class="row">
             <div class="ui container">
                 <h2 class="ui dividing header">Finalize and create</h2>
@@ -197,15 +190,14 @@
         </br>
         <form id="form_create" class="ui large form" method="POST">
 
-            <input id="imageRef" type="text" name="imageRef"  value="yoi">
-            <input id="flavorRef" type="text" name="flavorRef" value="">
-            <input id="availability_zone" type="text" name="availability_zone" value="nova">
-            <input id="network_uuid" type="text" name="network_uuid" value="4740af3d-582e-432f-9286-92b9c943e1cf">
-            <input id="key_name" type="text" name="key_name" value="">
-            <input id="name" type="text" name="name" value="">
-            <input id="purpose" type="text" name="name" value="">
-            <input id="pic_name" type="text" name="pic_name" value="">
-            <input id="pic_telp" type="text" name="pic_telp" value="">
+            <input id="imageRef" type="text" name="imageRef" hidden value="yoi">
+            <input id="flavorRef" type="text" name="flavorRef" hidden value="">
+            <input id="availability_zone" type="text" name="availability_zone" hidden value="nova">
+            <input id="key_name" type="text" name="key_name" hidden value="">
+            <input id="name" type="text" name="name" hidden value="">
+            <input id="purpose" type="text" name="name" hidden value="">
+            <input id="pic_name" type="text" name="pic_name" hidden value="">
+            <input id="pic_telp" type="text" name="pic_telp" hidden value="">
             
             <button id="submit_button" class="ui fluid large teal submit button" type="submit" onclick="submit('form_create')">Create</button>
         </form>
