@@ -17,8 +17,12 @@
                             {% for image in imagelist['images'] %}
                             <a class="column">
                                 <div id="image-{{image['id']}}" class="ui center aligned segment instance">
+<<<<<<< HEAD
                                     <p>{{image['name']}}</p>
                                     </br>
+=======
+                                    <p>{{image['name']}}</p></br>
+>>>>>>> 877014317f4b7cd2fd0ef3bd3dabce7a92d0b0fc
                                     <button class="ui fluid teal button" onclick="selectedimageid('{{image['id']}}')">Choose</button>
                                 </div>
                                 {% endfor %}
@@ -66,7 +70,11 @@
                                         <div>{{ flavor['disk'] }}GB Disk</div>
                                     </div>
                                     </br>
+<<<<<<< HEAD
                                     <button class="ui fluid teal button" onclick="selectedflavorid({{flavor['id']}})">Choose</button>                                    >>>>>>> 7ff8d7864997181bf98c85d8332646ea7eac3012
+=======
+                                    <button class="ui fluid teal button" onclick="selectedflavorid({{flavor['id']}})">Choose</button>
+>>>>>>> 877014317f4b7cd2fd0ef3bd3dabce7a92d0b0fc
                                 </div>
                             </div>
                             {% endfor %}
@@ -132,13 +140,21 @@
                 <div class="ui form">
                     <div class="field">
                         <label>Available Key Pair</label>
-                        <div class="ui selection dropdown">
-                            <input type="hidden" name="Key Pair">
+                        <div class="ui selection dropdown" id="key_list">
+                            <input type="hidden" name="key_pair" onchange="selectedkeyid();">
                             <i class="dropdown icon"></i>
                             <div class="default text">Key Pair</div>
                             <div class="menu">
+                                {% set n = 1 %}
                                 {% for keypair in keylist['keypairs'] %}
-                                <div class="item" data-value="{{ keypair['keypair']['name'] }}">{{ keypair['keypair']['name'] }}</div>
+                                {% if n == 1 %}
+                                    <div class="item" selected data-value="{{ keypair['keypair']['name'] }}">{{ 
+                                keypair['keypair']['name'] }}</div>
+                                {% else %}
+                                    <div class="item" data-value="{{ keypair['keypair']['name'] }}">{{ 
+                                keypair['keypair']['name'] }}</div>
+                                {% endif %}
+                                {% set n = n+1   %}
                                 {% endfor %}
 
                             </div>
@@ -154,6 +170,7 @@
                 </div>
             </div>
         </div>
+<<<<<<< HEAD
 
         <form method="POST">
 
@@ -182,18 +199,49 @@
                                 <label>Person in Charge Phone Number</label>
                                 <input type="text" name="pic_telp" placeholder="Phone Number">
                             </div>
+=======
+        <div class="row">
+            <div class="ui container">
+                <h2 class="ui dividing header">Finalize and create</h2>
+                <div class="ui form">
+                    <div class="field">
+                        <label>Choose a name</label>
+                        <input type="text" name="name" placeholder="Instance Name" onchange="selectedname(this.value);">
+                    </div>
+                    <div class="field">
+                        <label>Usage Purpose</label>
+                        <textarea rows="3" onchange="document.getElementById('purpose').value = this.value;"></textarea>
+                    </div>
+                    <div class="fields">
+                        <div class="field">
+                            <label>Person in Charge Name</label>
+                            <input type="text" name="text" placeholder="Name" onchange="document.getElementById('pic_name').value = this.value;">
+                        </div>
+                        <div class="field">
+                            <label>Person in Charge Phone Number</label>
+                            <input type="text" name="text" placeholder="Phone Number" onchange="document.getElementById('pic_telp').value = this.value;">
+>>>>>>> 877014317f4b7cd2fd0ef3bd3dabce7a92d0b0fc
                         </div>
                     </div>
                 </div>
             </div>
 
-        </form>
-
         </br>
-        <a class="ui fluid teal button">Create</a>
+        <form id="form_create" class="ui large form" method="POST">
+
+            <input id="imageRef" type="text" name="imageRef" hidden value="yoi">
+            <input id="flavorRef" type="text" name="flavorRef" hidden value="">
+            <input id="availability_zone" type="text" name="availability_zone" hidden value="nova">
+            <input id="key_name" type="text" name="key_name" hidden value="">
+            <input id="name" type="text" name="name" hidden value="">
+            <input id="purpose" type="text" name="name" hidden value="">
+            <input id="pic_name" type="text" name="pic_name" hidden value="">
+            <input id="pic_telp" type="text" name="pic_telp" hidden value="">
+            
+            <button id="submit_button" class="ui fluid large teal submit button" type="submit" onclick="submit('form_create')">Create</button>
+        </form>
     </div>
 </div>
-
 <script>
     $('.menu.createi .item')
         .tab()

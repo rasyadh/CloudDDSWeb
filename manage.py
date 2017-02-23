@@ -21,6 +21,12 @@ def create_admin():
 	db.session.add(admin)
 	db.session.commit()
 
+def create_user():
+	user = User(name = 'User Biasa', email='user@telkom.co.id',password=encrypt.generate_password_hash("usertelkom"),status=1,nomorhp="0812691299")
+	db.session.add(user)
+	db.session.commit()
+
+
 
 if __name__ == '__main__':
 	manager.run()

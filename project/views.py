@@ -24,7 +24,24 @@ def login_required(test):
             abort(403)
     return wrap
 
-# Client Side
+def admin_required(admin):
+    @wraps(admin)
+    def wrap(*args, **kwargs):
+        if 'admin_in' in session:
+            return admin(*args,**kwargs)
+        else:
+            abort(403)
+    return wrap
+
+@app.route('/logout')
+def logout():
+    session.pop('logged_in',None)
+    session.pop('admin_in',None)
+    session.pop('user_id',None)
+    session.pop('admin_id',None)
+    return redirect(url_for('index'))
+
+# Client Side --- USER
 
 @app.route('/')
 def index():
@@ -99,10 +116,15 @@ def login():
                     errormsg = "Akun Anda Belum TERVERIFIKASI"
 
                 else:
-                    if encrypt.check_password_hash(users.password,request.form['password']) :
+                    if encrypt.check_password_hash(users.password,request.form['password']) and users.role == 0:
                         session['logged_in'] = True
-                        session['email'] = users.email
+                        session['user_id'] = users.id
                         return redirect(url_for('manage'))
+
+                    elif encrypt.check_password_hash(users.password,request.form['password']) and users.role == 1:
+                        session['admin_in'] = True
+                        session['admin_id'] = users.id
+                        return redirect(url_for('admin_page'))
 
                     else :
                         errormsg = "Password Anda Salah !"
@@ -144,6 +166,7 @@ def activate_account():
 def activation_accountred(activation_code):
     return redirect(url_for('activate_account'))
 
+<<<<<<< HEAD
 @app.route('/forgot_password')
 def forgot_password():
     return render_template('forgot-password.html')
@@ -160,6 +183,8 @@ def logout():
     session.pop('email',None)
     return redirect(url_for('index'))
 
+=======
+>>>>>>> 877014317f4b7cd2fd0ef3bd3dabce7a92d0b0fc
 @app.route('/layanan')
 def layanan():
     return render_template('partials/layanan.html')
@@ -169,6 +194,7 @@ def bantuan():
     return render_template('partials/bantuan.html')
 
 @app.route('/manage')
+@app.route('/manage/')
 @login_required
 def manage():
     return redirect(url_for('computes'))
@@ -176,88 +202,116 @@ def manage():
 @app.route('/manage/computes')
 @login_required
 def computes():
-    email = session['email']
-    users = User.query.filter_by(email=email).first()
+    users = User.query.filter_by(id=session['user_id']).first()
     return render_template('computes.html',users=users)
 
-@app.route('/manage/create')
+@app.route('/manage/create', methods=['GET','POST'])
 @login_required
 def create_instance():
-    email = session['email']
-    users = User.query.filter_by(email=email).first()
     nova = novaapi()
     glance = glanceapi()
-    flavorJSON = nova.flavorList(0)
-    flavorJSON = json.loads(flavorJSON)
-    keyJSON = nova.keyList("yj34f8r7j34t79j38jgygvf3")
-    keyJSON = json.loads(keyJSON)
-    imageJSON = glance.imageList("yj34f8r7j34t79j38jgygvf3")
-    imageJSON = json.loads(imageJSON)
-    return render_template('create-instance.html',flavorlist = flavorJSON,keylist=keyJSON,imagelist=imageJSON,users=users)
-    #return str(respJSON['flavors'])
 
+    if request.method == 'POST':
+        try:
+            imageRef = request.form['imageRef']
+            flavorRef = str(request.form['flavorRef'])
+            availability_zone = request.form['availability_zone']
+            networks_uuid = "daeb34bc-b505-4852-8ad0-8ff693dee13a"
+            key_name = request.form['key_name']
+            name = request.form['name']
+            respJSON = nova.serverCreate(name,imageRef,flavorRef,availability_zone,key_name,networks_uuid)
+            return respJSON
+        except:
+            return "Bad Parameter"
+    else:
+        users = User.query.filter_by(id=session['user_id']).first()
+        #ubahteko baris iki
+        flavorJSON = nova.flavorList(0)
+        flavorJSON = json.loads(flavorJSON)
+        keyJSON = nova.keyList("yj34f8r7j34t79j38jgygvf3")
+        keyJSON = json.loads(keyJSON)
+        imageJSON = glance.imageList("yj34f8r7j34t79j38jgygvf3")
+        imageJSON = json.loads(imageJSON)
+        return render_template('create-instance.html',flavorlist = flavorJSON,keylist=keyJSON,imagelist=imageJSON,users=users)
+    #return str(respJSON['flavors'])
 @app.route('/manage/images')
 @login_required
 def images():
-    email = session['email']
-    users = User.query.filter_by(email=email).first()
+    users = User.query.filter_by(id=session['user_id']).first()
     return render_template('images.html',users=users)
 
 @app.route('/manage/network')
 @login_required
 def network():
-    email = session['email']
-    users = User.query.filter_by(email=email).first()
+    users = User.query.filter_by(id=session['user_id']).first()
     return render_template('network.html',users=users)
 
 @app.route('/manage/settings',methods=["GET","POST"])
 @login_required
 def settings():
     message = []
-    email = session['email']
-    users = User.query.filter_by(email=email).first()
+    users = User.query.filter_by(id=session['user_id']).first()
 
     if request.method == 'POST':
-        if encrypt.check_password_hash(users.password,request.form['password']) :
-            users.name = request.form['name']
-            users.nomorhp = request.form['phone-number']
-            db.session.commit()
+        if 'updateprofile' in request.form.values():
+            if encrypt.check_password_hash(users.password,request.form['password']) :
+                users.name = request.form['name']
+                users.nomorhp = request.form['phone-number']
+                db.session.commit()
+                message = "Data berhasil dirubah"
 
-            message = "Data berhasil dirubah"
-        else:
-            message = "Password anda salah"
+            else:
+                message = "Password anda salah"
 
-    return render_template('settings.html',users=users, message=message)
+        elif 'changepassword' in request.form.values():
+            if encrypt.check_password_hash(users.password,request.form['old-password']) :
+                 users.password = encrypt.generate_password_hash(request.form['confirm-password'])
+                 db.session.commit()
+                 message = "Password telah berubah"
+
+            else:
+                 message = "Password anda salah"
+
+    return render_template('settings.html',users=users,message=message)
 
 @app.route('/manage/request')
 @login_required
 def request_flav():
-    email = session['email']
-    users = User.query.filter_by(email=email).first()
+    users = User.query.filter_by(id=session['user_id']).first()
     return render_template('request.html',users=users)
 
 @app.route('/manage/instance')
 def manage_instance():
-    email = session['email']
-    users = User.query.filter_by(email=email).first()
+    users = User.query.filter_by(id=session['user_id']).first()
     return render_template('manage-instance.html',users=users)
 
+# Client Side --- ADMIN
+
 @app.route('/admin')
+@app.route('/admin/')
 @app.route('/admin/manage')
+@admin_required
 def admin_page():
     return redirect(url_for('manage_resource'))
 
 @app.route('/admin/manage-resource')
+@admin_required
 def manage_resource():
-    return render_template('managing-resource.html')
+    admin = User.query.filter_by(id=session['admin_id']).first()
+    return render_template('admin/managing-resource.html',admin=admin)
 
-@app.route('/admin/manage-user')
+@app.route('/admin/manage-user',methods=['GET','POST'])
+@admin_required
 def manage_user():
-    return render_template('managing-user.html')
+    admin = User.query.filter_by(id=session['admin_id']).first()
+    allusers = User.query.filter_by(role=0).all()
+    return render_template('admin/managing-user.html',admin=admin,allusers=allusers)
 
 @app.route('/admin/manage-vm')
+@admin_required
 def manage_vm():
-    return render_template('managing-vm.html')
+    admin = User.query.filter_by(id=session['admin_id']).first()
+    return render_template('admin/managing-vm.html',admin=admin)
 
 @app.route('/admin/manage-admin')
 def manage_admin():
@@ -295,10 +349,10 @@ def nova():
 def serverCreate():
     nova = novaapi()
     name = "Tes-Web"
-    imageRef = "04e2143e-a72a-4157-b744-0ae1c48377b1"
+    imageRef = "2efaef5b-13d2-439b-bb55-a6e4a3878c2d"
     flavorRef = "2"
-    key_name = "fatih-debian"
-    networks_uuid = "4740af3d-582e-432f-9286-92b9c943e1cf"
+    key_name = "aziz"
+    networks_uuid = "5eb3b761-4a8e-41b3-a512-b0d9e349f743"
     availability_zone = "nova"
 
     respJSON = nova.serverCreate(name,imageRef,flavorRef,availability_zone,key_name,networks_uuid)

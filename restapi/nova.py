@@ -11,6 +11,7 @@ class nova():
 	urlJSON = ""
 	headJSON = ""
 	contJSON = {}
+	keypair = {}
 	respJSON = ""
 	server = {}
 	networks = {}

@@ -25,16 +25,57 @@
     <script type="text/javascript">
     var flavorid = null;
     var imageid = "";
+    var prev_flav_id = ""
+    var prev_image_id = ""
+    var key_id = ""
+    var name = ""
 
     function selectedflavorid(selectedflavorid) {
         flavorid = selectedflavorid;
-        alert(flavorid);
+        if(prev_flav_id)
+        {
+            document.getElementById("flavor-"+prev_flav_id).className =
+            document.getElementById("flavor-"+prev_flav_id).className.replace(" teal",'');
+        }
+        var input = document.getElementById("flavor-"+flavorid);
+        input.className += " teal";
+        var d = document.getElementById("flavorRef");
+        d.value = selectedflavorid;
+        prev_flav_id = flavorid;
     };
 
     function selectedimageid(selectedimageid) {
         imageid = selectedimageid;
-        alert(imageid);
+        if(prev_image_id)
+        {
+            document.getElementById("image-"+prev_image_id).className =
+            document.getElementById("image-"+prev_image_id).className.replace(" teal",'');
+        }
+        var input = document.getElementById("image-"+imageid);
+        input.className += " teal";
+        var d = document.getElementById("imageRef");
+        d.value = selectedimageid;
+        prev_image_id = imageid;
     };
+
+    function selectedkeyid(selectedkeyid){
+        key_id = $('#key_list').dropdown('get text');
+        var d = document.getElementById("key_name");
+        d.value = key_id;
+    }
+
+    function selectedname(selectedname){
+        name = selectedname;
+        var d = document.getElementById("name");
+        d.value = name;
+    }
+
+    function submit(form_id){
+        var form = document.getElementById("form_id");
+        form.submit();
+        alert("success");
+    }
+
     </script>
 
 </head>

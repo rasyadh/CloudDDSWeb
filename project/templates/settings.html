@@ -93,7 +93,7 @@
                 <label>Password</label>
                 <input type="password" name="password" placeholder="Password">
             </div>
-            <button class="ui teal submit button" type="submit">Update Profile</button>
+            <button class="ui teal submit button updateprof" type="submit" name="btn" value="updateprofile">Update Profile</button>
         </form>
     </div>
 </div>
@@ -101,10 +101,12 @@
 <div class="ui changepassword modal">
     <i class="close icon"></i>
     <div class="header">
-        Edit your profile
+        Change Password
     </div>
     <div class="content">
-        <form class="ui form" method="POST" action="">
+        <form class="ui form changepassword" method="POST" action="">
+            <div class="ui error message">
+            </div>
             <div class="field">
                 <label>Old Password</label>
                 <input type="password" name="old-password" placeholder="Old Password" >
@@ -118,7 +120,7 @@
                 <input type="password" name="confirm-password" placeholder="Confirm Password" >
             </div>
 
-            <button class="ui teal submit button" type="submit">Change Password</button>
+            <button class="ui teal submit button changepsswd" type="submit" name="btn" value="changepassword">Change Password</button>
         </form>
     </div>
 </div>
@@ -143,6 +145,40 @@
             ;
           })
         ;
-</script>
 
+
+        $(document)
+            .ready(function () {
+                $('.ui.form.changepassword')
+                    .form({
+                        fields: {
+                            password: {
+                                identifier: 'new-password',
+                                rules: [
+                                    {
+                                        type: 'empty',
+                                        prompt: 'Masukkan password'
+                                    },
+                                    {
+                                        type: 'length[6]',
+                                        prompt: 'Password minimal 6 karakter'
+                                    }
+                                ]
+                            },
+                            match: {
+                                identifier: 'confirm-password',
+                                rules: [
+                                    {
+                                        type: 'match[new-password]',
+                                        prompt: 'Password tidak sama'
+                                    }
+                                ]
+                            }
+
+                        }
+                    })
+                    ;
+            })
+            ;
+</script>
 {% endblock %}

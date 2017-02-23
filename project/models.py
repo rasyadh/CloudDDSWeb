@@ -15,7 +15,7 @@ class User(db.Model):
     status = db.Column(db.Integer, default=0)
     nomorhp = db.Column(db.String, nullable=False)
     registered_on = db.Column(db.DateTime, nullable=False)
-    role = db.Column(db.Integer, default='0')
+    role = db.Column(db.Integer, default=0)
 
     def __init__(self, name=None, email=None, password=None, status=0, nomorhp=None, role=0):
         self.name = name
@@ -64,3 +64,36 @@ class Instance(db.Model):
 
     def __repr__(self):
         return '<Instance {0}>'.format(self.instance_id)
+
+class Request(db.Model):
+
+    __tablename__ = 'request_instance'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    image_id = db.Column(db.String(100), nullable=False)
+    flavor_id = db.Column(db.String(100), nullable=False)
+    network_id = db.Column(db.String(100), nullable=False)
+    available_zone = db.Column(db.String(100), nullable=False)
+    keyname = db.Column(db.String(100), nullable=False)
+    purpose = db.Column(db.String(100), nullable=False)
+    pic_name = db.Column(db.String(100), nullable=False)
+    pic_telp = db.Column(db.String(100), nullable=False)
+    status = db.Column(db.Integer, default=0)
+
+    def __init__(self,name,image_id, flavor_id, network_id, available_zone, keyname, purpose, pic_name, pic_telp):
+        self.name = name
+        self.image_id = image_id
+        self.flavor_id = flavor_id
+        self.network_id = network_id
+        self.available_zone = available_zone
+        self.keyname = keyname
+        self.purpose = purpose
+        self.pic_name = pic_name
+        self.pic_telp = pic_telp
+
+    def get_id(self):
+        return self.id
+
+    def __repr__(self):
+        return '<Request Instance {0}>'.format(self.name)
