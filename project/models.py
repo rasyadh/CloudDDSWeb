@@ -40,12 +40,14 @@ class Token(db.Model):
     email_user = db.Column(db.String,nullable=False,unique=True)
     code = db.Column(db.String,nullable=False,unique=True)
     type = db.Column(db.Integer, nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False)
 
     def __init__(self,id=None,email_user=None,code=None, type=None):
         self.id = id
         self.email_user = email_user
         self.code = code
         self.type = type
+        self.created_at = datetime.date.today()
 
 class Instance(db.Model):
 

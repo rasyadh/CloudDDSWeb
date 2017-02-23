@@ -62,7 +62,7 @@ def login():
                 if users.status == 0:
                     errormsg = "Akun Anda Belum TERVERIFIKASI"
 
-                else:
+                elif users.status == 1:
                     if encrypt.check_password_hash(users.password,request.form['password']) and users.role == 0:
                         session['logged_in'] = True
                         session['user_id'] = users.id
@@ -75,6 +75,12 @@ def login():
 
                     else :
                         errormsg = "Password Anda Salah !"
+
+                elif users.status == 2:
+                    errormsg = "Akun anda telah di SUSPEND, silahkan hubungi administrator untuk hal ini."
+
+                elif users.status == 3:
+                    errormsg = "Akun anda telah di BLACKLIST karena penggunaan ilegal pada layanan."
 
         except:
             return "Gagal bos"
@@ -116,9 +122,9 @@ def registration():
                 db.session.add(activationcode)
                 db.session.commit()
 
-                confirm_url = "localhost:5000/registration/activate_account?actemp="+activationcodetmp
+                confirm_url = "http://localhost:5000/registration/activate_account?actemp="+activationcodetmp
                 html = render_template('activation.html',confirm_url = confirm_url)
-                subject = "Please confirm your email"
+                subject = "Request Reset Password"
                 #send_email(users.email,subject,html)
                 send_email("gravpokemongo@gmail.com",subject,html)
 
@@ -186,7 +192,7 @@ def forgot_password():
             db.session.add(forgot_token)
             db.session.commit()
 
-            confirm_url = "localhost:5000/forgot_password/reset_password?tokens="+token
+            confirm_url = "http://localhost:5000/forgot_password/reset_password?tokens="+token
             html = render_template('resetpassword.html',confirm_url = confirm_url, users=users)
             subject = "Please confirm your email"
             #send_email(users.email,subject,html)
@@ -343,6 +349,11 @@ def settings():
             else:
                  message = "Password anda salah"
 
+        elif 'deactivate' in request.form.values():
+            users.status = 2
+            db.session.commit()
+            message = "Account telah diaktifasi"
+
     return render_template('settings.html',users=users,message=message)
 
 @app.route('/manage/request')
@@ -375,6 +386,19 @@ def manage_resource():
 def manage_user():
     admin = User.query.filter_by(id=session['admin_id']).first()
     allusers = User.query.filter_by(role=0).all()
+    if request.method == 'POST':
+        if request.form['action'] == "activate" :
+            users = User.query.filter_by(id=request.form['users-id']).first()
+            users.status = 1
+            db.session.commit()
+        elif request.form['action'] == "suspend":
+            users = User.query.filter_by(id=request.form['users-id']).first()
+            users.status = 2
+            db.session.commit()
+        elif request.form['action'] == "delete":
+            users = User.query.filter_by(id=request.form['users-id']).first()
+            users.status = 3
+            db.session.commit()
     return render_template('admin/managing-user.html',admin=admin,allusers=allusers)
 
 @app.route('/admin/manage-vm')
