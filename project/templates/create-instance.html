@@ -65,7 +65,7 @@
                                         <div>{{ flavor['disk'] }}GB Disk</div>
                                     </div>
                                     </br>
-                                    <button class="ui fluid teal button" onclick="selectedflavorid({{flavor['id']}})">Choose</button>
+                                    <button class="ui fluid teal button" onclick="selectedflavorid('{{flavor['id']}}')">Choose</button>
                                 </div>
                             </div>
                             {% endfor %}
@@ -154,8 +154,10 @@
                     <div class="field">
                         <label>Add Key Pair</label>
                         <div class="ui action input">
-                            <input type="text" placeholder="Add key pair">
-                            <button class="ui teal button">Add</button>
+                            <form action="/restapi/nova/keylist/new"  method="GET">
+                            <input type="text" name="keyname" placeholder="Add key pair">
+                            <button class="ui fluid large teal submit button" type="submit" onsubmit="location.reload(true);}">Create</button>
+                            </form>
                         </div>
                     </div>
                 </div>

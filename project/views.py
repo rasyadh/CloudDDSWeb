@@ -1,4 +1,4 @@
-import os, binascii
+import os, binascii, time
 
 from functools import wraps
 from flask import Flask,flash, request, Response, jsonify, json
@@ -191,19 +191,44 @@ def computes():
 def create_instance():
     nova = novaapi()
     glance = glanceapi()
+    neutron = neutronapi()
 
     if request.method == 'POST':
-        try:
+        #try:
             imageRef = request.form['imageRef']
             flavorRef = str(request.form['flavorRef'])
             availability_zone = request.form['availability_zone']
-            networks_uuid = "daeb34bc-b505-4852-8ad0-8ff693dee13a"
+            networks_uuid = "5055859c-3ca3-4421-aca0-a368b942c345"
             key_name = request.form['key_name']
             name = request.form['name']
             respJSON = nova.serverCreate(name,imageRef,flavorRef,availability_zone,key_name,networks_uuid)
-            return respJSON
-        except:
-            return "Bad Parameter"
+            
+            time.sleep(30)
+
+            resp = json.loads(respJSON)
+            server_id = resp['server']['id']
+            respJSON = nova.serverList(server_id)
+            resp = json.loads(respJSON)
+
+            # for addresses in resp['server']['addresses']['private']:
+            #     if addresses["version"] == 4:
+            #         private_ip = addresses["addr"]
+            #         break
+
+            # respJSON = neutron.floatipList()
+            # respJSON = json.loads(respJSON)
+            # iplist = respJSON['floatingips']
+
+            # for ip in iplist:
+            #     if ip['fixed_ip_address'] is Null:
+            #         public_ip = ip['floating_ip_address']
+            #         break
+
+            # nova.setFloatingIp(private_ip,public_ip,server_id)
+
+            return str(resp['server']['addresses']['private'])
+        #except:
+         #   return "Bad Parameter"
     else:
         users = User.query.filter_by(id=session['user_id']).first()
         #ubahteko baris iki
@@ -211,10 +236,11 @@ def create_instance():
         flavorJSON = json.loads(flavorJSON)
         keyJSON = nova.keyList("yj34f8r7j34t79j38jgygvf3")
         keyJSON = json.loads(keyJSON)
-        imageJSON = glance.imageList("yj34f8r7j34t79j38jgygvf3")
+        imageJSON = nova.imageList(0)
         imageJSON = json.loads(imageJSON)
         return render_template('create-instance.html',flavorlist = flavorJSON,keylist=keyJSON,imagelist=imageJSON,users=users)
     #return str(respJSON['flavors'])
+
 @app.route('/manage/images')
 @login_required
 def images():
@@ -343,6 +369,14 @@ def serverList():
     nova = novaapi()
     respJSON = nova.serverList()
 
+    return respJSON
+
+@app.route('/restapi/nova/server/list/<server_id>')
+@app.route('/restapi/nova/server/list/<server_id>/')
+def serverListDetail(server_id):
+    nova = novaapi()
+    respJSON = nova.serverList(server_id)
+
 
     return respJSON
 
@@ -424,12 +458,16 @@ def keylistnew():
             nova = novaapi()
             respJSON = nova.keyNew(key_name)
             resp = json.loads(respJSON)
-            #pk = resp['keypair']['private_key'].replace("\n","<br>")
-            pk = resp['keypair']['private_key']
-            r = Response(response=pk, status=200, mimetype="text/plain")
-            r.headers["Content-Type"] = "text/plain; charset=utf-8"
-            r.headers["Content-Disposition"] = "attachment; filename="+ key_name +".pem"
-            return r
+            
+            if resp['status'] is True:
+                #pk = resp['keypair']['private_key'].replace("\n","<br>")
+                resp = resp['content']
+                resp = json.loads(resp)
+                pk = resp['keypair']
+                r = Response(response=pk, status=200, mimetype="text/plain")
+                r.headers["Content-Type"] = "text/plain; charset=utf-8"
+                r.headers["Content-Disposition"] = "attachment; filename="+ key_name +".pem"
+                return r
     else:
         return "Bad Request"
 
