@@ -167,15 +167,14 @@ def activate_account():
 def activation_accountred(activation_code):
     return redirect(url_for('activate_account'))
 
+#Check halaman verifikasi forgot password
 @app.route('/forgot_password')
 def forgot_password():
     return render_template('forgot-password.html')
 
-#Check halaman verifikasi forgot password
 @app.route('/new_password')
 def new_password():
     return render_template('verifikasi-forgotpass.html')
-
 
 @app.route('/layanan')
 def layanan():
@@ -279,7 +278,6 @@ def manage_instance():
     return render_template('manage-instance.html',users=users)
 
 # Client Side --- ADMIN
-
 @app.route('/admin')
 @app.route('/admin/')
 @app.route('/admin/manage')
