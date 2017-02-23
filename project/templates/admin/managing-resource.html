@@ -72,10 +72,8 @@
                         <td>1 GB</td>
                         <td>20 GB</td>
                         <td>
-                            <div class="ui checkbox">
-                                <input type="checkbox" name="set_default">
-                                <label>Set as default</label>
-                            </div>
+                            <button class="ui teal button setas">Set as default</button>
+                            <i class="teal checkmark icon"></i>
                         </td>
                     </tr>
                 </tbody>
@@ -84,10 +82,38 @@
     </div>
 </div>
 
+<div class="ui modal">
+    <i class="close icon"></i>
+    <div class="header">
+        Set default flavor
+    </div>
+    <div class="content">
+        <form class="ui form">
+            <div class="field">
+                <label>Name Flavor Alias</label>
+                <input type="text" name="alias" placeholder="Nama Alias">
+            </div>
+        </form>
+    </div>
+    <div class="actions">
+        <div class="ui red cancel button">
+            Cancel
+        </div>
+        <div class="ui teal ok right labeled icon button">
+            Create
+            <i class="checkmark icon"></i>
+        </div>
+    </div>
+</div>
+
 <script>
     $('.menu.computes .item')
         .tab()
         ;
+
+    $('.ui.modal')
+        .modal('attach events', '.ui.teal.button.setas', 'show')
+        .modal('setting', 'transition', 'fade up');
 
     var cpu_pie = document.getElementById("cpu_chart").getContext("2d");
     var cpu_chart = new Chart(cpu_pie, {

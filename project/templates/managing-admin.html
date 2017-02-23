@@ -1,0 +1,107 @@
+{% extends "admin-page.html" %} {% block content %}
+
+<div class="ui vertical stripe computes container">
+    <div class="ui stackable grid container">
+        <div class="row">
+            <h3 class="ui header">Manage Admin</h3>
+            <div class="ui vertical stripe center aligned container">
+                <h2>List Admin</h2>
+                <table class="ui teal table center aligned">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Admin ID</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Admin</td>
+                            <td>admin id</td>
+                            <td>admin@telkom.co.id</td>
+                            <td>Active</td>
+                            <td>
+                                <button class="ui yellow button">Status</button>
+                                <div class="ui fluid popup top left transition hidden">
+                                    <div class="ui three column divided center aligned grid">
+                                        <div class="column">
+                                            <button class="ui button">Active</button>
+                                        </div>
+                                        <div class="column">
+                                            <button class="ui button">Suspend</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="ui red button">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot class="ui right aligned">
+                        <tr>
+                            <th colspan="5">
+                                <button class="ui teal button create">Create Admin</button>
+                            </th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="ui modal">
+    <i class="close icon"></i>
+    <div class="header">
+        Create new admin
+    </div>
+    <div class="content">
+        <form class="ui form">
+            <div class="field">
+                <label>Name</label>
+                <div class="ui left icon input">
+                    <i class="user icon"></i>
+                    <input type="text" name="name" placeholder="Nama">
+                </div>
+            </div>
+            <div class="field">
+                <label>Email</label>
+                <div class="ui left icon input">
+                    <i class="mail icon"></i>
+                    <input type="text" name="email" placeholder="Email Address">
+                </div>
+            </div>
+            <div class="field">
+                <label>Phone Number</label>
+                <div class="ui left icon input">
+                    <i class="text telephone icon"></i>
+                    <input type="text" name="email" placeholder="Phone Number">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="actions">
+        <div class="ui red cancel button">
+            Cancel
+        </div>
+        <div class="ui teal ok right labeled icon button">
+            Create
+            <i class="checkmark icon"></i>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('.ui.yellow.button').popup({
+        popup: $('.ui.flowing.popup'),
+        on: 'click'
+    });
+
+    $('.ui.modal')
+        .modal('attach events', '.ui.teal.button.create', 'show')
+        .modal('setting', 'transition', 'fade up');
+
+</script>
+
+{% endblock %}

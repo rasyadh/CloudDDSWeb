@@ -26,27 +26,27 @@
                 <div class="ui list">
                     <div class="item">
                         <h4>vCPU
-                            <span class="ui right floated">{{ '{{ flCtrl.lFlavor[flCtrl.tab].vcpu }}' }}</span>
+                            <span class="ui right floated">{{ '{{ flCtrl.lFlavor[selectedIndex].vcpu }}' }}</span>
                         </h4>
                     </div>
                     <div class="item">
                         <h4>RAM
-                            <span class="ui right floated">{{ '{{ flCtrl.lFlavor[flCtrl.tab].ram }}' }} GB</span>
+                            <span class="ui right floated">{{ '{{ flCtrl.lFlavor[selectedIndex].ram }}' }} GB</span>
                         </h4>
                     </div>
                     <div class="item">
                         <h4>Swap
-                            <span class="ui right floated">{{ '{{ flCtrl.lFlavor[flCtrl.tab].swap }}' }} GB</span>
+                            <span class="ui right floated">{{ '{{ flCtrl.lFlavor[selectedIndex].swap }}' }} GB</span>
                         </h4>
                     </div>
                     <div class="item">
                         <h4>Storage
-                            <span class="ui right floated">{{ '{{ flCtrl.lFlavor[flCtrl.tab].disk }}' }} GB</span>
+                            <span class="ui right floated">{{ '{{ flCtrl.lFlavor[selectedIndex].disk }}' }} GB</span>
                         </h4>
                     </div>
                     <div class="item">
                         <h4>Public IP
-                            <span class="ui right floated">{{ '{{ flCtrl.lFlavor[flCtrl.tab].public_ip }}' }}</span>
+                            <span class="ui right floated">{{ '{{ flCtrl.lFlavor[selectedIndex].public_ip }}' }}</span>
                         </h4>
                     </div>
                 </div>
@@ -67,22 +67,8 @@
             </br>
             <div class="row">
                 <div class="ui horizontal list">
-                    <div class="item">
-                        <!-- ng-class="{active: flCtrl.getFlav(1) }" -->
-                        <a class="ui massive button" ng-click="flCtrl.tab = 0">S</a>
-                        <!-- ng-click="flCtrl.setTab(1)" -->
-                    </div>
-                    <div class="item">
-                        <a class="ui massive button" ng-click="flCtrl.tab = 1">M</a>
-                    </div>
-                    <div class="item">
-                        <a class="ui massive button" ng-click="flCtrl.tab = 2">L</a>
-                    </div>
-                    <div class="item">
-                        <a class="ui massive button" ng-click="flCtrl.tab = 3">XL</a>
-                    </div>
-                    <div class="item">
-                        <a class="ui massive button" ng-click="flCtrl.tab = 4">Custom</a>
+                    <div class="item" ng-repeat="fl in flCtrl.lFlavor">
+                        <a class="ui massive button" ng-click="select($index)" ng-class="{{ '{ yellow: $index === selectedIndex }'}}">{{ '{{ fl.type }}' }}</a>
                     </div>
                 </div>
             </div>
