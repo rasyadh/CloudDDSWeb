@@ -15,11 +15,11 @@ from restapi.glance import glance as glanceapi
 from models import *
 
 #login session handler
-def login_required(test):
-    @wraps(test)
+def login_required(login):
+    @wraps(login)
     def wrap(*args, **kwargs):
         if 'logged_in' in session:
-            return test(*args,**kwargs)
+            return login(*args,**kwargs)
         else:
             abort(403)
     return wrap
@@ -167,6 +167,16 @@ def activate_account():
 def activation_accountred(activation_code):
     return redirect(url_for('activate_account'))
 
+@app.route('/forgot_password')
+def forgot_password():
+    return render_template('forgot-password.html')
+
+#Check halaman verifikasi forgot password
+@app.route('/new_password')
+def new_password():
+    return render_template('verifikasi-forgotpass.html')
+
+
 @app.route('/layanan')
 def layanan():
     return render_template('partials/layanan.html')
@@ -190,14 +200,24 @@ def computes():
 @app.route('/manage/create', methods=['GET','POST'])
 @login_required
 def create_instance():
-    if request.method == 'POST':
-        return "oke"
+    nova = novaapi()
+    glance = glanceapi()
 
+    if request.method == 'POST':
+        try:
+            imageRef = request.form['imageRef']
+            flavorRef = str(request.form['flavorRef'])
+            availability_zone = request.form['availability_zone']
+            networks_uuid = "daeb34bc-b505-4852-8ad0-8ff693dee13a"
+            key_name = request.form['key_name']
+            name = request.form['name']
+            respJSON = nova.serverCreate(name,imageRef,flavorRef,availability_zone,key_name,networks_uuid)
+            return respJSON
+        except:
+            return "Bad Parameter"
     else:
         users = User.query.filter_by(id=session['user_id']).first()
         #ubahteko baris iki
-        nova = novaapi()
-        glance = glanceapi()
         flavorJSON = nova.flavorList(0)
         flavorJSON = json.loads(flavorJSON)
         keyJSON = nova.keyList("yj34f8r7j34t79j38jgygvf3")
@@ -286,6 +306,10 @@ def manage_vm():
     admin = User.query.filter_by(id=session['admin_id']).first()
     return render_template('admin/managing-vm.html',admin=admin)
 
+@app.route('/admin/manage-admin')
+def manage_admin():
+    return render_template('managing-admin.html')
+
 # error handler
 @app.errorhandler(404)
 def page_not_found(e):
@@ -318,10 +342,10 @@ def nova():
 def serverCreate():
     nova = novaapi()
     name = "Tes-Web"
-    imageRef = "04e2143e-a72a-4157-b744-0ae1c48377b1"
+    imageRef = "2efaef5b-13d2-439b-bb55-a6e4a3878c2d"
     flavorRef = "2"
-    key_name = "fatih-debian"
-    networks_uuid = "4740af3d-582e-432f-9286-92b9c943e1cf"
+    key_name = "aziz"
+    networks_uuid = "5eb3b761-4a8e-41b3-a512-b0d9e349f743"
     availability_zone = "nova"
 
     respJSON = nova.serverCreate(name,imageRef,flavorRef,availability_zone,key_name,networks_uuid)

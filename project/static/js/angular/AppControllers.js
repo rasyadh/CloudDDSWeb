@@ -67,12 +67,15 @@ app.controller('VendormainController', function () {
 });
 
 /* Layanan Controllers */
-app.controller('FlavorlayananController', function () {
-    this.tab = 0;
-
+app.controller('FlavorlayananController', function ($scope) {
     this.lFlavor = layananFlavor;
 
-    this.getTab = this.tab;
+    $scope.selectedIndex = 0;
+    
+    $scope.select = function(index){
+        $scope.selectedIndex = index;
+    }
+        
 });
 
 var layananFlavor = [
@@ -172,14 +175,36 @@ var apps = [
 app.controller('InfobantuanController', function () {
     this.bInfo = [
         {
-            image: "static/img/question.png",
-            title: "FAQ",
-            description: "Frequently asked questions."
+            title: "Apakah itu VM (Virtual Machine) ?",
+            content: "Virtual Machine adalah implementasi perangkat lunak dari sebuah mesin komputer yang dapat menjalankan program sama seperti layaknya sebuah komputer asli."
         },
         {
-            image: "static/img/customer-service.png",
-            title: "Customer Service",
-            description: "Layanan customer service 24 jam."
+            title: "Mekanisme request VM ?",
+            content: "request VM"
+        },
+        {
+            title: "Cara Mengakses VM ?",
+            content: "Akses VM"
+        },
+        {
+            title: "Cara Memanajemen VM ?",
+            content: "manajemen VM"
+        },
+        {
+            title: "Cara melakukan upgrade VM (Scale Up) ?",
+            content: "scale up vm"
+        },
+        {
+            title: "Cara menghapus VM ?",
+            content: "delete VM"
+        },
+        {
+            title: "Setting username dan password VM ?",
+            content: "setting username dan password"
+        },
+        {
+            title: "Migrasi data bagi developer ?",
+            content: "migrasi"
         }
     ];
 });
