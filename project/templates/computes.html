@@ -21,20 +21,22 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% if serverList['servers']|length == 0 %}
-                            <tr>
-                                <td class="ui center aligned" colspan="4">There is no instance created.</td>
-                            </tr>
-                            {% else %}
-                                {% for server in serverList['servers'] %}
-                                    <tr>
-                                        <td>{{ server['name'] }}</td>
-                                        <td>Active</td>
-                                        <td>dd/mm/yyyy</td>
-                                        <td><a class="ui teal button" href="/manage/instance?id={{ server['id'] }}">Manage Instance</a></td>
-                                    </tr>
-                                {% endfor %}
-                            {% endif %}
+                            {% for server in serverreq %}
+                                <tr>
+                                    <td>{{ server.name }}</td>
+                                    {% if server.status == 0%}
+                                    <td>Menunggu Persetujuan Admin</td>
+                                    {% else %}
+                                    <td>Tidak Aktif</td>
+                                    {% endif %}
+                                    <td>dd/mm/yyyy</td>
+                                    {% if server.id == "" %}
+                                    <td><a class="ui teal button disabled" disabled href="/manage/instance">Manage Instance</a></td>
+                                    {% else %}
+                                    <td><a class="ui teal button disabled" href="/manage/instance?id={{ server.id }}">Manage Instance</a></td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
                         </tbody>
                         <tfoot>
                             <tr>

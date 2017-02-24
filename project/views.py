@@ -261,12 +261,9 @@ def manage():
 @login_required
 def computes():
     users = User.query.filter_by(id=session['user_id']).first()
-    nova = novaapi()
+    serverreq = Request.query.filter_by(owner_id=session['user_id']).order_by(Request.status).all()
 
-    serverList = nova.serverList("yj34f8r7j34t79j38jgygvf3")
-    serverList = json.loads(serverList)
-
-    return render_template('computes.html',users=users, serverList=serverList)
+    return render_template('computes.html',users=users, serverreq=serverreq)    
 
 @app.route('/manage/create', methods=['GET','POST'])
 @login_required

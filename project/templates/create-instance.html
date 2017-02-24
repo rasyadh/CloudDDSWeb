@@ -19,7 +19,7 @@
                                 <div id="image-{{image['id']}}" class="ui center aligned segment instance">
                                     <p>{{image['name']}}</p>
                                     </br>
-                                    <button class="ui fluid teal button" onclick="selectedimageid('{{image['id']}}')">Choose</button>
+                                    <button class="ui fluid teal button" onclick="selectedimageid('{{image['id']}}','{{image['name']}}')">Choose</button>
                                 </div>
                                 {% endfor %}
                             </a>
@@ -66,7 +66,7 @@
                                         <div>{{ flavor['disk'] }}GB Disk</div>
                                     </div>
                                     </br>
-                                    <button class="ui fluid teal button" onclick="selectedflavorid('{{flavor['id']}}','{{flavor['disk']}}')">Choose</button>
+                                    <button class="ui fluid teal button" onclick="selectedflavorid('{{flavor['id']}}','{{flavor['disk']}}','{{flavor['ram']}}','{{flavor['vcpus']}}')">Choose</button>
                                 </div>
                             </div>
                             {% endfor %}
@@ -137,11 +137,17 @@
                             <i class="dropdown icon"></i>
                             <div class="default text">Key Pair</div>
                             <div class="menu">
-                                {% set n = 1 %} {% for keypair in keylist['keypairs'] %} {% if n == 1 %}
-                                <div class="item" selected data-value="{{ keypair['keypair']['name'] }}">{{ keypair['keypair']['name'] }}</div>
+                                {% set n = 1 %}
+                                {% for keypair in keylist['keypairs'] %}
+                                {% if n == 1 %}
+                                    <div class="item" selected data-value="{{ keypair['keypair']['name'] }}">{{ 
+                                keypair['keypair']['name'] }}</div>
                                 {% else %}
-                                <div class="item" data-value="{{ keypair['keypair']['name'] }}">{{ keypair['keypair']['name'] }}</div>
-                                {% endif %} {% set n = n+1 %} {% endfor %}
+                                    <div class="item" data-value="{{ keypair['keypair']['name'] }}">{{ 
+                                keypair['keypair']['name'] }}</div>
+                                {% endif %}
+                                {% set n = n+1   %}
+                                {% endfor %}
 
                             </div>
                         </div>
@@ -149,16 +155,15 @@
                     <div class="field">
                         <label>Add Key Pair</label>
                         <div class="ui action input">
-                            <form action="/restapi/nova/keylist/new" method="GET">
-                                <input type="text" name="keyname" placeholder="Add key pair">
-                                <button class="ui fluid large teal submit button" type="submit" onsubmit="location.reload(true);}">Create</button>
+                            <form action="/restapi/nova/keylist/new"  method="GET">
+                            <input type="text" name="keyname" placeholder="Add key pair">
+                            <button class="ui fluid large teal submit button" type="submit" onsubmit="location.reload(true);}">Create</button>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
         <div class="row">
             <div class="ui container">
                 <h2 class="ui dividing header">Finalize and create</h2>
@@ -182,24 +187,26 @@
                         </div>
                     </div>
                 </div>
-
-                </br>
-                <form id="form_create" class="ui large form" method="POST">
-
-                    <input id="imageRef" type="text" name="imageRef" hidden value="yoi">
-                    <input id="flavorRef" type="text" name="flavorRef" hidden value="">
-                    <input id="availability_zone" type="text" name="availability_zone" hidden value="nova">
-                    <input id="key_name" type="text" name="key_name" hidden value="">
-                    <input id="name" type="text" name="name" hidden value="">
-                    <input id="size" type="text" name="size" hidden value="">
-                    <input id="purpose" type="text" name="purpose" hidden value="">
-                    <input id="pic_name" type="text" name="pic_name" hidden value="">
-                    <input id="pic_telp" type="text" name="pic_telp" hidden value="">
-
-                    <button id="submit_button" class="ui fluid large teal submit button" type="submit" onclick="submit('form_create')">Create</button>
-                </form>
             </div>
-        </div>
+
+        </br>
+        <form id="form_create" class="ui large form" method="POST">
+
+            <input id="imageRef" type="text" name="imageRef" hidden value="yoi">
+            <input id="flavorRef" type="text" name="flavorRef" hidden value="">
+            <input id="availability_zone" type="text" name="availability_zone" hidden value="nova">
+            <input id="key_name" type="text" name="key_name" hidden value="">
+            <input id="name" type="text" name="name" hidden value="">
+            <input id="image_name" type="text" name="image_name" hidden value="">
+            <input id="size" type="text" name="size" hidden value="">
+            <input id="ram" type="text" name="ram" hidden value="">
+            <input id="cpu" type="text" name="cpu" hidden value="">
+            <input id="purpose" type="text" name="purpose" hidden value="">
+            <input id="pic_name" type="text" name="pic_name" hidden value="">
+            <input id="pic_telp" type="text" name="pic_telp" hidden value="">
+            
+            <button id="submit_button" class="ui fluid large teal submit button" type="submit" onclick="submit('form_create')">Create</button>
+        </form>
     </div>
 </div>
 <script>
