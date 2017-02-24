@@ -3,8 +3,8 @@
 <div class="ui vertical stripe settings container">
     {% if message %}
     <div class="ui negative message">
-        <i class="close icon"></i>
-        {{message}}</div>
+        <i class="close icon"></i> {{message}}
+    </div>
     {% endif %}
     <div class="ui stackable grid container">
         <div class="row">
@@ -15,7 +15,6 @@
         <div class="three wide column">
             <div class="ui secondary vertical menu">
                 <a class="active item" data-tab="profile">Profile</a>
-                <a class="item" data-tab="billing">Billing</a>
                 <a class="item" data-tab="notifications">Notifications</a>
             </div>
         </div>
@@ -24,7 +23,7 @@
                 <div class="ui segment">
                     <div class="ui padded grid container">
                         <div class="three wide column">
-                            <img class="ui small avatar image" src="../static/img/avatar/tom.jpg">
+                            <img class="ui small avatar image" src="../static/img/avatar/user.png">
                         </div>
                         <div class="nine wide stretched column">
                             <h3>{{users.name}}</h3>
@@ -45,16 +44,8 @@
                 </div>
                 <div class="ui very padded segment">
                     <p>This will permanently delete all instances and backups.</p>
-                    <form method = 'POST' action="">
-                        <button class="ui right aligned red button" name="deactivate" value="deactivate">Deactive Account</button>
-                    </form>
+                    <button class="ui right aligned red deleteuser button">Deactive Account</button>
                 </div>
-            </div>
-            <div class="ui very padded tab segment" data-tab="billing">
-                <h3>Usage
-                    <span class="ui right floated"></span>
-                </h3>
-                <a class="ui teal fluid button">View Usage Detail</a>
             </div>
             <div class="ui very padded tab segment" data-tab="notifications">
                 <h3>Email Subscriptions</h3>
@@ -81,7 +72,7 @@
         <form class="ui form" method="POST" action="">
             <div class="field">
                 <label>Name</label>
-                <input type="text" name="name"  value="{{users.name}}" >
+                <input type="text" name="name" value="{{users.name}}">
             </div>
             <div class="field">
                 <label>Email Address</label>
@@ -89,7 +80,7 @@
             </div>
             <div class="field">
                 <label>Phone Number</label>
-                <input type="text" name="phone-number" value="{{users.nomorhp}}" >
+                <input type="text" name="phone-number" value="{{users.nomorhp}}">
             </div>
             <div class="field">
                 <label>Password</label>
@@ -111,7 +102,7 @@
             </div>
             <div class="field">
                 <label>Old Password</label>
-                <input type="password" name="old-password" placeholder="Old Password" >
+                <input type="password" name="old-password" placeholder="Old Password">
             </div>
             <div class="field">
                 <label>New Password</label>
@@ -119,10 +110,26 @@
             </div>
             <div class="field">
                 <label>Confirm Password</label>
-                <input type="password" name="confirm-password" placeholder="Confirm Password" >
+                <input type="password" name="confirm-password" placeholder="Confirm Password">
             </div>
 
             <button class="ui teal submit button changepsswd" type="submit" name="btn" value="changepassword">Change Password</button>
+        </form>
+    </div>
+</div>
+
+<div class="ui deleteuser modal">
+    <i class="close icon"></i>
+    <div class="header">
+        Delete Akun
+    </div>
+    <div class="content">
+        <p>Akun akan di non-aktifkan dan tidak dapat digunakan lagi.</p>
+    </div>
+    <div class="actions">
+        <form class="ui form deleteuser" method="POST" action="">
+            <button class="ui red cancel button">Batal</button>
+            <button class="ui teal ok button deactive" type="submit" name="deactivate" value="deactivate">Ya</button>
         </form>
     </div>
 </div>
@@ -139,48 +146,53 @@
         .modal('attach events', '.ui.changepassword.button', 'show')
         .modal('setting', 'transition', 'fade up');
 
-        $('.ui.negative.message .close')
-          .on('click', function() {
+    $('.ui.deleteuser.modal')
+        .modal('attach events', '.ui.deleteuser.button', 'show')
+        .modal('setting', 'transition', 'fade up');
+
+    $('.ui.negative.message .close')
+        .on('click', function () {
             $(this)
-              .closest('.message')
-              .transition('fade')
-            ;
-          })
+                .closest('.message')
+                .transition('fade')
+                ;
+        })
         ;
 
 
-        $(document)
-            .ready(function () {
-                $('.ui.form.changepassword')
-                    .form({
-                        fields: {
-                            password: {
-                                identifier: 'new-password',
-                                rules: [
-                                    {
-                                        type: 'empty',
-                                        prompt: 'Masukkan password'
-                                    },
-                                    {
-                                        type: 'length[6]',
-                                        prompt: 'Password minimal 6 karakter'
-                                    }
-                                ]
-                            },
-                            match: {
-                                identifier: 'confirm-password',
-                                rules: [
-                                    {
-                                        type: 'match[new-password]',
-                                        prompt: 'Password tidak sama'
-                                    }
-                                ]
-                            }
-
+    $(document)
+        .ready(function () {
+            $('.ui.form.changepassword')
+                .form({
+                    fields: {
+                        password: {
+                            identifier: 'new-password',
+                            rules: [
+                                {
+                                    type: 'empty',
+                                    prompt: 'Masukkan password'
+                                },
+                                {
+                                    type: 'length[6]',
+                                    prompt: 'Password minimal 6 karakter'
+                                }
+                            ]
+                        },
+                        match: {
+                            identifier: 'confirm-password',
+                            rules: [
+                                {
+                                    type: 'match[new-password]',
+                                    prompt: 'Password tidak sama'
+                                }
+                            ]
                         }
-                    })
-                    ;
-            })
-            ;
+
+                    }
+                })
+                ;
+        })
+        ;
+
 </script>
 {% endblock %}

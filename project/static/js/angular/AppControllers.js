@@ -25,28 +25,32 @@ app.controller('FlavormainController', function () {
             color: "red",
             memori: 1,
             processor: 1,
-            disk: 20
+            disk: 20,
+            detail: "Cocok digunakan untuk membuat hosting"
         },
         {
             type: "Medium",
             color: "yellow",
             memori: 2,
             processor: 1,
-            disk: 40
+            disk: 40,
+            detail: "Cocok digunakan untuk development aplikasi web dan lainnya"
         },
         {
             type: "Large",
             color: "green",
             memori: 2,
             processor: 2,
-            disk: 60
+            disk: 60,
+            detail: "Cocok digunakan untuk development dengan menggunakan container"
         },
         {
-            type: "Extra Large",
+            type: "Custom",
             color: "blue",
-            memori: 4,
-            processor: 2,
-            disk: 80
+            memori: "Custom",
+            processor: "Custom",
+            disk: "Custom",
+            detail: "Cocok digunakan untuk kebutuhan dengan spesifikasi yang tinggi"
         }
     ];
 });
@@ -83,41 +87,29 @@ var layananFlavor = [
         type: "S",
         vcpu: 1,
         ram: 1,
-        swap: 1,
         disk: 20,
-        public_ip: 1
+        detail: "Cocok digunakan untuk membuat hosting"
     },
     {
         type: "M",
         vcpu: 1,
         ram: 2,
-        swap: 1,
         disk: 40,
-        public_ip: 1
+        detail: "Cocok digunakan untuk development aplikasi web dan lainnya"
     },
     {
         type: "L",
         vcpu: 2,
         ram: 2,
-        swap: 2,
         disk: 60,
-        public_ip: 1
-    },
-    {
-        type: "XL",
-        vcpu: 2,
-        ram: 4,
-        swap: 2,
-        disk: 80,
-        public_ip: 1
+        detail: "Cocok digunakan untuk development dengan menggunakan container"
     },
     {
         type: "Custom",
         vcpu: "Custom",
         ram: "Custom",
-        swap: "Custom",
         disk: "Custom",
-        public_ip: 1
+        detail: "Cocok digunakan untuk kebutuhan dengan spesifikasi yang tinggi"
     }
 ];
 

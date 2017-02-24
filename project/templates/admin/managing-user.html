@@ -18,45 +18,43 @@
                         </tr>
                     </thead>
                     <tbody>
-                    {% if allusers %}
-                    {% for user in allusers %}
+                        {% if allusers %} {% for user in allusers %}
                         <tr>
                             <form id="form-{{user.id}}" method='POST'>
-                            <td>{{user.name}}</td>
-                            <td>{{user.email}}</td>
-                            <td>{{user.id}}</td>
-                            {% if user.status == 0 %}
-                            <td>Pending</td>
-                            {% elif user.status == 1 %}
-                            <td>Active</td>
-                            {% elif user.status == 2 %}
-                            <td>Suspend</td>
-                            {% elif user.status == 3 %}
-                            <td>Blacklist</td>
-                            {% endif %}
-                            <td>1</td>
-                            <td>
-                                <input type="hidden" name="users-id" value="{{ user.id }}">
-                                <input id="action-{{user.id}}" type="hidden" name="action" value="">
+                                <td>{{user.name}}</td>
+                                <td>{{user.email}}</td>
+                                <td>{{user.id}}</td>
+                                {% if user.status == 0 %}
+                                <td>Pending</td>
+                                {% elif user.status == 1 %}
+                                <td>Active</td>
+                                {% elif user.status == 2 %}
+                                <td>Suspend</td>
+                                {% elif user.status == 3 %}
+                                <td>Blacklist</td>
+                                {% endif %}
+                                <td>1</td>
+                                <td>
+                                    <input type="hidden" name="users-id" value="{{ user.id }}">
+                                    <input id="action-{{user.id}}" type="hidden" name="action" value="">
 
-                                <button class="ui yellow button">Status</button>
-                                <div class="ui fluid popup top left transition hidden">
-                                    <div class="ui two column divided center aligned grid">
+                                    <button class="ui yellow button">Status</button>
+                                    <div class="ui fluid popup top left transition hidden">
+                                        <div class="ui two column divided center aligned grid">
 
-                                        <div class="column">
-                                            <a class="ui button" onclick="setactive('form-{{user.id}}','{{user.id}}')" >Active</a>
-                                        </div>
-                                        <div class="column">
-                                            <a class="ui button" onclick="setsuspend('form-{{user.id}}','{{user.id}}')">Suspend</a>
+                                            <div class="column">
+                                                <a class="ui button" onclick="setactive('form-{{user.id}}','{{user.id}}')">Active</a>
+                                            </div>
+                                            <div class="column">
+                                                <a class="ui button" onclick="setsuspend('form-{{user.id}}','{{user.id}}')">Suspend</a>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <button class="ui red button" type="submit" onclick="setdelete('form-{{user.id}}','{{user.id}}')">Delete</button>
-                            </td>
+                                    <button class="ui red button" type="submit" onclick="setdelete('form-{{user.id}}','{{user.id}}')">Delete</button>
+                                </td>
                             </form>
                         </tr>
-                    {% endfor %}
-                    {% endif %}
+                        {% endfor %} {% endif %}
                     </tbody>
                 </table>
             </div>
@@ -70,21 +68,23 @@
         on: 'click'
     });
 
-    function setactive(form_id,user_id){
-        document.getElementById("action-"+user_id).value = "activate"
+    function setactive(form_id, user_id) {
+        document.getElementById("action-" + user_id).value = "activate"
         var form = document.getElementById(form_id);
         form.submit();
     }
 
-    function setsuspend(form_id,user_id){
-        document.getElementById("action-"+user_id).value = "suspend"
+    function setsuspend(form_id, user_id) {
+        document.getElementById("action-" + user_id).value = "suspend"
         var form = document.getElementById(form_id);
         form.submit();
     }
-    function setdelete(form_id,user_id){
-        document.getElementById("action-"+user_id).value = "delete"
+    function setdelete(form_id, user_id) {
+        document.getElementById("action-" + user_id).value = "delete"
         var form = document.getElementById(form_id);
         form.submit();
     }
+
 </script>
+
 {% endblock %}

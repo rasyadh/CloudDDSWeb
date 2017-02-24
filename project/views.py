@@ -238,14 +238,8 @@ def reset_pass():
 @app.route('/forgot_password/reset_password/<tokens>/')
 def reset_passred(tokens):
     return redirect(url_for('reset_pass'))
-<<<<<<< HEAD
 
 @app.route('/layanan')
-=======
-
-
-@app.route('/layanan')
->>>>>>> 0a5cd5003830869e18de4a7bd625ab839609233e
 def layanan():
     return render_template('partials/layanan.html')
 
@@ -334,17 +328,11 @@ def create_instance():
         return render_template('create-instance.html',flavorlist = flavorJSON,keylist=keyJSON,imagelist=imageJSON,users=users)
     #return str(respJSON['flavors'])
 
-@app.route('/manage/images')
+@app.route('/manage/help')
 @login_required
-def images():
+def help():
     users = User.query.filter_by(id=session['user_id']).first()
-    return render_template('images.html',users=users)
-
-@app.route('/manage/network')
-@login_required
-def network():
-    users = User.query.filter_by(id=session['user_id']).first()
-    return render_template('network.html',users=users)
+    return render_template('help.html',users=users)
 
 @app.route('/manage/settings',methods=["GET","POST"])
 @login_required

@@ -4,11 +4,11 @@
     <div class="ui stackable grid container">
         <div class="row">
             <h3 class="ui header">Computes</h3>
-            <div class="ui top attached tabular menu computes">
-                <a class="item active" data-tab="instances">Instances</a>
-                <a class="item" data-tab="volumes">Volumes</a>
-            </div>
-            <div class="ui bottom attached active tab segment" data-tab="instances">
+        </div>
+        </br>
+        <div class="row">
+            <h2>Instance</h2>
+            <div class="ui segment">
                 <div class="ui vertical stripe center aligned container">
                     <h2>List Instances</h2>
                     <table class="ui teal table">
@@ -22,20 +22,20 @@
                         </thead>
                         <tbody>
                             {% for server in serverreq %}
-                                <tr>
-                                    <td>{{ server.name }}</td>
-                                    {% if server.status == 0%}
-                                    <td>Menunggu Persetujuan Admin</td>
-                                    {% else %}
-                                    <td>Tidak Aktif</td>
-                                    {% endif %}
-                                    <td>dd/mm/yyyy</td>
-                                    {% if server.id == "" %}
-                                    <td><a class="ui teal button disabled" disabled href="/manage/instance">Manage Instance</a></td>
-                                    {% else %}
-                                    <td><a class="ui teal button disabled" href="/manage/instance?id={{ server.id }}">Manage Instance</a></td>
-                                    {% endif %}
-                                </tr>
+                            <tr>
+                                <td>{{ server.name }}</td>
+                                {% if server.status == 0%}
+                                <td>Menunggu Persetujuan Admin</td>
+                                {% else %}
+                                <td>Tidak Aktif</td>
+                                {% endif %}
+                                <td>dd/mm/yyyy</td>
+                                {% if server.id == "" %}
+                                <td><a class="ui teal button disabled" disabled href="/manage/instance">Manage Instance</a></td>
+                                {% else %}
+                                <td><a class="ui teal button disabled" href="/manage/instance?id={{ server.id }}">Manage Instance</a></td>
+                                {% endif %}
+                            </tr>
                             {% endfor %}
                         </tbody>
                         <tfoot>
@@ -48,20 +48,8 @@
                     </table>
                 </div>
             </div>
-            <div class="ui bottom attached tab segment" data-tab="volumes">
-                <div class="ui center aligned container">
-                    <h2>Looks like you don't have any block storage volumes</h2>
-                    <a class="ui teal button">Add Volume</a>
-                </div>
-            </div>
         </div>
     </div>
 </div>
-
-<script>
-    $('.menu.computes .item')
-        .tab()
-        ;
-</script>
 
 {% endblock %}
