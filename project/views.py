@@ -237,13 +237,8 @@ def reset_pass():
 @app.route('/forgot_password/reset_password/<tokens>/')
 def reset_passred(tokens):
     return redirect(url_for('reset_pass'))
-<<<<<<< HEAD
 
 @app.route('/layanan')
-=======
-
-@app.route('/layanan')
->>>>>>> 0211f1d9a7c43de0597de40e4030886d47058cab
 def layanan():
     return render_template('partials/layanan.html')
 
