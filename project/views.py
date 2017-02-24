@@ -438,6 +438,7 @@ def manage_user():
 @admin_required
 def manage_vm():
     admin = User.query.filter_by(id=session['admin_id']).first()
+    #allserver = Instance.query.all()
     return render_template('admin/managing-vm.html',admin=admin)
 
 @app.route('/admin/manage-request')
