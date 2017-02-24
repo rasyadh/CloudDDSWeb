@@ -44,8 +44,8 @@
             <div class="ui container">
                 <h2 class="ui dividing header">Choose a size</h2>
                 <div class="ui top attached tabular menu createi">
-                    <a class="item active" data-tab="flavor">Default Size</a>
-                    <a class="item" data-tab="custom">Custom Size</a>
+                    <a class="item active" data-tab="flavor" onclick="setflavordata('fixed')">Default Size</a>
+                    <a class="item" data-tab="custom" onclick="setflavordata('custom')">Custom Size</a>
                     <a class="item" data-tab="request_flav">Spesific Size</a>
                 </div>
                 <div class="ui bottom attached active tab segment" data-tab="flavor" ng-controller="CreateflavorController as cfCtrl">
@@ -77,18 +77,30 @@
                     <div class="ui very padded container" style="padding: 1em;">
                         <div class="ui form">
                             <div class="field" id="slider">
+<<<<<<< HEAD
                                 <label for="vcpu">CPU : </label>
                                 <input type="number" id="vcpu" readonly style="border:0; color:#00b5ad; font-weight:bold;">
                                 <div id="slider-range-max-vcpu" style="background: #00b5ad;"></div>
+=======
+                                <label for="custom_vcpu">CPU : </label>
+                                <input type="text" id="custom_vcpu" readonly style="border:0; color:#00b5ad; font-weight:bold;">
+                                <div id="slider-range-max-vcpu"></div>
+>>>>>>> bb47547f111d9a6bfddf12edd5efd1a6637cc529
                                 <div class="ui grid" style="margin-top: .5em;">
                                     <div class="left floated wide column">1vCPU</div>
                                     <div class="right floated wide column">2vCPU</div>
                                 </div>
                             </div>
                             <div class="field" id="slider">
+<<<<<<< HEAD
                                 <label for="memory">Memory : </label>
                                 <input type="number" id="memory" readonly style="border:0; color:#00b5ad; font-weight:bold;">
                                 <div id="slider-range-max-memory" style="background: #00b5ad;"></div>
+=======
+                                <label for="custom_memory">Memory : </label>
+                                <input type="text" id="custom_memory" readonly style="border:0; color:#00b5ad; font-weight:bold;">
+                                <div id="slider-range-max-memory"></div>
+>>>>>>> bb47547f111d9a6bfddf12edd5efd1a6637cc529
                                 <div class="ui grid" style="margin-top: .5em;">
                                     <div class="left floated six wide column">1 GB</div>
                                     <div class="left floated five wide column" style="margin-left: 2em;">2 GB</div>
@@ -96,17 +108,20 @@
                                 </div>
                             </div>
                             <div class="field" id="slider">
+<<<<<<< HEAD
                                 <label for="storage">Storage : </label>
                                 <input type="number" id="storage" readonly style="border:0; color:#00b5ad; font-weight:bold;">
                                 <div id="slider-range-storage" style="background: #00b5ad;"></div>
+=======
+                                <label for="custom_storage">Storage : </label>
+                                <input type="text" id="custom_storage" readonly style="border:0; color:#00b5ad; font-weight:bold;">
+                                <div id="slider-range-storage"></div>
+>>>>>>> bb47547f111d9a6bfddf12edd5efd1a6637cc529
                                 <div class="ui grid" style="margin-top: .5em;">
                                     <div class="left floated six wide column">20GB</div>
                                     <div class="left floated five wide column" style="margin-left: 2em;">40GB</div>
                                     <div class="right floated wide column">80GB</div>
                                 </div>
-                            </div>
-                            <div class="ui center aligned container">
-                                <button class="ui fluid teal button">Choose</button>
                             </div>
                         </div>
                     </div>
@@ -199,12 +214,16 @@
             <input id="size" type="text" name="size" hidden value="">
             <input id="ram" type="text" name="ram" hidden value="">
             <input id="cpu" type="text" name="cpu" hidden value="">
+            <input id="custom_vcpu_form" type="text" name="custom_vcpu_form" hidden value="1">
+            <input id="custom_storage_form" type="text" name="custom_storage_form" hidden value="20">
+            <input id="custom_memory_form" type="text" name="custom_memory_form" hidden value="1">
+            <input id="flavor_type" type="text" name="flavor_type" hidden value="fixed">
             <input id="purpose" type="text" name="purpose" hidden value="">
             <input id="pic_name" type="text" name="pic_name" hidden value="">
             <input id="pic_telp" type="text" name="pic_telp" hidden value="">
-            
-            <button id="submit_button" class="ui fluid large teal submit button" type="submit" onclick="submit('form_create')">Create</button>
+        
         </form>
+            <button id="submit_button" class="ui fluid large teal button" onclick="submit('form_create')">Create</button>
     </div>
 </div>
 <script>
@@ -213,16 +232,18 @@
         ;
 
     $(function () {
+        var objCpu = [1, 2];        
         $("#slider-range-max-vcpu").slider({
             range: "max",
             min: 1,
-            max: 2,
+            max: objCpu.length,
             value: 1,
             slide: function (event, ui) {
-                $("#vcpu").val(ui.value);
+                $("#custom_vcpu").val(objCpu[ui.value - 1]);
+                $("#custom_vcpu_form").val(objCpu[ui.value - 1]);
             }
         });
-        $("#vcpu").val($("#slider-range-max-vcpu").slider("value"));
+        $("#custom_vcpu").val(objCpu[$("#slider-range-max-vcpu").slider("value")-1]);        
     });
 
     $(function () {
@@ -233,24 +254,26 @@
             max: objMemory.length,
             value: 1,
             slide: function (event, ui) {
-                $("#memory").val(objMemory[ui.value-1]);
+                $("#custom_memory").val(objMemory[ui.value-1]);
+                $("#custom_memory_form").val(objMemory[ui.value-1]);
             }
         });
-        $("#memory").val($("#slider-range-max-memory").slider("value"));
+        $("#custom_memory").val(objMemory[$("#slider-range-max-memory").slider("value")-1]);        
     });
 
     $(function () {
-        var objStorage = [20, 40, 80];
+        var objStorage = [20, 40, 80];        
         $("#slider-range-storage").slider({
             range: "max",
             min: 1,
             max: objStorage.length,
             value: 1,
             slide: function (event, ui) {
-                $("#storage").val(objStorage[ui.value-1]);
+                $("#custom_storage").val(objStorage[ui.value-1]);
+                $("#custom_storage_form").val(objStorage[ui.value-1]);
             }
         });
-        $("#storage").val($("#slider-range-storage").slider("value"));
+        $("#custom_storage").val(objStorage[$("#slider-range-storage").slider("value")-1]);
     });
 
 </script>

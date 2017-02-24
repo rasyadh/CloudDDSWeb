@@ -29,25 +29,31 @@
     var prev_image_id = ""
     var key_id = ""
     var name = ""
+    var flavor_type = "fixed"
+    var objMemory = [1, 2, 4];
+    var objStorage = [20, 40, 80];
 
     function selectedflavorid(selectedflavorid,flavor_disk, flavor_ram, flavor_cpu) {
-        flavorid = selectedflavorid;
-        if(prev_flav_id)
+        if(flavor_type == "fixed")
         {
-            document.getElementById("flavor-"+prev_flav_id).className =
-            document.getElementById("flavor-"+prev_flav_id).className.replace(" teal",'');
-        }
-        var input = document.getElementById("flavor-"+flavorid);
-        input.className += " teal";
-        var d = document.getElementById("flavorRef");
-        d.value = selectedflavorid;
-        var d = document.getElementById("size");
-        d.value = flavor_disk;
-        var d = document.getElementById("ram");
-        d.value = flavor_ram;
-        var d = document.getElementById("cpu");
-        d.value = flavor_cpu;
-        prev_flav_id = flavorid;
+            flavorid = selectedflavorid;
+            if(prev_flav_id)
+            {
+                document.getElementById("flavor-"+prev_flav_id).className =
+                document.getElementById("flavor-"+prev_flav_id).className.replace(" teal",'');
+            }
+            var input = document.getElementById("flavor-"+flavorid);
+            input.className += " teal";
+            var d = document.getElementById("flavorRef");
+            d.value = selectedflavorid;
+            var d = document.getElementById("size");
+            d.value = flavor_disk;
+            var d = document.getElementById("ram");
+            d.value = flavor_ram;
+            var d = document.getElementById("cpu");
+            d.value = flavor_cpu;
+            prev_flav_id = flavorid;
+        } 
     };
 
     function selectedimageid(selectedimageid, image_name) {
@@ -79,10 +85,32 @@
     }
 
     function submit(form_id){
-        var form = document.getElementById("form_id");
+        var form = document.getElementById(form_id);
         form.submit();
-        alert("success");
     }
+
+    function setflavordata(flavor_type){
+        flavor_types = flavor_type;
+        document.getElementById("flavor_type").value = flavor_type;
+        if(prev_image_id)
+        {
+            document.getElementById("image-"+prev_image_id).className =
+            document.getElementById("image-"+prev_image_id).className.replace(" teal",'');
+        }
+        prev_flav_id = "";
+
+        if(flavor_type == "custom")
+        {
+            alert("custom")
+        }
+        else
+        {
+            alert("fixed")
+        }
+
+        // alert(document.getElementById('custom_vcpu').value + "<br>" + document.getElementById('custom_storage').value + "<br>" + document.getElementById('custom_memory').value)
+    }
+
 
     </script>
 

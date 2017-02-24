@@ -18,18 +18,26 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% if request_users and request_users.status !=0 %}
+                        {% for inst in request_users %}
                         <tr>
-                            <td>Instance test</td>
-                            <td>linux</td>
-                            <td>size flavor</td>
-                            <td>user</td>
-                            <td>Active</td>
+                            <form id="form-{{inst.id}}">
+                            <td>{{inst.name}}</td>
+                            <td>{{inst.image_name}}</td>
+                            <td>{{inst.flavor_id}}</td>
+                            <td>{{inst.owner_id}}</td>
+                            {% if inst.status == 0 %}
+                            <td>Pending</td>
+                            {% endif %}
                             <td>
-                                <button class="ui yellow button detail">Detail</button>
-                                <button class="ui green button">Accept</button>
-                                <button class="ui red button">Decline</button>
+                                <input id="action-{{inst.id}}" type="hidden" name="action" value="">
+                                <button class="ui yellow button detail" onclick="getdetail('{{inst.name}}','{{inst.image_name}}','{{inst.flavor_id}}','{{inst.flavor_vcpu}}','{{inst.flavor_ram}}','{{inst.flavor_disk}}','{{inst.purpose}}','{{inst.pic_name}}','{{inst.pic_telp}}')">Detail</button>
+                                <button class="ui green button process" onclick="processed('{{inst.id}}','{{inst.name}}','{{inst.image_id}}','{{inst.flavor_id}}','{{inst.network_id}}','{{inst.availability_zone}}','{{inst.keyname}}','{{inst.flavor_disk}}')">Process</button>
                             </td>
+                        </form>
                         </tr>
+                        {% endfor %}
+                        {% endif %}
                     </tbody>
                 </table>
             </div>
@@ -37,69 +45,128 @@
     </div>
 </div>
 
-<div class="ui modal">
+<div class="ui modal detail">
     <i class="close icon"></i>
     <div class="header">
         Detail Request
     </div>
     <div class="content">
-        <table class="ui fixed table">
+        <table class="ui table">
             <tbody>
                 <tr>
                     <td>Name</td>
-                    <td>...</td>
+                    <td><p id="name-detail"></p></td>
                 </tr>
                 <tr>
                     <td>OS</td>
-                    <td>...</td>
+                    <td><p id="image-name"></p></td>
                 </tr>
                 <tr>
                     <td>Flavor</td>
-                    <td>...</td>
+                    <td><p id="flavor-id"></p></td>
                 </tr>
                 <tr>
                     <td>CPU</td>
-                    <td>...</td>
+                    <td><p id="flavor-vcpu"></p></td>
                 </tr>
                 <tr>
                     <td>Memory</td>
-                    <td>...</td>
+                    <td><p id="flavor-ram"></p></td>
                 </tr>
                 <tr>
                     <td>Storage</td>
-                    <td>...</td>
-                </tr>
-                <tr>
-                    <td>Key Pair</td>
-                    <td>...</td>
+                    <td><p id="flavor-disk"></p></td>
                 </tr>
                 <tr>
                     <td>Usage Purpose</td>
-                    <td>...</td>
+                    <td><p id="purpose"></p></td>
                 </tr>
                 <tr>
                     <td>PIC Name</td>
-                    <td>...</td>
+                    <td><p id="pic-name"></p></td>
                 </tr>
                 <tr>
                     <td>PIC Phone Number</td>
-                    <td>...</td>
+                    <td><p id="pic-telp"></p></td>
                 </tr>
             </tbody>
         </table>
-    </div>    
+    </div>
+</div>
+
+<div class="ui small modal process">
+    <i class="close icon"></i>
+    <div class="header">
+        Process Confirmation
+    </div>
+
+    <div class="actions">
+        <form id="process-request" method="POST">
+            <input type="hidden" id="modal-id" name="request-id" value="">
+            <input type="hidden" id="modal-name" name="request-name" value="">
+            <input type="hidden" id="modal-img" name="request-img" value="">
+            <input type="hidden" id="modal-flavor" name="request-flavor" value="">
+            <input type="hidden" id="modal-ava" name="request-ava" value="">
+            <input type="hidden" id="modal-keyname" name="request-keyname" value="">
+            <input type="hidden" id="modal-networks" name="request-networks" value="">
+            <input type="hidden" id="modal-size" name="request-size" value="">
+            <input type="hidden" id="modal-action" name="action" value="">
+            <button class="ui red cancel button" onclick="creating('decline')">Decline</button>
+            <button class="ui green ok button" onclick="creating('accept')">Accept</button>
+        </form>
+    </div>
 </div>
 
 <script>
-    $('.ui.yellow.button').popup({
-        popup: $('.ui.flowing.popup'),
+    $('.ui.green.button').popup({
+        popup: $('.ui.fluid.popup'),
         on: 'click'
     });
 
-    $('.ui.modal')
+    $('.ui.modal.detail')
         .modal('attach events', '.ui.yellow.button.detail', 'show')
         .modal('setting', 'transition', 'fade up');
 
+    $('.ui.small.modal.process')
+        .modal('attach events', '.ui.green.button.process', 'show')
+        .modal('setting', 'transition', 'fade up');
+
+    function processed(request_id,name,image,flavor,network,ava,keyname,flavordisk){
+        document.getElementById('modal-id').value = request_id;
+        document.getElementById('modal-name').value = name;
+        document.getElementById('modal-img').value = image;
+        document.getElementById('modal-flavor').value = flavor;
+        document.getElementById('modal-networks').value = network;
+        document.getElementById('modal-ava').value = ava;
+        document.getElementById('modal-keyname').value = keyname;
+        document.getElementById('modal-size').value = flavordisk;
+
+    }
+    function getdetail(name,imagename,flavor,flavorvcpu,flavorram,flavordisk,flavorpurpose,flavorpicname,flavorpictelp){
+        document.getElementById('name-detail').innerHTML = name;
+        document.getElementById('image-name').innerHTML = imagename;
+        document.getElementById('flavor-id').innerHTML = flavor;
+        document.getElementById('flavor-vcpu').innerHTML = flavorvcpu+' vCPU';
+        document.getElementById('flavor-ram').innerHTML = flavorram+' MB';
+        document.getElementById('flavor-disk').innerHTML = flavordisk+' GB';
+        document.getElementById('purpose').innerHTML = flavorpurpose;
+        document.getElementById('pic-name').innerHTML = flavorpicname;
+        document.getElementById('pic-telp').innerHTML = flavorpictelp;
+    }
+
+
+    function creating(status){
+        if(status == "accept"){
+            document.getElementById('modal-action').value = "Accepted"
+        }
+        else if(status == "decline"){
+            document.getElementById('modal-action').value = "Decline"
+        }
+        var form = document.getElementById('process-request')
+        form.submit()
+    }
+
+//submit form
 </script>
 
 {% endblock %}

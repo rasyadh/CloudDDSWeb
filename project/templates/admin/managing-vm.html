@@ -17,23 +17,28 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% if allserver %}
+                        {% for server in allserver %}
                         <tr>
-                            <td>Instance test</td>
-                            <td>linux</td>
-                            <td>user</td>
-                            <td>Active</td>
+                            <td>{{server.name}}</td>
+                            <td>{{server.image_name}}</td>
+                            <td>{{server.user_id}}</td>
+                            {% if server.status == 0 %}
+                            <td>Stopping</td>
+                            {% elif server.status == 1 %}
+                            <td>Running</td>
+                            {% elif server.status == 2 %}
+                            <td>Error</td>
+                            {% endif %}
                             <td>
                                 <button class="ui yellow button">Status</button>
-                                <div class="ui fluid popup top left transition hidden">
-                                    <div class="ui three column divided center aligned grid">
+                                <div class="ui popup top left transition hidden">
+                                    <div class="ui two column divided center aligned grid">
                                         <div class="column">
-                                            <button class="ui button">Active</button>
+                                            <button class="ui button">Run</button>
                                         </div>
                                         <div class="column">
-                                            <button class="ui button">Pending</button>
-                                        </div>
-                                        <div class="column">
-                                            <button class="ui button">Suspend</button>
+                                            <button class="ui button">Stop</button>
                                         </div>
                                     </div>
                                 </div>
@@ -41,6 +46,8 @@
                                 <button class="ui red button">Delete</button>
                             </td>
                         </tr>
+                        {% endfor %}
+                        {% endif %}
                     </tbody>
                 </table>
             </div>
@@ -50,7 +57,7 @@
 
 <script>
     $('.ui.yellow.button').popup({
-        popup: $('.ui.flowing.popup'),
+        popup: $('.ui.fluid.popup'),
         on: 'click'
     });
 

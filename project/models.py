@@ -9,13 +9,13 @@ class User(db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False)
-    email = db.Column(db.String, nullable=False, unique=True)
-    password = db.Column(db.String, default=None, nullable=True)
-    status = db.Column(db.Integer, default=0)
-    nomorhp = db.Column(db.String, nullable=False)
+    name = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(50), nullable=False, unique=True)
+    password = db.Column(db.String(100), default=None, nullable=True)
+    status = db.Column(db.Integer, default=0) #0=pending, 1=activate, 2=suspend, 3=delete
+    nomorhp = db.Column(db.String(50), nullable=False)
     registered_on = db.Column(db.DateTime, nullable=False)
-    role = db.Column(db.Integer, default=0)
+    role = db.Column(db.Integer, default=0) #0=user, 1=admin, 2=superadmin
 
     def __init__(self, name=None, email=None, password=None, status=0, nomorhp=None, role=0):
         self.name = name
@@ -39,7 +39,7 @@ class Token(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     email_user = db.Column(db.String,nullable=False,unique=True)
     code = db.Column(db.String,nullable=False,unique=True)
-    type = db.Column(db.Integer, nullable=False)
+    type = db.Column(db.Integer, nullable=False) #0 = registration, 1= reset password
     created_at = db.Column(db.DateTime, nullable=False)
 
     def __init__(self,id=None,email_user=None,code=None, type=None):
@@ -54,13 +54,19 @@ class Instance(db.Model):
     __tablename__ = 'instances'
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, nullable=False, unique=True)
-    instance_id = db.Column(db.String, unique=True)
+    user_id = db.Column(db.Integer, nullable=False)
+    instance_id = db.Column(db.String(100), unique=True)
+    name = db.Column(db.String(50), nullable=False)
+    image_name = db.Column(db.String(100), nullable=False)
+    status = db.Column(db.Integer, default=1)
     build_on = db.Column(db.DateTime, nullable=False)
 
-    def __init__(self, user_id=None, instance_id=None):
+    def __init__(self, user_id=None, instance_id=None,name=None,image_name=None,status=None):
         self.user_id = user_id
         self.instance_id=instance_id
+        self.name=name
+        self.image_name=image_name
+        self.status=status
         self.build_on = datetime.date.today()
 
     def get_id(self):
@@ -89,7 +95,7 @@ class Request(db.Model):
     purpose = db.Column(db.String(100), nullable=False)
     pic_name = db.Column(db.String(100), nullable=False)
     pic_telp = db.Column(db.String(100), nullable=False)
-    status = db.Column(db.Integer, default=0)
+    status = db.Column(db.Integer, default=0) #0 = pending, 1 = accepted, 2 = decline
     request_at = db.Column(db.DateTime, nullable=False)
 
     def __init__(self,owner_id,server_id,name,image_id,image_name , flavor_id, flavor_vcpu, flavor_ram, flavor_disk,network_id, availability_zone, keyname, purpose, pic_name, pic_telp, status):

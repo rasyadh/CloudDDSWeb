@@ -121,11 +121,11 @@ def registration():
                 db.session.add(users)
                 db.session.add(activationcode)
 
-                confirm_url = "http://localhost:5000/registration/activate_account?actemp="+activationcodetmp
+                confirm_url = "http://10.14.36.100:5000/registration/activate_account?actemp="+activationcodetmp
                 html = render_template('email/verification-email.html',confirm_url = confirm_url)
                 subject = "Verification Email Cloud Telkom DDS"
                 #send_email(users.email,subject,html)
-                send_email("gravpokemongo@gmail.com",subject,html)
+                send_email(users.email,subject,html)
                 db.session.commit()
 
                 return redirect(url_for('login'))
@@ -258,8 +258,9 @@ def manage():
 def computes():
     users = User.query.filter_by(id=session['user_id']).first()
     serverreq = Request.query.filter_by(owner_id=session['user_id']).order_by(Request.status).all()
+    serverins = Instance.query.filter_by(user_id=session['user_id']).order_by(Instance.status).all()
 
-    return render_template('computes.html',users=users, serverreq=serverreq)    
+    return render_template('computes.html',users=users, serverreq=serverreq,serverins=serverins)
 
 @app.route('/manage/create', methods=['GET','POST'])
 @login_required
@@ -269,38 +270,71 @@ def create_instance():
     neutron = neutronapi()
 
     if request.method == 'POST':
-        #try:
-            imageRef = request.form['imageRef']
-            flavorRef = str(request.form['flavorRef'])
-            size = request.form['size']
-            availability_zone = request.form['availability_zone']
-            networks_uuid = "417b4cdd-b706-4f6c-8e6e-1b06f58e94c8"
-            key_name = request.form['key_name']
-            name = request.form['name']
-            respJSON = nova.serverCreate(name,imageRef,flavorRef,availability_zone,key_name,networks_uuid,size)
+        try:
+            if request.form['flavor_type'] == "custom":
+                imageRef = request.form['imageRef']
+                availability_zone = request.form['availability_zone']
+                networks_uuid = "417b4cdd-b706-4f6c-8e6e-1b06f58e94c8"
+                key_name = request.form['key_name']
+                name = request.form['name']
+                image_name = request.form['image_name']
+                size = request.form['custom_storage_form']
+                ram = request.form['custom_memory_form']
+                cpu = request.form['custom_vcpu_form']
+                purpose = request.form['purpose']
+                pic_name = request.form['pic_name']
+                pic_telp = request.form['pic_telp']
 
-            # time.sleep(30)
-            # resp = json.loads(respJSON)
-            # server_id = resp['server']['id']
-            # respJSON = nova.serverList(server_id)
-            # resp = json.loads(respJSON)
-            # for addresses in resp['server']['addresses']['private']:
-            #     if addresses["version"] == 4:
-            #         private_ip = addresses["addr"]
-            #         break
-            # respJSON = neutron.floatipList()
-            # respJSON = json.loads(respJSON)
-            # iplist = respJSON['floatingips']
-            # for ip in iplist:
-            #     if ip['fixed_ip_address'] is Null:
-            #         public_ip = ip['floating_ip_address']
-            #         break
-            # nova.setFloatingIp(private_ip,public_ip,server_id)
+                size = str(size)
+                ram = str(ram)
+                cpu = str(cpu)
+                flavorRef = cpu + ram.zfill(2) + size.zfill(3)
+
+            else:
+                imageRef = request.form['imageRef']
+                availability_zone = request.form['availability_zone']
+                networks_uuid = "417b4cdd-b706-4f6c-8e6e-1b06f58e94c8"
+                key_name = request.form['key_name']
+                name = request.form['name']
+                image_name = request.form['image_name']
+                flavorRef = request.form['flavorRef']
+                size = request.form['size']
+                ram = request.form['ram']
+                cpu = request.form['cpu']
+                purpose = request.form['purpose']
+                pic_name = request.form['pic_name']
+                pic_telp = request.form['pic_telp']
+
+                #respJSON = nova.serverCreate(name,imageRef,flavorRef,availability_zone,key_name,networks_uuid,size)
+
+                # time.sleep(30)
+                # resp = json.loads(respJSON)
+                # server_id = resp['server']['id']
+                # respJSON = nova.serverList(server_id)
+                # resp = json.loads(respJSON)
+                # for addresses in resp['server']['addresses']['private']:
+                #     if addresses["version"] == 4:
+                #         private_ip = addresses["addr"]
+                #         break
+                # respJSON = neutron.floatipList()
+                # respJSON = json.loads(respJSON)
+                # iplist = respJSON['floatingips']
+                # for ip in iplist:
+                #     if ip['fixed_ip_address'] is Null:
+                #         public_ip = ip['floating_ip_address']
+                #         break
+                # nova.setFloatingIp(private_ip,public_ip,server_id)
 
             req = Request(
+                    owner_id = session['user_id'],
+                    server_id = "",
                     name = name,
                     image_id = imageRef,
+                    image_name=image_name,
                     flavor_id = flavorRef,
+                    flavor_vcpu = cpu,
+                    flavor_ram = ram,
+                    flavor_disk = size,
                     network_id = networks_uuid,
                     availability_zone = availability_zone,
                     keyname = key_name,
@@ -314,8 +348,8 @@ def create_instance():
             db.session.commit()
 
             return redirect(url_for('computes'))
-        #except:
-            #return "Bad Parameter"
+        except:
+            return "Bad Parameter"
     else:
         users = User.query.filter_by(id=session['user_id']).first()
         #ubahteko baris iki
@@ -327,8 +361,18 @@ def create_instance():
         imageJSON = json.loads(imageJSON)
         return render_template('create-instance.html',flavorlist = flavorJSON,keylist=keyJSON,imagelist=imageJSON,users=users)
     #return str(respJSON['flavors'])
+<<<<<<< HEAD
 
 @app.route('/manage/help')
+=======
+@app.route('/manage/images')
+@login_required
+def images():
+    users = User.query.filter_by(id=session['user_id']).first()
+    return render_template('images.html',users=users)
+
+@app.route('/manage/network')
+>>>>>>> bb47547f111d9a6bfddf12edd5efd1a6637cc529
 @login_required
 def help():
     users = User.query.filter_by(id=session['user_id']).first()
@@ -416,19 +460,50 @@ def manage_user():
 @admin_required
 def manage_vm():
     admin = User.query.filter_by(id=session['admin_id']).first()
-    return render_template('admin/managing-vm.html',admin=admin)
+    allserver = Instance.query.all()
+    return render_template('admin/managing-vm.html',admin=admin,allserver=allserver)
 
-@app.route('/admin/manage-request')
+@app.route('/admin/manage-request',methods=['GET','POST'])
 @admin_required
 def manage_request():
     admin = User.query.filter_by(id=session['admin_id']).first()
-    return render_template('admin/managing-request.html',admin=admin)
+    request_users = Request.query.filter_by(status=0).all()
+
+    if request.method == 'POST':
+        if request.form['action'] == 'Accepted' :
+            reqf = request.form
+            nova = novaapi()
+            respJSON = nova.serverCreate(reqf['request-name'],reqf['request-img'],reqf['request-flavor'],reqf['request-ava'],\
+                       reqf['request-keyname'],reqf['request-networks'],reqf['request-size'])
+            resp = json.loads(respJSON)
+
+            create = Request.query.filter_by(id=request.form['request-id']).first()
+            ins = Instance(
+                user_id = create.owner_id,
+                instance_id = resp['server']['id'],
+                name = create.name,
+                image_name = create.image_name,
+                status = 1
+            )
+            create.status = 1
+            db.session.add(ins)
+            db.session.delete(create)
+            db.session.commit()
+            return redirect(url_for('manage_request'))
+
+        elif request.form['action'] == 'Decline':
+            create = Request.query.filter_by(id=request.form['request-id']).first()
+            create.status = 2
+            db.session.commit()
+
+    return render_template('admin/managing-request.html',admin=admin,request_users=request_users)
 
 @app.route('/admin/manage-admin')
 @admin_required
 def manage_admin():
     admin = User.query.filter_by(id=session['admin_id']).first()
-    return render_template('admin/managing-admin.html',admin=admin)
+    alladmin = User.query.filter_by(role=1).all()
+    return render_template('admin/managing-admin.html',admin=admin,alladmin=alladmin)
 
 # error handler
 @app.errorhandler(404)
@@ -548,6 +623,7 @@ def keylistdelete():
     if request.method == "GET":
         if request.args.get('keyname') is None:
             return "Bad Parameter"
+
         else:
             key_name = request.args.get('keyname')
             nova = novaapi()
