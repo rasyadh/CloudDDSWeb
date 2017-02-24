@@ -260,7 +260,7 @@ def computes():
     users = User.query.filter_by(id=session['user_id']).first()
     serverreq = Request.query.filter_by(owner_id=session['user_id']).order_by(Request.status).all()
 
-    return render_template('computes.html',users=users, serverreq=serverreq)    
+    return render_template('computes.html',users=users, serverreq=serverreq)
 
 @app.route('/manage/create', methods=['GET','POST'])
 @login_required
@@ -423,6 +423,7 @@ def manage_user():
 @admin_required
 def manage_vm():
     admin = User.query.filter_by(id=session['admin_id']).first()
+    #allserver = Instance.query.all()
     return render_template('admin/managing-vm.html',admin=admin)
 
 @app.route('/admin/manage-admin')
