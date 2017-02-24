@@ -176,6 +176,7 @@ def activation_accountred(activation_code):
 #Check halaman verifikasi forgot password
 @app.route('/forgot_password',methods=["GET","POST"])
 def forgot_password():
+
     message = []
     if request.method == 'POST':
         users = User.query.filter_by(email=request.form['email']+request.form['email_domain']).first()
@@ -193,6 +194,7 @@ def forgot_password():
             db.session.commit()
 
             confirm_url = "http://localhost:5000/forgot_password/reset_password?tokens="+token
+
             html = render_template('email/resetpass-email.html',confirm_url = confirm_url, users=users)
             subject = "Request Reset Password Cloud Telkom DDS"
             #send_email(users.email,subject,html)
@@ -204,6 +206,7 @@ def forgotredirect():
     return redirect(url_for('forgot_password'))
 
 @app.route('/forgot_password/reset_password',methods=['GET','POST'])
+
 def reset_pass():
     if request.method == 'POST':
         if request.form['tokens'] is None :
@@ -235,6 +238,7 @@ def reset_pass():
 @app.route('/forgot_password/reset_password/<tokens>/')
 def reset_passred(tokens):
     return redirect(url_for('reset_pass'))
+
 
 @app.route('/layanan')
 def layanan():
