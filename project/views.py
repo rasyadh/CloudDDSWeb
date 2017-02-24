@@ -194,6 +194,7 @@ def forgot_password():
             db.session.commit()
 
             confirm_url = "http://localhost:5000/forgot_password/reset_password?tokens="+token
+
             html = render_template('email/resetpass-email.html',confirm_url = confirm_url, users=users)
             subject = "Request Reset Password Cloud Telkom DDS"
             #send_email(users.email,subject,html)
@@ -239,6 +240,14 @@ def reset_passred(tokens):
     return redirect(url_for('reset_pass'))
 
 @app.route('/layanan')
+<<<<<<< HEAD
+=======
+=======
+
+
+@app.route('/layanan')
+>>>>>>> 0a5cd5003830869e18de4a7bd625ab839609233e
+>>>>>>> 1a624ca54774249b69471c04abf6bc22a15ef7f4
 def layanan():
     return render_template('partials/layanan.html')
 
@@ -422,6 +431,12 @@ def manage_user():
 def manage_vm():
     admin = User.query.filter_by(id=session['admin_id']).first()
     return render_template('admin/managing-vm.html',admin=admin)
+
+@app.route('/admin/manage-request')
+@admin_required
+def manage_request():
+    admin = User.query.filter_by(id=session['admin_id']).first()
+    return render_template('admin/managing-request.html',admin=admin)
 
 @app.route('/admin/manage-admin')
 @admin_required

@@ -61,7 +61,7 @@ class Instance(db.Model):
     def __init__(self, user_id=None, instance_id=None):
         self.user_id = user_id
         self.instance_id=instance_id
-        self.build_on = datetime.date.today
+        self.build_on = datetime.date.today()
 
     def get_id(self):
         return self.id
@@ -90,6 +90,7 @@ class Request(db.Model):
     pic_name = db.Column(db.String(100), nullable=False)
     pic_telp = db.Column(db.String(100), nullable=False)
     status = db.Column(db.Integer, default=0)
+    request_at = db.Column(db.DateTime, nullable=False)
 
     def __init__(self,owner_id,server_id,name,image_id,image_name , flavor_id, flavor_vcpu, flavor_ram, flavor_disk,network_id, availability_zone, keyname, purpose, pic_name, pic_telp, status):
         self.owner_id = owner_id
@@ -108,6 +109,7 @@ class Request(db.Model):
         self.pic_name = pic_name
         self.pic_telp = pic_telp
         self.status = status
+        self.request_at = datetime.date.today()
 
     def get_id(self):
         return self.id

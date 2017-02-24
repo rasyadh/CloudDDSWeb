@@ -1,0 +1,105 @@
+{% extends "admin/admin-page.html" %} {% block content %}
+
+<div class="ui vertical stripe computes container">
+    <div class="ui stackable grid container">
+        <div class="row">
+            <h3 class="ui header">Manage Request</h3>
+            <div class="ui vertical stripe center aligned container">
+                <h2>List Request</h2>
+                <table class="ui teal table center aligned">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Operating System</th>
+                            <th>Flavor</th>
+                            <th>User</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Instance test</td>
+                            <td>linux</td>
+                            <td>size flavor</td>
+                            <td>user</td>
+                            <td>Active</td>
+                            <td>
+                                <button class="ui yellow button detail">Detail</button>
+                                <button class="ui green button">Accept</button>
+                                <button class="ui red button">Decline</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="ui modal">
+    <i class="close icon"></i>
+    <div class="header">
+        Detail Request
+    </div>
+    <div class="content">
+        <table class="ui fixed table">
+            <tbody>
+                <tr>
+                    <td>Name</td>
+                    <td>...</td>
+                </tr>
+                <tr>
+                    <td>OS</td>
+                    <td>...</td>
+                </tr>
+                <tr>
+                    <td>Flavor</td>
+                    <td>...</td>
+                </tr>
+                <tr>
+                    <td>CPU</td>
+                    <td>...</td>
+                </tr>
+                <tr>
+                    <td>Memory</td>
+                    <td>...</td>
+                </tr>
+                <tr>
+                    <td>Storage</td>
+                    <td>...</td>
+                </tr>
+                <tr>
+                    <td>Key Pair</td>
+                    <td>...</td>
+                </tr>
+                <tr>
+                    <td>Usage Purpose</td>
+                    <td>...</td>
+                </tr>
+                <tr>
+                    <td>PIC Name</td>
+                    <td>...</td>
+                </tr>
+                <tr>
+                    <td>PIC Phone Number</td>
+                    <td>...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>    
+</div>
+
+<script>
+    $('.ui.yellow.button').popup({
+        popup: $('.ui.flowing.popup'),
+        on: 'click'
+    });
+
+    $('.ui.modal')
+        .modal('attach events', '.ui.yellow.button.detail', 'show')
+        .modal('setting', 'transition', 'fade up');
+
+</script>
+
+{% endblock %}
