@@ -361,18 +361,8 @@ def create_instance():
         imageJSON = json.loads(imageJSON)
         return render_template('create-instance.html',flavorlist = flavorJSON,keylist=keyJSON,imagelist=imageJSON,users=users)
     #return str(respJSON['flavors'])
-<<<<<<< HEAD
 
 @app.route('/manage/help')
-=======
-@app.route('/manage/images')
-@login_required
-def images():
-    users = User.query.filter_by(id=session['user_id']).first()
-    return render_template('images.html',users=users)
-
-@app.route('/manage/network')
->>>>>>> bb47547f111d9a6bfddf12edd5efd1a6637cc529
 @login_required
 def help():
     users = User.query.filter_by(id=session['user_id']).first()

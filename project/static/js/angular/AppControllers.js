@@ -18,41 +18,13 @@ app.controller('InfomainController', function () {
     ];
 });
 
-app.controller('FlavormainController', function () {
-    this.mFlavor = [
-        {
-            type: "Small",
-            color: "red",
-            memori: 1,
-            processor: 1,
-            disk: 20,
-            detail: "Cocok digunakan untuk membuat hosting"
-        },
-        {
-            type: "Medium",
-            color: "yellow",
-            memori: 2,
-            processor: 1,
-            disk: 40,
-            detail: "Cocok digunakan untuk development aplikasi web dan lainnya"
-        },
-        {
-            type: "Large",
-            color: "green",
-            memori: 2,
-            processor: 2,
-            disk: 60,
-            detail: "Cocok digunakan untuk development dengan menggunakan container"
-        },
-        {
-            type: "Custom",
-            color: "blue",
-            memori: "Custom",
-            processor: "Custom",
-            disk: "Custom",
-            detail: "Cocok digunakan untuk kebutuhan dengan spesifikasi yang tinggi"
-        }
-    ];
+app.controller('FlavormainController', function ($scope) {
+    this.mFlavor = listFlavor;
+    
+    $scope.select = function(index){
+        $scope.data = index;
+    }
+
 });
 
 app.controller('VendormainController', function () {
@@ -72,7 +44,7 @@ app.controller('VendormainController', function () {
 
 /* Layanan Controllers */
 app.controller('FlavorlayananController', function ($scope) {
-    this.lFlavor = layananFlavor;
+    this.lFlavor = listFlavor;
 
     $scope.selectedIndex = 0;
     
@@ -82,23 +54,26 @@ app.controller('FlavorlayananController', function ($scope) {
         
 });
 
-var layananFlavor = [
+var listFlavor = [
     {
-        type: "S",
+        type: "Small",
+        color: "red",
         vcpu: 1,
         ram: 1,
         disk: 20,
         detail: "Cocok digunakan untuk membuat hosting"
     },
     {
-        type: "M",
+        type: "Medium",
+        color: "yellow",
         vcpu: 1,
         ram: 2,
         disk: 40,
         detail: "Cocok digunakan untuk development aplikasi web dan lainnya"
     },
     {
-        type: "L",
+        type: "Large",
+        color: "green",
         vcpu: 2,
         ram: 2,
         disk: 60,
@@ -106,6 +81,7 @@ var layananFlavor = [
     },
     {
         type: "Custom",
+        color: "blue",
         vcpu: "Custom",
         ram: "Custom",
         disk: "Custom",
