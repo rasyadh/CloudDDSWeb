@@ -16,6 +16,7 @@ class nova():
 	server = {}
 	networks = {}
 	network = []
+	block_device = []
 	OS_SCH_HNT = {}
 	returnJSON = ""
 	responsepacket = {}
@@ -71,7 +72,7 @@ class nova():
 
 		return str(respJSON)
 
-	def serverCreate(self,name,imageRef,flavorRef,availability_zone, key_name, networks_uuid):
+	def serverCreate(self,name,imageRef,flavorRef,availability_zone, key_name, networks_uuid,size):
 		#self.urlJSON = self.getUrl()
 		self.urlJSON = json.loads(self.getUrl())
 
@@ -85,7 +86,15 @@ class nova():
 		self.server['availability_zone'] = availability_zone
 		self.server['key_name'] = key_name
 		self.network = [{"uuid": ""+networks_uuid}]
+		self.block_device = [{
+	    		"boot_index": "0",
+	    		"source_type": "blank",
+	    		"volume_size": ""+size,
+	    		"destination_type": "volume",
+	    		"delete_on_termination": True
+        	}]
 		self.server['networks'] = self.network
+		self.server['block_device_mapping_v2'] = self.block_device
 		#self.OS_SCH_HNT['same_host'] = "48e6a9f6-30af-47e0-bc04-acaed113bb4e"
 		self.data['server'] = self.server
 		#self.data['OS-SCH-HNT:scheduler_hints'] = self.OS_SCH_HNT
