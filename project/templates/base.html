@@ -8,18 +8,18 @@
     <meta name="description" content="Layanan cloud DDS Telkom" />
     <title>Cloud Computing - DDS Telkom</title>
     <link rel="icon" href="{{url_for('static', filename='favicon.png') }}">
-    <link rel="stylesheet" type="text/css" href="../static/css/semantic.min.css" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/semantic.min.css') }}" />
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="../static/css/custom.css" />
-    <link rel="stylesheet" type="text/css" href="../static/js/jquery-ui.min.css">
-    <script src="../static/js/jquery.min.js"></script>
-    <script src="../static/js/jquery-ui.min.js"></script>
-    <script src="../static/js/semantic.min.js"></script>
-    <script src="../static/js/sidebar.js"></script>
-    <script src="../static/js/angular/angular.min.js"></script>
-    <script src="../static/js/angular/app.js"></script>
-    <script src="../static/js/angular/AppControllers.js"></script>
-    <script src="../static/js/angular/CreateControllers.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/custom.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='js/jquery-ui.min.css') }}">
+    <script src="{{url_for('static', filename='js/jquery.min.js') }}"></script>
+    <script src="{{url_for('static', filename='js/jquery-ui.min.js') }}"></script>
+    <script src="{{url_for('static', filename='js/semantic.min.js') }}"></script>
+    <script src="{{url_for('static', filename='js/sidebar.js') }}"></script>
+    <script src="{{url_for('static', filename='js/angular/angular.min.js') }}"></script>
+    <script src="{{url_for('static', filename='js/angular/app.js') }}"></script>
+    <script src="{{url_for('static', filename='js/angular/AppControllers.js') }}"></script>
+    <script src="{{url_for('static', filename='js/angular/CreateControllers.js') }}"></script>
 
 </head>
 
@@ -27,7 +27,7 @@
     <!-- Sidebar Menu -->
     <div class="ui vertical teal inverted sidebar borderless menu">
         <a class="item" href="/">
-            <img class="ui small image" src="../static/img/logo-cloud-dds.png">
+            <img class="ui small image" src="{{url_for('static', filename='img/logo-cloud-dds.png') }}">
         </a>
         <a class="item" href="{{ url_for('layanan') }}">LAYANAN</a>
         <a class="item" href="{{ url_for('bantuan') }}">BANTUAN</a>
@@ -39,7 +39,7 @@
     <div class="ui large top borderless fixed hidden menu">
         <div class="ui container">
             <a class="item" href="/">
-                <img class="ui small image" src="../static/img/logo-cloud-dds.png">
+                <img class="ui small image" src="{{url_for('static', filename='img/logo-cloud-dds.png') }}">
             </a>
             <div class="right menu">
                 <a class="item" href="{{ url_for('layanan') }}">LAYANAN</a>
@@ -66,7 +66,7 @@
                     </a>
                     <div class="left item">
                         <a class="item" href="/">
-                            <img class="ui small image" src="../static/img/logo-cloud-dds.png">
+                            <img class="ui small image" src="{{url_for('static', filename='img/logo-cloud-dds.png') }}">
                         </a>
                     </div>
                     <div class="right item">

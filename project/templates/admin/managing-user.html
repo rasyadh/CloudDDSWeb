@@ -1,4 +1,4 @@
-{% extends "admin/admin-page.html" %} {% block content %}
+ {% extends "admin/admin-page.html" %} {% block content %}
 
 <div class="ui vertical stripe computes container">
     <div class="ui stackable grid container">
@@ -20,8 +20,8 @@
                     <tbody>
                     {% if allusers %}
                     {% for user in allusers %}
-                    <form method='POST'>
                         <tr>
+                            <form id="form-{{user.id}}" method='POST'>
                             <td>{{user.name}}</td>
                             <td>{{user.email}}</td>
                             <td>{{user.id}}</td>
@@ -31,29 +31,30 @@
                             <td>Active</td>
                             {% elif user.status == 2 %}
                             <td>Suspend</td>
+                            {% elif user.status == 3 %}
+                            <td>Blacklist</td>
                             {% endif %}
                             <td>1</td>
                             <td>
+                                <input type="hidden" name="users-id" value="{{ user.id }}">
+                                <input id="action" type="hidden" name="action" value="">
+
                                 <button class="ui yellow button">Status</button>
                                 <div class="ui fluid popup top left transition hidden">
                                     <div class="ui two column divided center aligned grid">
+
                                         <div class="column">
-<<<<<<< HEAD:project/templates/managing-user.html
-                                            <button class="ui button">Active</button>
-=======
-                                            <button type='submit' class="ui button" >Active</button>
->>>>>>> 877014317f4b7cd2fd0ef3bd3dabce7a92d0b0fc:project/templates/admin/managing-user.html
+                                            <a class="ui button" onclick="setactive('form-{{user.id}}')" >Active</a>
                                         </div>
                                         <div class="column">
-                                            <button class="ui button">Suspend</button>
+                                            <a class="ui button" onclick="setsuspend('form-{{user.id}}')">Suspend</a>
                                         </div>
                                     </div>
                                 </div>
-                                <button class="ui red button">Delete</button>
-
+                                <button class="ui red button" type="submit" onclick="setdelete('form-{{user.id}}')">Delete</button>
                             </td>
+                            </form>
                         </tr>
-                        </form>
                     {% endfor %}
                     {% endif %}
                     </tbody>
@@ -65,10 +66,25 @@
 
 <script>
     $('.ui.yellow.button').popup({
-        popup: $('.ui.flowing.popup'),
+        popup: $('.ui.fluid.popup'),
         on: 'click'
     });
 
-</script>
+    function setactive(form_id){
+        document.getElementById("action").value = "activate"
+        var form = document.getElementById(form_id);
+        form.submit();
+    }
 
+    function setsuspend(form_id){
+        document.getElementById("action").value = "suspend"
+        var form = document.getElementById(form_id);
+        form.submit();
+    }
+    function setdelete(form_id){
+        document.getElementById("action").value = "delete"
+        var form = document.getElementById(form_id);
+        form.submit();
+    }
+</script>
 {% endblock %}

@@ -1,4 +1,4 @@
-import os, binascii
+import os, binascii, time
 
 from functools import wraps
 from flask import Flask,flash, request, Response, jsonify, json
@@ -15,11 +15,11 @@ from restapi.glance import glance as glanceapi
 from models import *
 
 #login session handler
-def login_required(test):
-    @wraps(test)
+def login_required(login):
+    @wraps(login)
     def wrap(*args, **kwargs):
         if 'logged_in' in session:
-            return test(*args,**kwargs)
+            return login(*args,**kwargs)
         else:
             abort(403)
     return wrap
@@ -30,7 +30,7 @@ def admin_required(admin):
         if 'admin_in' in session:
             return admin(*args,**kwargs)
         else:
-            abort(403)
+            return redirect(url_for('index'))
     return wrap
 
 @app.route('/logout')
@@ -46,6 +46,46 @@ def logout():
 @app.route('/')
 def index():
     return render_template('partials/content.html')
+
+@app.route('/login',methods=['GET','POST'])
+def login():
+    errormsg = []
+
+    if request.method == 'POST' :
+        try:
+            users = User.query.filter_by(email=request.form['email']+request.form['email_domain']).first()
+
+            if users is None :
+                errormsg = "Email Tidak Terdaftar"
+
+            else :
+                if users.status == 0:
+                    errormsg = "Akun Anda Belum TERVERIFIKASI"
+
+                elif users.status == 1:
+                    if encrypt.check_password_hash(users.password,request.form['password']) and users.role == 0:
+                        session['logged_in'] = True
+                        session['user_id'] = users.id
+                        return redirect(url_for('manage'))
+
+                    elif encrypt.check_password_hash(users.password,request.form['password']) and users.role == 1:
+                        session['admin_in'] = True
+                        session['admin_id'] = users.id
+                        return redirect(url_for('admin_page'))
+
+                    else :
+                        errormsg = "Password Anda Salah !"
+
+                elif users.status == 2:
+                    errormsg = "Akun anda telah di SUSPEND, silahkan hubungi administrator untuk hal ini."
+
+                elif users.status == 3:
+                    errormsg = "Akun anda telah di BLACKLIST karena penggunaan ilegal pada layanan."
+
+        except:
+            return "Gagal bos"
+
+    return render_template('login.html',errormsg=errormsg)
 
 @app.route('/registration',methods=['POST','GET'])
 def registration():
@@ -71,10 +111,10 @@ def registration():
                 )
 
                 activationcodetmp = binascii.b2a_hex(os.urandom(15))
-                activationcode = ActivationCode(
+                activationcode = Token(
                     email_user=request.form['email']+request.form['email_domain'],
                     #email_user=request.form['email']+"@gmail.com",
-                    activationcode=activationcodetmp,
+                    code=activationcodetmp,type=0
 
                 )
 
@@ -82,9 +122,9 @@ def registration():
                 db.session.add(activationcode)
                 db.session.commit()
 
-                confirm_url = "localhost:5000/registration/activate_account?actemp="+activationcodetmp
+                confirm_url = "http://localhost:5000/registration/activate_account?actemp="+activationcodetmp
                 html = render_template('activation.html',confirm_url = confirm_url)
-                subject = "Please confirm your email"
+                subject = "Request Reset Password"
                 #send_email(users.email,subject,html)
                 send_email("gravpokemongo@gmail.com",subject,html)
 
@@ -96,43 +136,8 @@ def registration():
 
     return render_template('signup.html',errormsg=errormsg)
 
-@app.route('/registration/')
 def registrationred():
     return redirect(url_for('registration'))
-
-@app.route('/login',methods=['GET','POST'])
-def login():
-    errormsg = []
-
-    if request.method == 'POST' :
-        try:
-            users = User.query.filter_by(email=request.form['email']+request.form['email_domain']).first()
-
-            if users is None :
-                errormsg = "Email Tidak Terdaftar"
-
-            else :
-                if users.status == 0:
-                    errormsg = "Akun Anda Belum TERVERIFIKASI"
-
-                else:
-                    if encrypt.check_password_hash(users.password,request.form['password']) and users.role == 0:
-                        session['logged_in'] = True
-                        session['user_id'] = users.id
-                        return redirect(url_for('manage'))
-
-                    elif encrypt.check_password_hash(users.password,request.form['password']) and users.role == 1:
-                        session['admin_in'] = True
-                        session['admin_id'] = users.id
-                        return redirect(url_for('admin_page'))
-
-                    else :
-                        errormsg = "Password Anda Salah !"
-
-        except:
-            return "Gagal bos"
-
-    return render_template('login.html',errormsg=errormsg)
 
 @app.route('/registration/activate_account',methods=["GET","POST"])
 def activate_account():
@@ -140,10 +145,11 @@ def activate_account():
 
     if request.method == 'POST':
         if request.form['actemp'] is None :
-            return redirect(url_for('login'))
+            abort(404)
+
         else :
             try:
-                activationcode = ActivationCode.query.filter_by(activationcode=request.form['actemp']).first()
+                activationcode = Token.query.filter_by(code=request.form['actemp']).first()
                 users = User.query.filter_by(email=request.form['email']).first()
                 users.status = 1
                 users.password = encrypt.generate_password_hash(request.form['password'])
@@ -152,29 +158,91 @@ def activate_account():
                 return redirect(url_for('login'))
 
             except:
-                return "gagal"
+                abort(404)
+
     else:
         activation_code = request.args.get('actemp')
-        activationcode = ActivationCode.query.filter_by(activationcode=activation_code).first()
+        activationcode = Token.query.filter_by(code=activation_code).first()
         if activationcode is None:
-            return "kode tidak ditemukan"
+            abort(404)
         else :
             users = User.query.filter_by(email=activationcode.email_user).first()
-            return render_template('verifikasi.html',codetemp=activationcode.activationcode,users=users)
+            return render_template('verifikasi.html',codetemp=activationcode.code,users=users)
 
 @app.route('/registration/activate_account/<activation_code>/')
 def activation_accountred(activation_code):
     return redirect(url_for('activate_account'))
 
+<<<<<<< HEAD
 @app.route('/forgot_password')
+=======
+#Check halaman verifikasi forgot password
+@app.route('/forgot_password',methods=["GET","POST"])
+>>>>>>> e5ba8b000200927199b8ad116709309d06133bc5
 def forgot_password():
+    message = []
+    if request.method == 'POST':
+        users = User.query.filter_by(email=request.form['email']+request.form['email_domain']).first()
+        if users is None :
+            message = 'Email tidak ditemukan'
+
+        else:
+            token = binascii.b2a_hex(os.urandom(15))
+            forgot_token = Token(
+                email_user=request.form['email']+request.form['email_domain'],
+                code=token,type=1
+            )
+            message = 'Request reset password telah dikirim'
+            db.session.add(forgot_token)
+            db.session.commit()
+
+            confirm_url = "http://localhost:5000/forgot_password/reset_password?tokens="+token
+            html = render_template('resetpassword.html',confirm_url = confirm_url, users=users)
+            subject = "Please confirm your email"
+            #send_email(users.email,subject,html)
+            send_email("gravpokemongo@gmail.com",subject,html)
     return render_template('forgot-password.html')
 
-#Check halaman verifikasi forgot password
-@app.route('/new_password')
-def new_password():
-    return render_template('verifikasi-forgotpass.html')
+@app.route('/forgot_password/')
+def forgotredirect():
+    return redirect(url_for('forgot_password'))
 
+<<<<<<< HEAD
+=======
+@app.route('/forgot_password/reset_password',methods=['GET','POST'])
+def reset_pass():
+    if request.method == 'POST':
+        if request.form['tokens'] is None :
+            abort(404)
+
+        else :
+            try:
+                tokens = Token.query.filter_by(code=request.form['tokens']).first()
+                users = User.query.filter_by(email=request.form['email']).first()
+
+                users.password = encrypt.generate_password_hash(request.form['confirm_new_password'])
+                db.session.delete(tokens)
+                db.session.commit()
+                return redirect(url_for('login'))
+
+            except:
+                abort(404)
+
+    else:
+        token = request.args.get('tokens')
+        resetauth = Token.query.filter_by(code=token).first()
+        if resetauth is None:
+            abort(404)
+
+        else :
+            users = User.query.filter_by(email=resetauth.email_user).first()
+            return render_template('verifikasi-forgotpass.html',reset=resetauth,users=users)
+
+@app.route('/forgot_password/reset_password/<tokens>/')
+def reset_passred(tokens):
+    return redirect(url_for('reset_pass'))
+
+>>>>>>> e5ba8b000200927199b8ad116709309d06133bc5
 @app.route('/layanan')
 def layanan():
     return render_template('partials/layanan.html')
@@ -193,26 +261,68 @@ def manage():
 @login_required
 def computes():
     users = User.query.filter_by(id=session['user_id']).first()
-    return render_template('computes.html',users=users)
+    nova = novaapi()
+
+    serverList = nova.serverList("yj34f8r7j34t79j38jgygvf3")
+    serverList = json.loads(serverList)
+
+    return render_template('computes.html',users=users, serverList=serverList)    
 
 @app.route('/manage/create', methods=['GET','POST'])
 @login_required
 def create_instance():
     nova = novaapi()
     glance = glanceapi()
+    neutron = neutronapi()
 
     if request.method == 'POST':
-        try:
+        #try:
             imageRef = request.form['imageRef']
             flavorRef = str(request.form['flavorRef'])
+            size = request.form['size']
             availability_zone = request.form['availability_zone']
-            networks_uuid = "daeb34bc-b505-4852-8ad0-8ff693dee13a"
+            networks_uuid = "417b4cdd-b706-4f6c-8e6e-1b06f58e94c8"
             key_name = request.form['key_name']
             name = request.form['name']
-            respJSON = nova.serverCreate(name,imageRef,flavorRef,availability_zone,key_name,networks_uuid)
-            return respJSON
-        except:
-            return "Bad Parameter"
+            respJSON = nova.serverCreate(name,imageRef,flavorRef,availability_zone,key_name,networks_uuid,size)
+            
+            # time.sleep(30)
+            # resp = json.loads(respJSON)
+            # server_id = resp['server']['id']
+            # respJSON = nova.serverList(server_id)
+            # resp = json.loads(respJSON)
+            # for addresses in resp['server']['addresses']['private']:
+            #     if addresses["version"] == 4:
+            #         private_ip = addresses["addr"]
+            #         break
+            # respJSON = neutron.floatipList()
+            # respJSON = json.loads(respJSON)
+            # iplist = respJSON['floatingips']
+            # for ip in iplist:
+            #     if ip['fixed_ip_address'] is Null:
+            #         public_ip = ip['floating_ip_address']
+            #         break
+            # nova.setFloatingIp(private_ip,public_ip,server_id)
+
+            req = Request(
+                    name = name,
+                    image_id = imageRef,
+                    flavor_id = flavorRef,
+                    network_id = networks_uuid,
+                    availability_zone = availability_zone,
+                    keyname = key_name,
+                    purpose = request.form['purpose'],
+                    pic_name = request.form['pic_name'],
+                    pic_telp = request.form['pic_telp'],
+                    status = 0
+                )
+
+            db.session.add(req)
+            db.session.commit()
+
+            return redirect(url_for('computes'))
+        #except:
+            #return "Bad Parameter"
     else:
         users = User.query.filter_by(id=session['user_id']).first()
         #ubahteko baris iki
@@ -220,10 +330,11 @@ def create_instance():
         flavorJSON = json.loads(flavorJSON)
         keyJSON = nova.keyList("yj34f8r7j34t79j38jgygvf3")
         keyJSON = json.loads(keyJSON)
-        imageJSON = glance.imageList("yj34f8r7j34t79j38jgygvf3")
+        imageJSON = nova.imageList(0)
         imageJSON = json.loads(imageJSON)
         return render_template('create-instance.html',flavorlist = flavorJSON,keylist=keyJSON,imagelist=imageJSON,users=users)
     #return str(respJSON['flavors'])
+
 @app.route('/manage/images')
 @login_required
 def images():
@@ -262,6 +373,11 @@ def settings():
             else:
                  message = "Password anda salah"
 
+        elif 'deactivate' in request.form.values():
+            users.status = 2
+            db.session.commit()
+            message = "Account telah diaktifasi"
+
     return render_template('settings.html',users=users,message=message)
 
 @app.route('/manage/request')
@@ -276,7 +392,6 @@ def manage_instance():
     return render_template('manage-instance.html',users=users)
 
 # Client Side --- ADMIN
-
 @app.route('/admin')
 @app.route('/admin/')
 @app.route('/admin/manage')
@@ -295,6 +410,19 @@ def manage_resource():
 def manage_user():
     admin = User.query.filter_by(id=session['admin_id']).first()
     allusers = User.query.filter_by(role=0).all()
+    if request.method == 'POST':
+        if request.form['action'] == "activate" :
+            users = User.query.filter_by(id=request.form['users-id']).first()
+            users.status = 1
+            db.session.commit()
+        elif request.form['action'] == "suspend":
+            users = User.query.filter_by(id=request.form['users-id']).first()
+            users.status = 2
+            db.session.commit()
+        elif request.form['action'] == "delete":
+            users = User.query.filter_by(id=request.form['users-id']).first()
+            users.status = 3
+            db.session.commit()
     return render_template('admin/managing-user.html',admin=admin,allusers=allusers)
 
 @app.route('/admin/manage-vm')
@@ -312,7 +440,7 @@ def manage_admin():
 # error handler
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html'),404
+    return render_template('error/404.html'),404
 
 @app.errorhandler(403)
 def page_login_required(e):
@@ -357,6 +485,14 @@ def serverCreate():
 def serverList():
     nova = novaapi()
     respJSON = nova.serverList()
+
+    return respJSON
+
+@app.route('/restapi/nova/server/list/<server_id>')
+@app.route('/restapi/nova/server/list/<server_id>/')
+def serverListDetail(server_id):
+    nova = novaapi()
+    respJSON = nova.serverList(server_id)
 
 
     return respJSON
@@ -428,7 +564,6 @@ def keylistdelete():
             return redirect(url_for('keylist'))
     else:
         return "Bad Request"
-
 @app.route('/restapi/nova/keylist/new',methods=["GET"])
 def keylistnew():
     if request.method == "GET":
@@ -439,12 +574,19 @@ def keylistnew():
             nova = novaapi()
             respJSON = nova.keyNew(key_name)
             resp = json.loads(respJSON)
-            #pk = resp['keypair']['private_key'].replace("\n","<br>")
-            pk = resp['keypair']['private_key']
-            r = Response(response=pk, status=200, mimetype="text/plain")
-            r.headers["Content-Type"] = "text/plain; charset=utf-8"
-            r.headers["Content-Disposition"] = "attachment; filename="+ key_name +".pem"
-            return r
+
+            if resp['status'] is True:
+                #pk = resp['keypair']['private_key'].replace("\n","<br>")
+                resp = resp['content']
+                resp = json.loads(resp)
+                pk = resp['keypair']
+                r = Response(response=pk, status=200, mimetype="text/plain")
+                r.headers["Content-Type"] = "text/plain; charset=utf-8"
+                r.headers["Content-Disposition"] = "attachment; filename="+ key_name +".pem"
+                return r
+            else:
+                return resp['content']['conflictingRequest']['message']
+                
     else:
         return "Bad Request"
 

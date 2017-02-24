@@ -7,21 +7,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <meta name="description" content="Layanan cloud DDS Telkom" />
     <title>Cloud Computing - DDS Telkom</title>
-    <!-- <link rel="icon" href="{{url_for('static', filename='favicon.png') }}"> -->
-    <link rel="stylesheet" type="text/css" href="../static/css/semantic.min.css" />
+    <link rel="icon" href="{{url_for('static', filename='favicon.png') }}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/semantic.min.css') }}" />
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="../static/css/custom.css" />
-    <link rel="stylesheet" type="text/css" href="../static/js/jquery-ui.min.css" />
-    <script src="../static/js/jquery.min.js"></script>
-    <script src="../static/js/jquery-ui.min.js"></script>
-    <script src="../static/js/semantic.min.js"></script>
-    <script src="../static/js/sidebar.js"></script>
-    <script src="../static/js/angular/angular.min.js"></script>
-    <script src="../static/js/angular/app.js"></script>
-    <script src="../static/js/angular/AppControllers.js"></script>
-    <script src="../static/js/angular/CreateControllers.js"></script>
-    <script src="../static/js/moment.js"></script>
-    <script src="../static/js/Chart.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/custom.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='js/jquery-ui.min.css') }}" />
+    <script src="{{url_for('static', filename='js/jquery.min.js') }}"></script>
+    <script src="{{url_for('static', filename='js/jquery-ui.min.js') }}"></script>
+    <script src="{{url_for('static', filename='js/semantic.min.js') }}"></script>
+    <script src="{{url_for('static', filename='js/sidebar.js') }}"></script>
+    <script src="{{url_for('static', filename='js/angular/angular.min.js') }}"></script>
+    <script src="{{url_for('static', filename='js/angular/app.js') }}"></script>
+    <script src="{{url_for('static', filename='js/angular/AppControllers.js') }}"></script>
+    <script src="{{url_for('static', filename='js/angular/CreateControllers.js') }}"></script>
+    <script src="{{url_for('static', filename='js/moment.js') }}"></script>
+    <script src="{{url_for('static', filename='js/Chart.min.js') }}"></script>
     <script type="text/javascript">
     var flavorid = null;
     var imageid = "";
@@ -30,7 +30,7 @@
     var key_id = ""
     var name = ""
 
-    function selectedflavorid(selectedflavorid) {
+    function selectedflavorid(selectedflavorid,flavor_disk) {
         flavorid = selectedflavorid;
         if(prev_flav_id)
         {
@@ -41,6 +41,8 @@
         input.className += " teal";
         var d = document.getElementById("flavorRef");
         d.value = selectedflavorid;
+        var d = document.getElementById("size");
+        d.value = flavor_disk;
         prev_flav_id = flavorid;
     };
 
@@ -84,7 +86,7 @@
     <!-- Sidebar Menu -->
     <div class="ui vertical teal inverted sidebar borderless menu">
         <a class="item" href="/manage">
-            <img class="ui small image" src="../static/img/logo-cloud-dds.png">
+            <img class="ui small image" src="{{url_for('static', filename='img/logo-cloud-dds.png') }}">
         </a>
         <a class="item" href="/manage/computes">Compute</a>
         <a class="item" href="/manage/images">Images</a>
@@ -106,7 +108,7 @@
                     </a>
                     <div class="left item">
                         <a class="item" href="/manage">
-                            <img class="ui small image" src="../static/img/logo-cloud-dds.png">
+                            <img class="ui small image" src="{{url_for('static', filename='img/logo-cloud-dds.png') }}">
                         </a>
                     </div>
                     <div class="right item">
@@ -114,11 +116,11 @@
                         <a class="item" href="/manage/images">IMAGES</a>
                         <a class="item" href="/manage/network">NETWORKING</a>
                         <div class="ui top right pointing dropdown" style="margin-left: 1.5em;">
-                            <img class="ui avatar image" src="../static/img/avatar/tom.jpg">
+                            <img class="ui avatar image" src="{{url_for('static', filename='img/avatar/tom.jpg') }}">
                             <i class="dropdown icon"></i>
                             <div class="menu">
                                 <a class="item">
-                                    <img class="ui avatar image" src="../static/img/avatar/tom.jpg">
+                                    <img class="ui avatar image" src="{{url_for('static', filename='img/avatar/tom.jpg') }}">
                                     <span>{{users.name}}</span>
                                 </a>
                                 <div class="divider"></div>

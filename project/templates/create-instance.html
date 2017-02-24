@@ -66,7 +66,11 @@
                                         <div>{{ flavor['disk'] }}GB Disk</div>
                                     </div>
                                     </br>
+<<<<<<< HEAD
                                     <button class="ui fluid teal button" onclick="selectedflavorid({{flavor['id']}})">Choose</button>
+=======
+                                    <button class="ui fluid teal button" onclick="selectedflavorid('{{flavor['id']}}','{{flavor['disk']}}')">Choose</button>
+>>>>>>> e5ba8b000200927199b8ad116709309d06133bc5
                                 </div>
                             </div>
                             {% endfor %}
@@ -149,13 +153,16 @@
                     <div class="field">
                         <label>Add Key Pair</label>
                         <div class="ui action input">
-                            <input type="text" placeholder="Add key pair">
-                            <button class="ui teal button">Add</button>
+                            <form action="/restapi/nova/keylist/new"  method="GET">
+                            <input type="text" name="keyname" placeholder="Add key pair">
+                            <button class="ui fluid large teal submit button" type="submit" onsubmit="location.reload(true);}">Create</button>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+<<<<<<< HEAD
         <<<<<<< HEAD <form method="POST">
 
             <input id="imageRef" type="text" name="imageRef" hidden value="">
@@ -183,6 +190,28 @@
                                 <label>Person in Charge Phone Number</label>
                                 <input type="text" name="text" placeholder="Phone Number" onchange="document.getElementById('pic_telp').value = this.value;">                                >>>>>>> 877014317f4b7cd2fd0ef3bd3dabce7a92d0b0fc
                             </div>
+=======
+        <div class="row">
+            <div class="ui container">
+                <h2 class="ui dividing header">Finalize and create</h2>
+                <div class="ui form">
+                    <div class="field">
+                        <label>Choose a name</label>
+                        <input type="text" name="name" placeholder="Instance Name" onchange="selectedname(this.value);">
+                    </div>
+                    <div class="field">
+                        <label>Usage Purpose</label>
+                        <textarea rows="3" onchange="document.getElementById('purpose').value = this.value;"></textarea>
+                    </div>
+                    <div class="fields">
+                        <div class="field">
+                            <label>Person in Charge Name</label>
+                            <input type="text" name="text" placeholder="Name" onchange="document.getElementById('pic_name').value = this.value;">
+                        </div>
+                        <div class="field">
+                            <label>Person in Charge Phone Number</label>
+                            <input type="text" name="text" placeholder="Phone Number" onchange="document.getElementById('pic_telp').value = this.value;">
+>>>>>>> e5ba8b000200927199b8ad116709309d06133bc5
                         </div>
                     </div>
                 </div>
@@ -199,9 +228,24 @@
                     <input id="pic_name" type="text" name="pic_name" hidden value="">
                     <input id="pic_telp" type="text" name="pic_telp" hidden value="">
 
+<<<<<<< HEAD
                     <button id="submit_button" class="ui fluid large teal submit button" type="submit" onclick="submit('form_create')">Create</button>
                 </form>
             </div>
+=======
+            <input id="imageRef" type="text" name="imageRef" hidden value="yoi">
+            <input id="flavorRef" type="text" name="flavorRef" hidden value="">
+            <input id="availability_zone" type="text" name="availability_zone" hidden value="nova">
+            <input id="key_name" type="text" name="key_name" hidden value="">
+            <input id="name" type="text" name="name" hidden value="">
+            <input id="size" type="text" name="size" hidden value="">
+            <input id="purpose" type="text" name="purpose" hidden value="">
+            <input id="pic_name" type="text" name="pic_name" hidden value="">
+            <input id="pic_telp" type="text" name="pic_telp" hidden value="">
+            
+            <button id="submit_button" class="ui fluid large teal submit button" type="submit" onclick="submit('form_create')">Create</button>
+        </form>
+>>>>>>> e5ba8b000200927199b8ad116709309d06133bc5
     </div>
     <script>
         $('.menu.createi .item')

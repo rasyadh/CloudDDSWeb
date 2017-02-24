@@ -21,12 +21,20 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {% if serverList['servers']|length == 0 %}
                             <tr>
-                                <td>Tes OS</td>
-                                <td>Pending</td>
-                                <td>dd/mm/yyyy</td>
-                                <td><a class="ui teal button" href="/manage/instance">Manage Instance</a></td>
+                                <td class="ui center aligned" colspan="4">There is no instance created.</td>
                             </tr>
+                            {% else %}
+                                {% for server in serverList['servers'] %}
+                                    <tr>
+                                        <td>{{ server['name'] }}</td>
+                                        <td>Active</td>
+                                        <td>dd/mm/yyyy</td>
+                                        <td><a class="ui teal button" href="/manage/instance?id={{ server['id'] }}">Manage Instance</a></td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
                         </tbody>
                         <tfoot>
                             <tr>
