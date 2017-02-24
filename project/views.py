@@ -240,14 +240,6 @@ def reset_passred(tokens):
     return redirect(url_for('reset_pass'))
 
 @app.route('/layanan')
-<<<<<<< HEAD
-=======
-=======
-
-
-@app.route('/layanan')
->>>>>>> 0a5cd5003830869e18de4a7bd625ab839609233e
->>>>>>> 1a624ca54774249b69471c04abf6bc22a15ef7f4
 def layanan():
     return render_template('partials/layanan.html')
 
@@ -267,7 +259,7 @@ def computes():
     users = User.query.filter_by(id=session['user_id']).first()
     serverreq = Request.query.filter_by(owner_id=session['user_id']).order_by(Request.status).all()
 
-    return render_template('computes.html',users=users, serverreq=serverreq)    
+    return render_template('computes.html',users=users, serverreq=serverreq)
 
 @app.route('/manage/create', methods=['GET','POST'])
 @login_required
@@ -289,7 +281,7 @@ def create_instance():
             ram = request.form['ram']
             cpu = request.form['cpu']
             #respJSON = nova.serverCreate(name,imageRef,flavorRef,availability_zone,key_name,networks_uuid,size)
-            
+
             # time.sleep(30)
             # resp = json.loads(respJSON)
             # server_id = resp['server']['id']
@@ -308,27 +300,27 @@ def create_instance():
             #         break
             # nova.setFloatingIp(private_ip,public_ip,server_id)
 
-            # req = Request(
-            #         owner_id = session['user_id'],
-            #         server_id = "",
-            #         name = name,
-            #         image_id = imageRef,
-            #         image_name=image_name,
-            #         flavor_id = flavorRef,
-            #         flavor_vcpu = cpu,
-            #         flavor_ram = ram,
-            #         flavor_disk = size,
-            #         network_id = networks_uuid,
-            #         availability_zone = availability_zone,
-            #         keyname = key_name,
-            #         purpose = request.form['purpose'],
-            #         pic_name = request.form['pic_name'],
-            #         pic_telp = request.form['pic_telp'],
-            #         status = 0
-            #     )
+            req = Request(
+                    owner_id = session['user_id'],
+                    server_id = "",
+                    name = name,
+                    image_id = imageRef,
+                    image_name=image_name,
+                    flavor_id = flavorRef,
+                    flavor_vcpu = cpu,
+                    flavor_ram = ram,
+                    flavor_disk = size,
+                    network_id = networks_uuid,
+                    availability_zone = availability_zone,
+                    keyname = key_name,
+                    purpose = request.form['purpose'],
+                    pic_name = request.form['pic_name'],
+                    pic_telp = request.form['pic_telp'],
+                    status = 0
+                )
 
-            # db.session.add(req)
-            # db.session.commit()
+            db.session.add(req)
+            db.session.commit()
 
             return redirect(url_for('computes'))
         #except:
@@ -438,20 +430,44 @@ def manage_user():
 @admin_required
 def manage_vm():
     admin = User.query.filter_by(id=session['admin_id']).first()
-    #allserver = Instance.query.all()
-    return render_template('admin/managing-vm.html',admin=admin)
+    allserver = Instance.query.all()
+    return render_template('admin/managing-vm.html',admin=admin,allserver=allserver)
 
-@app.route('/admin/manage-request')
+@app.route('/admin/manage-request',methods=['GET','POST'])
 @admin_required
 def manage_request():
     admin = User.query.filter_by(id=session['admin_id']).first()
-    return render_template('admin/managing-request.html',admin=admin)
+    request_users = Request.query.filter_by(status=0).all()
+
+    if request.method == 'POST':
+        if request.form['action'] == 'Accepted' :
+            print(request.form['request-id'])
+            create = Request.query.filter_by(id=request.form['request-id']).first()
+            ins = Instance(
+                user_id = create.owner_id,
+                instance_id = create.server_id,
+                name = create.name,
+                image_name = create.image_name,
+                status = 1
+            )
+            create.status = 1
+            db.session.add(ins)
+            db.session.commit()
+            return redirect(url_for('manage_request'))
+
+        elif request.form['action'] == 'Decline':
+            create = Request.query.filter_by(id=request.form['request-id']).first()
+            create.status = 2
+            db.session.commit()
+
+    return render_template('admin/managing-request.html',admin=admin,request_users=request_users)
 
 @app.route('/admin/manage-admin')
 @admin_required
 def manage_admin():
     admin = User.query.filter_by(id=session['admin_id']).first()
-    return render_template('admin/managing-admin.html',admin=admin)
+    alladmin = User.query.filter_by(role=1).all()
+    return render_template('admin/managing-admin.html',admin=admin,alladmin=alladmin)
 
 # error handler
 @app.errorhandler(404)

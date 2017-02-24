@@ -12,10 +12,10 @@ class User(db.Model):
     name = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(50), nullable=False, unique=True)
     password = db.Column(db.String(100), default=None, nullable=True)
-    status = db.Column(db.Integer, default=0)
+    status = db.Column(db.Integer, default=0) #0=pending, 1=activate, 2=suspend, 3=delete
     nomorhp = db.Column(db.String(50), nullable=False)
     registered_on = db.Column(db.DateTime, nullable=False)
-    role = db.Column(db.Integer, default=0)
+    role = db.Column(db.Integer, default=0) #0=user, 1=admin, 2=superadmin
 
     def __init__(self, name=None, email=None, password=None, status=0, nomorhp=None, role=0):
         self.name = name
@@ -95,7 +95,7 @@ class Request(db.Model):
     purpose = db.Column(db.String(100), nullable=False)
     pic_name = db.Column(db.String(100), nullable=False)
     pic_telp = db.Column(db.String(100), nullable=False)
-    status = db.Column(db.Integer, default=0)
+    status = db.Column(db.Integer, default=0) #0 = pending, 1 = accepted, 2 = decline
     request_at = db.Column(db.DateTime, nullable=False)
 
     def __init__(self,owner_id,server_id,name,image_id,image_name , flavor_id, flavor_vcpu, flavor_ram, flavor_disk,network_id, availability_zone, keyname, purpose, pic_name, pic_telp, status):

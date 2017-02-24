@@ -17,11 +17,18 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% for admin in alladmin %}
                         <tr>
-                            <td>Admin</td>
-                            <td>admin id</td>
-                            <td>admin@telkom.co.id</td>
+                            <td>{{admin.name}}</td>
+                            <td>{{admin.id}}</td>
+                            <td>{{admin.email}}</td>
+                            {% if admin.status == 1 %}
                             <td>Active</td>
+                            {% elif admin.status == 2 %}
+                            <td>Suspend</td>
+                            {% elif admin.status == 3 %}
+                            <td>Deleted</td>
+                            {% endif %}
                             <td>
                                 <button class="ui yellow button">Status</button>
                                 <div class="ui fluid popup top left transition hidden">
@@ -37,6 +44,7 @@
                                 <button class="ui red button">Delete</button>
                             </td>
                         </tr>
+                        {% endfor %}
                     </tbody>
                     <tfoot class="ui right aligned">
                         <tr>
