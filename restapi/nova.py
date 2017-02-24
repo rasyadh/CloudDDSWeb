@@ -88,7 +88,8 @@ class nova():
 		self.network = [{"uuid": ""+networks_uuid}]
 		self.block_device = [{
 	    		"boot_index": "0",
-	    		"source_type": "blank",
+	    		"source_type": "image",
+				"uuid": ""+imageRef, 
 	    		"volume_size": ""+size,
 	    		"destination_type": "volume",
 	    		"delete_on_termination": True
@@ -160,7 +161,7 @@ class nova():
 		self.contJSON['keypair'] = self.keypair
 		self.contJSON = json.dumps(self.contJSON)
 		self.urlJSON['url'] = self.urlJSON['url']+"/os-keypairs"
-		
+
 		r = self.postRequest(self.urlJSON['url'],str(self.headJSON),str(self.contJSON))
 		respJSON = r.text
 
