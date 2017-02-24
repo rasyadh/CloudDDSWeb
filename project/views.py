@@ -120,13 +120,13 @@ def registration():
 
                 db.session.add(users)
                 db.session.add(activationcode)
-                db.session.commit()
 
                 confirm_url = "http://localhost:5000/registration/activate_account?actemp="+activationcodetmp
-                html = render_template('activation.html',confirm_url = confirm_url)
-                subject = "Request Reset Password"
+                html = render_template('email/verification-email.html',confirm_url = confirm_url)
+                subject = "Verification Email Cloud Telkom DDS"
                 #send_email(users.email,subject,html)
                 send_email("gravpokemongo@gmail.com",subject,html)
+                db.session.commit()
 
                 return redirect(url_for('login'))
 
@@ -176,6 +176,7 @@ def activation_accountred(activation_code):
 #Check halaman verifikasi forgot password
 @app.route('/forgot_password',methods=["GET","POST"])
 def forgot_password():
+
     message = []
     if request.method == 'POST':
         users = User.query.filter_by(email=request.form['email']+request.form['email_domain']).first()
@@ -193,8 +194,8 @@ def forgot_password():
             db.session.commit()
 
             confirm_url = "http://localhost:5000/forgot_password/reset_password?tokens="+token
-            html = render_template('resetpassword.html',confirm_url = confirm_url, users=users)
-            subject = "Please confirm your email"
+            html = render_template('email/resetpass-email.html',confirm_url = confirm_url, users=users)
+            subject = "Request Reset Password Cloud Telkom DDS"
             #send_email(users.email,subject,html)
             send_email("gravpokemongo@gmail.com",subject,html)
     return render_template('forgot-password.html')
@@ -204,6 +205,7 @@ def forgotredirect():
     return redirect(url_for('forgot_password'))
 
 @app.route('/forgot_password/reset_password',methods=['GET','POST'])
+
 def reset_pass():
     if request.method == 'POST':
         if request.form['tokens'] is None :
@@ -235,8 +237,13 @@ def reset_pass():
 @app.route('/forgot_password/reset_password/<tokens>/')
 def reset_passred(tokens):
     return redirect(url_for('reset_pass'))
+<<<<<<< HEAD
 
 @app.route('/layanan')
+=======
+
+@app.route('/layanan')
+>>>>>>> 0211f1d9a7c43de0597de40e4030886d47058cab
 def layanan():
     return render_template('partials/layanan.html')
 
@@ -259,7 +266,7 @@ def computes():
     serverList = nova.serverList("yj34f8r7j34t79j38jgygvf3")
     serverList = json.loads(serverList)
 
-    return render_template('computes.html',users=users, serverList=serverList)    
+    return render_template('computes.html',users=users, serverList=serverList)
 
 @app.route('/manage/create', methods=['GET','POST'])
 @login_required
@@ -278,7 +285,7 @@ def create_instance():
             key_name = request.form['key_name']
             name = request.form['name']
             respJSON = nova.serverCreate(name,imageRef,flavorRef,availability_zone,key_name,networks_uuid,size)
-            
+
             # time.sleep(30)
             # resp = json.loads(respJSON)
             # server_id = resp['server']['id']
@@ -579,7 +586,7 @@ def keylistnew():
                 return r
             else:
                 return resp['content']['conflictingRequest']['message']
-                
+
     else:
         return "Bad Request"
 
