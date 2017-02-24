@@ -74,6 +74,8 @@ class Request(db.Model):
     __tablename__ = 'request_instance'
 
     id = db.Column(db.Integer, primary_key=True)
+    owner_id=db.Column(db.String(100), nullable=False)
+    server_id=db.Column(db.String(100), nullable=False, default="")
     name = db.Column(db.String(50), nullable=False)
     image_id = db.Column(db.String(100), nullable=False)
     image_name = db.Column(db.String(100), nullable=False)
@@ -89,7 +91,9 @@ class Request(db.Model):
     pic_telp = db.Column(db.String(100), nullable=False)
     status = db.Column(db.Integer, default=0)
 
-    def __init__(self,name,image_id,image_name , flavor_id, flavor_vcpu, flavor_ram, flavor_disk,network_id, availability_zone, keyname, purpose, pic_name, pic_telp, status):
+    def __init__(self,owner_id,server_id,name,image_id,image_name , flavor_id, flavor_vcpu, flavor_ram, flavor_disk,network_id, availability_zone, keyname, purpose, pic_name, pic_telp, status):
+        self.owner_id = owner_id
+        self.server_id = server_id
         self.name = name
         self.image_id = image_id
         self.image_name = image_name

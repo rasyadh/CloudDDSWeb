@@ -30,7 +30,7 @@
     var key_id = ""
     var name = ""
 
-    function selectedflavorid(selectedflavorid,flavor_disk) {
+    function selectedflavorid(selectedflavorid,flavor_disk, flavor_ram, flavor_cpu) {
         flavorid = selectedflavorid;
         if(prev_flav_id)
         {
@@ -43,10 +43,14 @@
         d.value = selectedflavorid;
         var d = document.getElementById("size");
         d.value = flavor_disk;
+        var d = document.getElementById("ram");
+        d.value = flavor_ram;
+        var d = document.getElementById("cpu");
+        d.value = flavor_cpu;
         prev_flav_id = flavorid;
     };
 
-    function selectedimageid(selectedimageid) {
+    function selectedimageid(selectedimageid, image_name) {
         imageid = selectedimageid;
         if(prev_image_id)
         {
@@ -57,6 +61,8 @@
         input.className += " teal";
         var d = document.getElementById("imageRef");
         d.value = selectedimageid;
+        var d = document.getElementById("image_name");
+        d.value = image_name;
         prev_image_id = imageid;
     };
 
