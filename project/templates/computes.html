@@ -21,27 +21,46 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% if serverreq|length == 0 %}
-                                <tr>
-                                        <td colspan="4" class="ui center aligned"><p>Looks like you don't have any instances</p></td>
-                                </tr>
-                            {% else %}
+                            {% if serverreq or serverins %}
+                                {% for server in serverins %}
+                                    <tr>
+                                        <td>{{ server.name }}</td>
+                                        {% if server.status == 0%}
+                                        <td>Menunggu Persetujuan Admin</td>
+                                        {% elif server.status == 1 %}
+                                        <td>Aktif</td>
+                                        {% elif server.status == 2 %}
+                                        <td>Ditolak</td>
+                                        {% endif %}
+                                        <td>dd/mm/yyyy</td>
+                                        {% if server.instance_id %}
+                                            <td><a class="ui teal button" href="/manage/instance/{{ server.instance_id }}">Manage Instance</a></td>
+
+                                        {% else %}
+                                            <td><a class="ui teal button disabled" disabled href="/manage/instance">Manage Instance</a></td>
+
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+
                                 {% for server in serverreq %}
                                     <tr>
                                         <td>{{ server.name }}</td>
                                         {% if server.status == 0%}
                                         <td>Menunggu Persetujuan Admin</td>
-                                        {% else %}
-                                        <td>Tidak Aktif</td>
+                                        {% elif server.status == 1 %}
+                                        <td>Aktif</td>
+                                        {% elif server.status == 2 %}
+                                        <td>Ditolak</td>
                                         {% endif %}
                                         <td>dd/mm/yyyy</td>
-                                        {% if server.id == "" %}
                                         <td><a class="ui teal button disabled" disabled href="/manage/instance">Manage Instance</a></td>
-                                        {% else %}
-                                        <td><a class="ui teal button disabled" href="/manage/instance?id={{ server.id }}">Manage Instance</a></td>
-                                        {% endif %}
                                     </tr>
                                 {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="4" class="ui center aligned"><p>Looks like you don't have any instances</p></td>
+                                </tr>
                             {% endif %}
                         </tbody>
                         <tfoot>

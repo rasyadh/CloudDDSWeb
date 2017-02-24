@@ -258,8 +258,9 @@ def manage():
 def computes():
     users = User.query.filter_by(id=session['user_id']).first()
     serverreq = Request.query.filter_by(owner_id=session['user_id']).order_by(Request.status).all()
+    serverins = Instance.query.filter_by(user_id=session['user_id']).order_by(Instance.status).all()
 
-    return render_template('computes.html',users=users, serverreq=serverreq)
+    return render_template('computes.html',users=users, serverreq=serverreq,serverins=serverins)
 
 @app.route('/manage/create', methods=['GET','POST'])
 @login_required
@@ -481,6 +482,7 @@ def manage_request():
             )
             create.status = 1
             db.session.add(ins)
+            db.session.delete(create)
             db.session.commit()
             return redirect(url_for('manage_request'))
 

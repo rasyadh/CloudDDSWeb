@@ -18,7 +18,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% if request_users and request_users.status !=0%}
+                        {% if request_users and request_users.status !=0 %}
                         {% for inst in request_users %}
                         <tr>
                             <form id="form-{{inst.id}}">
