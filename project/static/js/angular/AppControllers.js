@@ -172,15 +172,16 @@ var apps = [
 ];
 
 /* Bantuan Controllers */
-app.controller('InfobantuanController', function () {
+app.controller('InfobantuanController', function ($scope, $http) {
     this.bInfo = [
         {
+
             title: "Apakah itu VM (Virtual Machine) ?",
             content: "Virtual Machine adalah implementasi perangkat lunak dari sebuah mesin komputer yang dapat menjalankan program sama seperti layaknya sebuah komputer asli."
         },
         {
             title: "Mekanisme request VM ?",
-            content: "request VM"
+            content: "Step Satu, Login"
         },
         {
             title: "Cara Mengakses VM ?",
@@ -207,4 +208,18 @@ app.controller('InfobantuanController', function () {
             content: "migrasi"
         }
     ];
+
+    // $scope.faqContent = [];
+    // $scope.faqContent.faqtitle = '';
+
+    // $http({
+    //     method: 'GET',
+    //     url: 'data/faq-content.json'
+    // })
+    // .success(function(data, status, header, config){
+    //     $scope.faqContent = data;
+    // })
+    // .error(function(data, status, header, config){
+
+    // });
 });

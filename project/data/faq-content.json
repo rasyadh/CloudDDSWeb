@@ -1,0 +1,34 @@
+[
+  {
+    "title": "Apakah itu VM (Virtual Machine) ?",
+    "content": "Virtual Machine adalah implementasi perangkat lunak dari sebuah mesin komputer yang dapat menjalankan program sama seperti layaknya sebuah komputer asli."
+  },
+  {
+    "title": "Mekanisme request VM ?",
+    "content": "request VM"
+  },
+  {
+    "title": "Cara Mengakses VM ?",
+    "content": "Akses VM"
+  },
+  {
+    "title": "Cara Memanajemen VM ?",
+    "content": "manajemen VM"
+  },
+  {
+    "title": "Cara melakukan upgrade VM (Scale Up) ?",
+    "content": "scale up vm"
+  },
+  {
+    "title": "Cara menghapus VM ?",
+    "content": "delete VM"
+  },
+  {
+    "title": "Setting username dan password VM ?",
+    "content": "setting username dan password"
+  },
+  {
+    "title": "Migrasi data bagi developer ?",
+    "content": "migrasi"
+  }
+]

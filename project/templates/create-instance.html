@@ -17,12 +17,8 @@
                             {% for image in imagelist['images'] %}
                             <a class="column">
                                 <div id="image-{{image['id']}}" class="ui center aligned segment instance">
-<<<<<<< HEAD
                                     <p>{{image['name']}}</p>
                                     </br>
-=======
-                                    <p>{{image['name']}}</p></br>
->>>>>>> 877014317f4b7cd2fd0ef3bd3dabce7a92d0b0fc
                                     <button class="ui fluid teal button" onclick="selectedimageid('{{image['id']}}')">Choose</button>
                                 </div>
                                 {% endfor %}
@@ -70,11 +66,7 @@
                                         <div>{{ flavor['disk'] }}GB Disk</div>
                                     </div>
                                     </br>
-<<<<<<< HEAD
-                                    <button class="ui fluid teal button" onclick="selectedflavorid({{flavor['id']}})">Choose</button>                                    >>>>>>> 7ff8d7864997181bf98c85d8332646ea7eac3012
-=======
                                     <button class="ui fluid teal button" onclick="selectedflavorid({{flavor['id']}})">Choose</button>
->>>>>>> 877014317f4b7cd2fd0ef3bd3dabce7a92d0b0fc
                                 </div>
                             </div>
                             {% endfor %}
@@ -145,17 +137,11 @@
                             <i class="dropdown icon"></i>
                             <div class="default text">Key Pair</div>
                             <div class="menu">
-                                {% set n = 1 %}
-                                {% for keypair in keylist['keypairs'] %}
-                                {% if n == 1 %}
-                                    <div class="item" selected data-value="{{ keypair['keypair']['name'] }}">{{ 
-                                keypair['keypair']['name'] }}</div>
+                                {% set n = 1 %} {% for keypair in keylist['keypairs'] %} {% if n == 1 %}
+                                <div class="item" selected data-value="{{ keypair['keypair']['name'] }}">{{ keypair['keypair']['name'] }}</div>
                                 {% else %}
-                                    <div class="item" data-value="{{ keypair['keypair']['name'] }}">{{ 
-                                keypair['keypair']['name'] }}</div>
-                                {% endif %}
-                                {% set n = n+1   %}
-                                {% endfor %}
+                                <div class="item" data-value="{{ keypair['keypair']['name'] }}">{{ keypair['keypair']['name'] }}</div>
+                                {% endif %} {% set n = n+1 %} {% endfor %}
 
                             </div>
                         </div>
@@ -170,9 +156,7 @@
                 </div>
             </div>
         </div>
-<<<<<<< HEAD
-
-        <form method="POST">
+        <<<<<<< HEAD <form method="POST">
 
             <input id="imageRef" type="text" name="imageRef" hidden value="">
             <input id="flavorRef" type="text" name="imageRef" hidden value="">
@@ -184,108 +168,84 @@
                     <div class="ui form">
                         <div class="field">
                             <label>Choose a name</label>
-                            <input type="text" name="name" placeholder="Instance Name">
+                            <input type="text" name="name" placeholder="Instance Name" onchange="selectedname(this.value);">
                         </div>
                         <div class="field">
                             <label>Usage Purpose</label>
-                            <textarea rows="3"></textarea>
+                            <textarea rows="3" onchange="document.getElementById('purpose').value = this.value;"></textarea>
                         </div>
                         <div class="fields">
                             <div class="field">
                                 <label>Person in Charge Name</label>
-                                <input type="text" name="pic_name" placeholder="Name">
+                                <input type="text" name="text" placeholder="Name" onchange="document.getElementById('pic_name').value = this.value;">
                             </div>
                             <div class="field">
                                 <label>Person in Charge Phone Number</label>
-                                <input type="text" name="pic_telp" placeholder="Phone Number">
+                                <input type="text" name="text" placeholder="Phone Number" onchange="document.getElementById('pic_telp').value = this.value;">                                >>>>>>> 877014317f4b7cd2fd0ef3bd3dabce7a92d0b0fc
                             </div>
-=======
-        <div class="row">
-            <div class="ui container">
-                <h2 class="ui dividing header">Finalize and create</h2>
-                <div class="ui form">
-                    <div class="field">
-                        <label>Choose a name</label>
-                        <input type="text" name="name" placeholder="Instance Name" onchange="selectedname(this.value);">
-                    </div>
-                    <div class="field">
-                        <label>Usage Purpose</label>
-                        <textarea rows="3" onchange="document.getElementById('purpose').value = this.value;"></textarea>
-                    </div>
-                    <div class="fields">
-                        <div class="field">
-                            <label>Person in Charge Name</label>
-                            <input type="text" name="text" placeholder="Name" onchange="document.getElementById('pic_name').value = this.value;">
-                        </div>
-                        <div class="field">
-                            <label>Person in Charge Phone Number</label>
-                            <input type="text" name="text" placeholder="Phone Number" onchange="document.getElementById('pic_telp').value = this.value;">
->>>>>>> 877014317f4b7cd2fd0ef3bd3dabce7a92d0b0fc
                         </div>
                     </div>
                 </div>
+
+                </br>
+                <form id="form_create" class="ui large form" method="POST">
+
+                    <input id="imageRef" type="text" name="imageRef" hidden value="yoi">
+                    <input id="flavorRef" type="text" name="flavorRef" hidden value="">
+                    <input id="availability_zone" type="text" name="availability_zone" hidden value="nova">
+                    <input id="key_name" type="text" name="key_name" hidden value="">
+                    <input id="name" type="text" name="name" hidden value="">
+                    <input id="purpose" type="text" name="name" hidden value="">
+                    <input id="pic_name" type="text" name="pic_name" hidden value="">
+                    <input id="pic_telp" type="text" name="pic_telp" hidden value="">
+
+                    <button id="submit_button" class="ui fluid large teal submit button" type="submit" onclick="submit('form_create')">Create</button>
+                </form>
             </div>
-
-        </br>
-        <form id="form_create" class="ui large form" method="POST">
-
-            <input id="imageRef" type="text" name="imageRef" hidden value="yoi">
-            <input id="flavorRef" type="text" name="flavorRef" hidden value="">
-            <input id="availability_zone" type="text" name="availability_zone" hidden value="nova">
-            <input id="key_name" type="text" name="key_name" hidden value="">
-            <input id="name" type="text" name="name" hidden value="">
-            <input id="purpose" type="text" name="name" hidden value="">
-            <input id="pic_name" type="text" name="pic_name" hidden value="">
-            <input id="pic_telp" type="text" name="pic_telp" hidden value="">
-            
-            <button id="submit_button" class="ui fluid large teal submit button" type="submit" onclick="submit('form_create')">Create</button>
-        </form>
     </div>
-</div>
-<script>
-    $('.menu.createi .item')
-        .tab()
-        ;
+    <script>
+        $('.menu.createi .item')
+            .tab()
+            ;
 
-    $(function () {
-        $("#slider-range-max-vcpu").slider({
-            range: "max",
-            min: 1,
-            max: 2,
-            value: 1,
-            slide: function (event, ui) {
-                $("#vcpu").val(ui.value);
-            }
+        $(function () {
+            $("#slider-range-max-vcpu").slider({
+                range: "max",
+                min: 1,
+                max: 2,
+                value: 1,
+                slide: function (event, ui) {
+                    $("#vcpu").val(ui.value);
+                }
+            });
+            $("#vcpu").val($("#slider-range-max-vcpu").slider("value"));
         });
-        $("#vcpu").val($("#slider-range-max-vcpu").slider("value"));
-    });
 
-    $(function () {
-        $("#slider-range-max-memory").slider({
-            range: "max",
-            min: 1,
-            max: 4,
-            value: 1,
-            slide: function (event, ui) {
-                $("#memory").val(ui.value);
-            }
+        $(function () {
+            $("#slider-range-max-memory").slider({
+                range: "max",
+                min: 1,
+                max: 4,
+                value: 1,
+                slide: function (event, ui) {
+                    $("#memory").val(ui.value);
+                }
+            });
+            $("#memory").val($("#slider-range-max-memory").slider("value"));
         });
-        $("#memory").val($("#slider-range-max-memory").slider("value"));
-    });
 
-    $(function () {
-        $("#slider-range-max-disk").slider({
-            step: 20,
-            min: 20,
-            max: 80,
-            value: 20,
-            slide: function (event, ui) {
-                $("#disk").val(ui.value);
-            }
+        $(function () {
+            $("#slider-range-max-disk").slider({
+                step: 20,
+                min: 20,
+                max: 80,
+                value: 20,
+                slide: function (event, ui) {
+                    $("#disk").val(ui.value);
+                }
+            });
+            $("#disk").val($("#slider-range-max-disk").slider("value"));
         });
-        $("#disk").val($("#slider-range-max-disk").slider("value"));
-    });
+    </script>
 
-</script>
-
-{% endblock %}
+    {% endblock %}

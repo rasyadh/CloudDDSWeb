@@ -166,7 +166,6 @@ def activate_account():
 def activation_accountred(activation_code):
     return redirect(url_for('activate_account'))
 
-<<<<<<< HEAD
 @app.route('/forgot_password')
 def forgot_password():
     return render_template('forgot-password.html')
@@ -176,15 +175,6 @@ def forgot_password():
 def new_password():
     return render_template('verifikasi-forgotpass.html')
 
-@app.route('/logout')
-@login_required
-def logout():
-    session.pop('logged_in',None)
-    session.pop('email',None)
-    return redirect(url_for('index'))
-
-=======
->>>>>>> 877014317f4b7cd2fd0ef3bd3dabce7a92d0b0fc
 @app.route('/layanan')
 def layanan():
     return render_template('partials/layanan.html')
@@ -314,8 +304,10 @@ def manage_vm():
     return render_template('admin/managing-vm.html',admin=admin)
 
 @app.route('/admin/manage-admin')
+@admin_required
 def manage_admin():
-    return render_template('managing-admin.html')
+    admin = User.query.filter_by(id=session['admin_id']).first()
+    return render_template('admin/managing-admin.html',admin=admin)
 
 # error handler
 @app.errorhandler(404)
