@@ -173,12 +173,8 @@ def activate_account():
 def activation_accountred(activation_code):
     return redirect(url_for('activate_account'))
 
-<<<<<<< HEAD
-@app.route('/forgot_password')
-=======
 #Check halaman verifikasi forgot password
 @app.route('/forgot_password',methods=["GET","POST"])
->>>>>>> e5ba8b000200927199b8ad116709309d06133bc5
 def forgot_password():
     message = []
     if request.method == 'POST':
@@ -207,8 +203,6 @@ def forgot_password():
 def forgotredirect():
     return redirect(url_for('forgot_password'))
 
-<<<<<<< HEAD
-=======
 @app.route('/forgot_password/reset_password',methods=['GET','POST'])
 def reset_pass():
     if request.method == 'POST':
@@ -242,7 +236,6 @@ def reset_pass():
 def reset_passred(tokens):
     return redirect(url_for('reset_pass'))
 
->>>>>>> e5ba8b000200927199b8ad116709309d06133bc5
 @app.route('/layanan')
 def layanan():
     return render_template('partials/layanan.html')

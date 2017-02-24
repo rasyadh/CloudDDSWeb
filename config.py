@@ -13,9 +13,9 @@ class Config(object):
     MAIL_PORT = 465
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
-    MAIL_USERNAME = 'cloudtelkomdds'
-    MAIL_PASSWORD = 'Admintelk0m'
-    MAIL_DEFAULT_SENDER = 'cloutelkomdds@gmail.com'
+    MAIL_USERNAME = 'd4tiajoss'
+    MAIL_PASSWORD = 'cumlaude2018'
+    MAIL_DEFAULT_SENDER = 'd4tiajoss@gmail.com'
 
 class ProductionConfig(Config):
     DEBUG = False
