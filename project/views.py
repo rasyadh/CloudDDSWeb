@@ -194,6 +194,7 @@ def forgot_password():
             db.session.commit()
 
             confirm_url = "http://localhost:5000/forgot_password/reset_password?tokens="+token
+
             html = render_template('email/resetpass-email.html',confirm_url = confirm_url, users=users)
             subject = "Request Reset Password Cloud Telkom DDS"
             #send_email(users.email,subject,html)
@@ -237,8 +238,14 @@ def reset_pass():
 @app.route('/forgot_password/reset_password/<tokens>/')
 def reset_passred(tokens):
     return redirect(url_for('reset_pass'))
+<<<<<<< HEAD
 
 @app.route('/layanan')
+=======
+
+
+@app.route('/layanan')
+>>>>>>> 0a5cd5003830869e18de4a7bd625ab839609233e
 def layanan():
     return render_template('partials/layanan.html')
 
@@ -256,12 +263,9 @@ def manage():
 @login_required
 def computes():
     users = User.query.filter_by(id=session['user_id']).first()
-    nova = novaapi()
+    serverreq = Request.query.filter_by(owner_id=session['user_id']).order_by(Request.status).all()
 
-    serverList = nova.serverList("yj34f8r7j34t79j38jgygvf3")
-    serverList = json.loads(serverList)
-
-    return render_template('computes.html',users=users, serverList=serverList)
+    return render_template('computes.html',users=users, serverreq=serverreq)    
 
 @app.route('/manage/create', methods=['GET','POST'])
 @login_required
