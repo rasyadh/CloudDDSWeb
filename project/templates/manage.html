@@ -30,7 +30,7 @@
     var key_id = ""
     var name = ""
 
-    function selectedflavorid(selectedflavorid) {
+    function selectedflavorid(selectedflavorid,flavor_disk) {
         flavorid = selectedflavorid;
         if(prev_flav_id)
         {
@@ -41,6 +41,8 @@
         input.className += " teal";
         var d = document.getElementById("flavorRef");
         d.value = selectedflavorid;
+        var d = document.getElementById("size");
+        d.value = flavor_disk;
         prev_flav_id = flavorid;
     };
 

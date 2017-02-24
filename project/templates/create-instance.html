@@ -66,7 +66,7 @@
                                         <div>{{ flavor['disk'] }}GB Disk</div>
                                     </div>
                                     </br>
-                                    <button class="ui fluid teal button" onclick="selectedflavorid('{{flavor['id']}}')">Choose</button>
+                                    <button class="ui fluid teal button" onclick="selectedflavorid('{{flavor['id']}}','{{flavor['disk']}}')">Choose</button>
                                 </div>
                             </div>
                             {% endfor %}
@@ -197,7 +197,8 @@
             <input id="availability_zone" type="text" name="availability_zone" hidden value="nova">
             <input id="key_name" type="text" name="key_name" hidden value="">
             <input id="name" type="text" name="name" hidden value="">
-            <input id="purpose" type="text" name="name" hidden value="">
+            <input id="size" type="text" name="size" hidden value="">
+            <input id="purpose" type="text" name="purpose" hidden value="">
             <input id="pic_name" type="text" name="pic_name" hidden value="">
             <input id="pic_telp" type="text" name="pic_telp" hidden value="">
             
