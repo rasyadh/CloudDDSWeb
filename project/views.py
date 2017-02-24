@@ -285,8 +285,11 @@ def create_instance():
             networks_uuid = "417b4cdd-b706-4f6c-8e6e-1b06f58e94c8"
             key_name = request.form['key_name']
             name = request.form['name']
-            respJSON = nova.serverCreate(name,imageRef,flavorRef,availability_zone,key_name,networks_uuid,size)
-
+            image_name = request.form['image_name']
+            ram = request.form['ram']
+            cpu = request.form['cpu']
+            #respJSON = nova.serverCreate(name,imageRef,flavorRef,availability_zone,key_name,networks_uuid,size)
+            
             # time.sleep(30)
             # resp = json.loads(respJSON)
             # server_id = resp['server']['id']
@@ -305,21 +308,27 @@ def create_instance():
             #         break
             # nova.setFloatingIp(private_ip,public_ip,server_id)
 
-            req = Request(
-                    name = name,
-                    image_id = imageRef,
-                    flavor_id = flavorRef,
-                    network_id = networks_uuid,
-                    availability_zone = availability_zone,
-                    keyname = key_name,
-                    purpose = request.form['purpose'],
-                    pic_name = request.form['pic_name'],
-                    pic_telp = request.form['pic_telp'],
-                    status = 0
-                )
+            # req = Request(
+            #         owner_id = session['user_id'],
+            #         server_id = "",
+            #         name = name,
+            #         image_id = imageRef,
+            #         image_name=image_name,
+            #         flavor_id = flavorRef,
+            #         flavor_vcpu = cpu,
+            #         flavor_ram = ram,
+            #         flavor_disk = size,
+            #         network_id = networks_uuid,
+            #         availability_zone = availability_zone,
+            #         keyname = key_name,
+            #         purpose = request.form['purpose'],
+            #         pic_name = request.form['pic_name'],
+            #         pic_telp = request.form['pic_telp'],
+            #         status = 0
+            #     )
 
-            db.session.add(req)
-            db.session.commit()
+            # db.session.add(req)
+            # db.session.commit()
 
             return redirect(url_for('computes'))
         #except:
@@ -335,7 +344,6 @@ def create_instance():
         imageJSON = json.loads(imageJSON)
         return render_template('create-instance.html',flavorlist = flavorJSON,keylist=keyJSON,imagelist=imageJSON,users=users)
     #return str(respJSON['flavors'])
-
 @app.route('/manage/images')
 @login_required
 def images():
