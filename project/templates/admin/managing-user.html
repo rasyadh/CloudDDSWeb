@@ -37,21 +37,21 @@
                             <td>1</td>
                             <td>
                                 <input type="hidden" name="users-id" value="{{ user.id }}">
-                                <input id="action" type="hidden" name="action" value="">
+                                <input id="action-{{user.id}}" type="hidden" name="action" value="">
 
                                 <button class="ui yellow button">Status</button>
                                 <div class="ui fluid popup top left transition hidden">
                                     <div class="ui two column divided center aligned grid">
 
                                         <div class="column">
-                                            <a class="ui button" onclick="setactive('form-{{user.id}}')" >Active</a>
+                                            <a class="ui button" onclick="setactive('form-{{user.id}}','{{user.id}}')" >Active</a>
                                         </div>
                                         <div class="column">
-                                            <a class="ui button" onclick="setsuspend('form-{{user.id}}')">Suspend</a>
+                                            <a class="ui button" onclick="setsuspend('form-{{user.id}}','{{user.id}}')">Suspend</a>
                                         </div>
                                     </div>
                                 </div>
-                                <button class="ui red button" type="submit" onclick="setdelete('form-{{user.id}}')">Delete</button>
+                                <button class="ui red button" type="submit" onclick="setdelete('form-{{user.id}}','{{user.id}}')">Delete</button>
                             </td>
                             </form>
                         </tr>
@@ -70,19 +70,19 @@
         on: 'click'
     });
 
-    function setactive(form_id){
-        document.getElementById("action").value = "activate"
+    function setactive(form_id,user_id){
+        document.getElementById("action-"+user_id).value = "activate"
         var form = document.getElementById(form_id);
         form.submit();
     }
 
-    function setsuspend(form_id){
-        document.getElementById("action").value = "suspend"
+    function setsuspend(form_id,user_id){
+        document.getElementById("action-"+user_id).value = "suspend"
         var form = document.getElementById(form_id);
         form.submit();
     }
-    function setdelete(form_id){
-        document.getElementById("action").value = "delete"
+    function setdelete(form_id,user_id){
+        document.getElementById("action-"+user_id).value = "delete"
         var form = document.getElementById(form_id);
         form.submit();
     }
