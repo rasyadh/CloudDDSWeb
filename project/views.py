@@ -254,7 +254,12 @@ def manage():
 @login_required
 def computes():
     users = User.query.filter_by(id=session['user_id']).first()
-    return render_template('computes.html',users=users)
+    nova = novaapi()
+
+    serverList = nova.serverList("yj34f8r7j34t79j38jgygvf3")
+    serverList = json.loads(serverList)
+
+    return render_template('computes.html',users=users, serverList=serverList)    
 
 @app.route('/manage/create', methods=['GET','POST'])
 @login_required
@@ -267,38 +272,50 @@ def create_instance():
         #try:
             imageRef = request.form['imageRef']
             flavorRef = str(request.form['flavorRef'])
+            size = request.form['size']
             availability_zone = request.form['availability_zone']
-            networks_uuid = "5055859c-3ca3-4421-aca0-a368b942c345"
+            networks_uuid = "417b4cdd-b706-4f6c-8e6e-1b06f58e94c8"
             key_name = request.form['key_name']
             name = request.form['name']
-            respJSON = nova.serverCreate(name,imageRef,flavorRef,availability_zone,key_name,networks_uuid)
-
-            time.sleep(30)
-
-            resp = json.loads(respJSON)
-            server_id = resp['server']['id']
-            respJSON = nova.serverList(server_id)
-            resp = json.loads(respJSON)
-
+            respJSON = nova.serverCreate(name,imageRef,flavorRef,availability_zone,key_name,networks_uuid,size)
+            
+            # time.sleep(30)
+            # resp = json.loads(respJSON)
+            # server_id = resp['server']['id']
+            # respJSON = nova.serverList(server_id)
+            # resp = json.loads(respJSON)
             # for addresses in resp['server']['addresses']['private']:
             #     if addresses["version"] == 4:
             #         private_ip = addresses["addr"]
             #         break
-
             # respJSON = neutron.floatipList()
             # respJSON = json.loads(respJSON)
             # iplist = respJSON['floatingips']
-
             # for ip in iplist:
             #     if ip['fixed_ip_address'] is Null:
             #         public_ip = ip['floating_ip_address']
             #         break
-
             # nova.setFloatingIp(private_ip,public_ip,server_id)
 
-            return str(resp['server']['addresses']['private'])
+            req = Request(
+                    name = name,
+                    image_id = imageRef,
+                    flavor_id = flavorRef,
+                    network_id = networks_uuid,
+                    availability_zone = availability_zone,
+                    keyname = key_name,
+                    purpose = request.form['purpose'],
+                    pic_name = request.form['pic_name'],
+                    pic_telp = request.form['pic_telp'],
+                    status = 0
+                )
+
+            db.session.add(req)
+            db.session.commit()
+
+            return redirect(url_for('computes'))
         #except:
-         #   return "Bad Parameter"
+            #return "Bad Parameter"
     else:
         users = User.query.filter_by(id=session['user_id']).first()
         #ubahteko baris iki
@@ -538,7 +555,6 @@ def keylistdelete():
             return redirect(url_for('keylist'))
     else:
         return "Bad Request"
-
 @app.route('/restapi/nova/keylist/new',methods=["GET"])
 def keylistnew():
     if request.method == "GET":
@@ -559,6 +575,9 @@ def keylistnew():
                 r.headers["Content-Type"] = "text/plain; charset=utf-8"
                 r.headers["Content-Disposition"] = "attachment; filename="+ key_name +".pem"
                 return r
+            else:
+                return resp['content']['conflictingRequest']['message']
+                
     else:
         return "Bad Request"
 
