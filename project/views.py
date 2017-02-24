@@ -238,9 +238,14 @@ def reset_pass():
 @app.route('/forgot_password/reset_password/<tokens>/')
 def reset_passred(tokens):
     return redirect(url_for('reset_pass'))
+<<<<<<< HEAD
+
+@app.route('/layanan')
+=======
 
 
 @app.route('/layanan')
+>>>>>>> 0a5cd5003830869e18de4a7bd625ab839609233e
 def layanan():
     return render_template('partials/layanan.html')
 
@@ -425,6 +430,12 @@ def manage_vm():
     admin = User.query.filter_by(id=session['admin_id']).first()
     #allserver = Instance.query.all()
     return render_template('admin/managing-vm.html',admin=admin)
+
+@app.route('/admin/manage-request')
+@admin_required
+def manage_request():
+    admin = User.query.filter_by(id=session['admin_id']).first()
+    return render_template('admin/managing-request.html',admin=admin)
 
 @app.route('/admin/manage-admin')
 @admin_required

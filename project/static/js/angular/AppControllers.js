@@ -181,23 +181,88 @@ app.controller('InfobantuanController', function ($scope, $http) {
         },
         {
             title: "Mekanisme request VM ?",
-            content: "Step Satu, Login"
+            steps: [
+                {
+                    desc: "Login"
+                },
+                {
+                    desc: "Pilih Create VM"
+                },
+                {
+                    desc: "Pilih sesuai kebutuhan"
+                },
+                {
+                    desc: "Verifikasi lewat email"
+                },
+                {
+                    desc: "VM Aktif"
+                }
+            ]
         },
         {
             title: "Cara Mengakses VM ?",
-            content: "Akses VM"
+            steps: [
+                {
+                    desc: "Login"
+                },
+                {
+                    desc: "Buka VM lewat IP"
+                },
+                {
+                    desc: "Login"
+                }
+            ]
         },
         {
             title: "Cara Memanajemen VM ?",
-            content: "manajemen VM"
+            steps: [
+                {
+                    desc: "Login"
+                },
+                {
+                    desc: "Pilih Manage VM"
+                },
+                {
+                    desc: "Manajemen VM sesuai kebutuhan"
+                }
+            ]
         },
         {
             title: "Cara melakukan upgrade VM (Scale Up) ?",
-            content: "scale up vm"
+            steps: [
+                {
+                    desc: "Login"
+                },
+                {
+                    desc: "Pilih Manage VM"
+                },
+                {
+                    desc: "Pilih Scale Up"
+                },
+                {
+                    desc: "Masukkan spesifikasi request"
+                },
+                {
+                    desc: "Email dan Telefon Konfirmasi"
+                },
+                {
+                    desc: "VM ter-upgrade"
+                }
+            ]
         },
         {
             title: "Cara menghapus VM ?",
-            content: "delete VM"
+            steps: [
+                {
+                    desc: "Login"
+                },
+                {
+                    desc: "Pilih Manage VM"
+                },
+                {
+                    desc: "Pilih Delete VM"
+                }
+            ]
         },
         {
             title: "Setting username dan password VM ?",
@@ -208,18 +273,4 @@ app.controller('InfobantuanController', function ($scope, $http) {
             content: "migrasi"
         }
     ];
-
-    // $scope.faqContent = [];
-    // $scope.faqContent.faqtitle = '';
-
-    // $http({
-    //     method: 'GET',
-    //     url: 'data/faq-content.json'
-    // })
-    // .success(function(data, status, header, config){
-    //     $scope.faqContent = data;
-    // })
-    // .error(function(data, status, header, config){
-
-    // });
 });
