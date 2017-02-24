@@ -122,8 +122,8 @@ def registration():
                 db.session.add(activationcode)
 
                 confirm_url = "http://localhost:5000/registration/activate_account?actemp="+activationcodetmp
-                html = render_template('verification.html',confirm_url = confirm_url)
-                subject = "Request Reset Password"
+                html = render_template('email/verification-email.html',confirm_url = confirm_url)
+                subject = "Verification Email Cloud Telkom DDS"
                 #send_email(users.email,subject,html)
                 send_email("gravpokemongo@gmail.com",subject,html)
                 db.session.commit()
@@ -193,8 +193,8 @@ def forgot_password():
             db.session.commit()
 
             confirm_url = "http://localhost:5000/forgot_password/reset_password?tokens="+token
-            html = render_template('resetpassword.html',confirm_url = confirm_url, users=users)
-            subject = "Please confirm your email"
+            html = render_template('email/resetpass-email.html',confirm_url = confirm_url, users=users)
+            subject = "Request Reset Password Cloud Telkom DDS"
             #send_email(users.email,subject,html)
             send_email("gravpokemongo@gmail.com",subject,html)
     return render_template('forgot-password.html')
