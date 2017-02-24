@@ -74,25 +74,34 @@ class Request(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
     image_id = db.Column(db.String(100), nullable=False)
+    image_name = db.Column(db.String(100), nullable=False)
     flavor_id = db.Column(db.String(100), nullable=False)
+    flavor_vcpu = db.Column(db.String(100), nullable=False)
+    flavor_ram = db.Column(db.String(100), nullable=False)
+    flavor_disk = db.Column(db.String(100), nullable=False)
     network_id = db.Column(db.String(100), nullable=False)
-    available_zone = db.Column(db.String(100), nullable=False)
+    availability_zone = db.Column(db.String(100), nullable=False)
     keyname = db.Column(db.String(100), nullable=False)
     purpose = db.Column(db.String(100), nullable=False)
     pic_name = db.Column(db.String(100), nullable=False)
     pic_telp = db.Column(db.String(100), nullable=False)
     status = db.Column(db.Integer, default=0)
 
-    def __init__(self,name,image_id, flavor_id, network_id, available_zone, keyname, purpose, pic_name, pic_telp):
+    def __init__(self,name,image_id,image_name , flavor_id, flavor_vcpu, flavor_ram, flavor_disk,network_id, availability_zone, keyname, purpose, pic_name, pic_telp, status):
         self.name = name
         self.image_id = image_id
+        self.image_name = image_name
         self.flavor_id = flavor_id
+        self.flavor_vcpu = flavor_vcpu
+        self.flavor_ram = flavor_ram
+        self.flavor_disk = flavor_disk
         self.network_id = network_id
-        self.available_zone = available_zone
+        self.availability_zone = availability_zone
         self.keyname = keyname
         self.purpose = purpose
         self.pic_name = pic_name
         self.pic_telp = pic_telp
+        self.status = status
 
     def get_id(self):
         return self.id
