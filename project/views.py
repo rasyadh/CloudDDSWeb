@@ -120,13 +120,14 @@ def registration():
 
                 db.session.add(users)
                 db.session.add(activationcode)
-                db.session.commit()
+
 
                 confirm_url = "http://localhost:5000/registration/activate_account?actemp="+activationcodetmp
-                html = render_template('activation.html',confirm_url = confirm_url)
+                html = render_template('verification.html',confirm_url = confirm_url)
                 subject = "Request Reset Password"
                 #send_email(users.email,subject,html)
                 send_email("gravpokemongo@gmail.com",subject,html)
+                db.session.commit()
 
                 return redirect(url_for('login'))
 
