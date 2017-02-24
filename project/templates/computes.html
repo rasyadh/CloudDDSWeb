@@ -21,22 +21,28 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for server in serverreq %}
+                            {% if serverreq|length == 0 %}
                                 <tr>
-                                    <td>{{ server.name }}</td>
-                                    {% if server.status == 0%}
-                                    <td>Menunggu Persetujuan Admin</td>
-                                    {% else %}
-                                    <td>Tidak Aktif</td>
-                                    {% endif %}
-                                    <td>dd/mm/yyyy</td>
-                                    {% if server.id == "" %}
-                                    <td><a class="ui teal button disabled" disabled href="/manage/instance">Manage Instance</a></td>
-                                    {% else %}
-                                    <td><a class="ui teal button disabled" href="/manage/instance?id={{ server.id }}">Manage Instance</a></td>
-                                    {% endif %}
+                                        <td colspan="4" class="ui center aligned"><p>Looks like you don't have any instances</p></td>
                                 </tr>
-                            {% endfor %}
+                            {% else %}
+                                {% for server in serverreq %}
+                                    <tr>
+                                        <td>{{ server.name }}</td>
+                                        {% if server.status == 0%}
+                                        <td>Menunggu Persetujuan Admin</td>
+                                        {% else %}
+                                        <td>Tidak Aktif</td>
+                                        {% endif %}
+                                        <td>dd/mm/yyyy</td>
+                                        {% if server.id == "" %}
+                                        <td><a class="ui teal button disabled" disabled href="/manage/instance">Manage Instance</a></td>
+                                        {% else %}
+                                        <td><a class="ui teal button disabled" href="/manage/instance?id={{ server.id }}">Manage Instance</a></td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
                         </tbody>
                         <tfoot>
                             <tr>

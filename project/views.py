@@ -240,14 +240,6 @@ def reset_passred(tokens):
     return redirect(url_for('reset_pass'))
 
 @app.route('/layanan')
-<<<<<<< HEAD
-=======
-=======
-
-
-@app.route('/layanan')
->>>>>>> 0a5cd5003830869e18de4a7bd625ab839609233e
->>>>>>> 1a624ca54774249b69471c04abf6bc22a15ef7f4
 def layanan():
     return render_template('partials/layanan.html')
 
@@ -277,62 +269,86 @@ def create_instance():
     neutron = neutronapi()
 
     if request.method == 'POST':
-        #try:
-            imageRef = request.form['imageRef']
-            flavorRef = str(request.form['flavorRef'])
-            size = request.form['size']
-            availability_zone = request.form['availability_zone']
-            networks_uuid = "417b4cdd-b706-4f6c-8e6e-1b06f58e94c8"
-            key_name = request.form['key_name']
-            name = request.form['name']
-            image_name = request.form['image_name']
-            ram = request.form['ram']
-            cpu = request.form['cpu']
-            #respJSON = nova.serverCreate(name,imageRef,flavorRef,availability_zone,key_name,networks_uuid,size)
-            
-            # time.sleep(30)
-            # resp = json.loads(respJSON)
-            # server_id = resp['server']['id']
-            # respJSON = nova.serverList(server_id)
-            # resp = json.loads(respJSON)
-            # for addresses in resp['server']['addresses']['private']:
-            #     if addresses["version"] == 4:
-            #         private_ip = addresses["addr"]
-            #         break
-            # respJSON = neutron.floatipList()
-            # respJSON = json.loads(respJSON)
-            # iplist = respJSON['floatingips']
-            # for ip in iplist:
-            #     if ip['fixed_ip_address'] is Null:
-            #         public_ip = ip['floating_ip_address']
-            #         break
-            # nova.setFloatingIp(private_ip,public_ip,server_id)
+        try:
+            if request.form['flavor_type'] == "custom":
+                imageRef = request.form['imageRef']
+                availability_zone = request.form['availability_zone']
+                networks_uuid = "417b4cdd-b706-4f6c-8e6e-1b06f58e94c8"
+                key_name = request.form['key_name']
+                name = request.form['name']
+                image_name = request.form['image_name']
+                size = request.form['custom_storage_form']
+                ram = request.form['custom_memory_form']
+                cpu = request.form['custom_vcpu_form']
+                purpose = request.form['purpose']
+                pic_name = request.form['pic_name']
+                pic_telp = request.form['pic_telp']
 
-            # req = Request(
-            #         owner_id = session['user_id'],
-            #         server_id = "",
-            #         name = name,
-            #         image_id = imageRef,
-            #         image_name=image_name,
-            #         flavor_id = flavorRef,
-            #         flavor_vcpu = cpu,
-            #         flavor_ram = ram,
-            #         flavor_disk = size,
-            #         network_id = networks_uuid,
-            #         availability_zone = availability_zone,
-            #         keyname = key_name,
-            #         purpose = request.form['purpose'],
-            #         pic_name = request.form['pic_name'],
-            #         pic_telp = request.form['pic_telp'],
-            #         status = 0
-            #     )
+                size = str(size)
+                ram = str(ram)
+                cpu = str(cpu)
+                flavorRef = cpu + ram.zfill(2) + size.zfill(3)
 
-            # db.session.add(req)
-            # db.session.commit()
+            else:
+                imageRef = request.form['imageRef']
+                availability_zone = request.form['availability_zone']
+                networks_uuid = "417b4cdd-b706-4f6c-8e6e-1b06f58e94c8"
+                key_name = request.form['key_name']
+                name = request.form['name']
+                image_name = request.form['image_name']
+                flavorRef = request.form['flavorRef']
+                size = request.form['size']
+                ram = request.form['ram']
+                cpu = request.form['cpu']
+                purpose = request.form['purpose']
+                pic_name = request.form['pic_name']
+                pic_telp = request.form['pic_telp']
+                
+                #respJSON = nova.serverCreate(name,imageRef,flavorRef,availability_zone,key_name,networks_uuid,size)
+                
+                # time.sleep(30)
+                # resp = json.loads(respJSON)
+                # server_id = resp['server']['id']
+                # respJSON = nova.serverList(server_id)
+                # resp = json.loads(respJSON)
+                # for addresses in resp['server']['addresses']['private']:
+                #     if addresses["version"] == 4:
+                #         private_ip = addresses["addr"]
+                #         break
+                # respJSON = neutron.floatipList()
+                # respJSON = json.loads(respJSON)
+                # iplist = respJSON['floatingips']
+                # for ip in iplist:
+                #     if ip['fixed_ip_address'] is Null:
+                #         public_ip = ip['floating_ip_address']
+                #         break
+                # nova.setFloatingIp(private_ip,public_ip,server_id)
+
+            req = Request(
+                    owner_id = session['user_id'],
+                    server_id = "",
+                    name = name,
+                    image_id = imageRef,
+                    image_name=image_name,
+                    flavor_id = flavorRef,
+                    flavor_vcpu = cpu,
+                    flavor_ram = ram,
+                    flavor_disk = size,
+                    network_id = networks_uuid,
+                    availability_zone = availability_zone,
+                    keyname = key_name,
+                    purpose = request.form['purpose'],
+                    pic_name = request.form['pic_name'],
+                    pic_telp = request.form['pic_telp'],
+                    status = 0
+                )
+
+            db.session.add(req)
+            db.session.commit()
 
             return redirect(url_for('computes'))
-        #except:
-            #return "Bad Parameter"
+        except:
+            return "Bad Parameter"
     else:
         users = User.query.filter_by(id=session['user_id']).first()
         #ubahteko baris iki
