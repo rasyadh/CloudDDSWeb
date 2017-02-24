@@ -121,11 +121,11 @@ def registration():
                 db.session.add(users)
                 db.session.add(activationcode)
 
-                confirm_url = "http://localhost:5000/registration/activate_account?actemp="+activationcodetmp
+                confirm_url = "http://10.14.36.100:5000/registration/activate_account?actemp="+activationcodetmp
                 html = render_template('email/verification-email.html',confirm_url = confirm_url)
                 subject = "Verification Email Cloud Telkom DDS"
                 #send_email(users.email,subject,html)
-                send_email("gravpokemongo@gmail.com",subject,html)
+                send_email(users.email,subject,html)
                 db.session.commit()
 
                 return redirect(url_for('login'))
