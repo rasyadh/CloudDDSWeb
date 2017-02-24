@@ -269,36 +269,60 @@ def create_instance():
     neutron = neutronapi()
 
     if request.method == 'POST':
-        #try:
-            imageRef = request.form['imageRef']
-            flavorRef = str(request.form['flavorRef'])
-            size = request.form['size']
-            availability_zone = request.form['availability_zone']
-            networks_uuid = "417b4cdd-b706-4f6c-8e6e-1b06f58e94c8"
-            key_name = request.form['key_name']
-            name = request.form['name']
-            image_name = request.form['image_name']
-            ram = request.form['ram']
-            cpu = request.form['cpu']
-            #respJSON = nova.serverCreate(name,imageRef,flavorRef,availability_zone,key_name,networks_uuid,size)
+        try:
+            if request.form['flavor_type'] == "custom":
+                imageRef = request.form['imageRef']
+                availability_zone = request.form['availability_zone']
+                networks_uuid = "417b4cdd-b706-4f6c-8e6e-1b06f58e94c8"
+                key_name = request.form['key_name']
+                name = request.form['name']
+                image_name = request.form['image_name']
+                size = request.form['custom_storage_form']
+                ram = request.form['custom_memory_form']
+                cpu = request.form['custom_vcpu_form']
+                purpose = request.form['purpose']
+                pic_name = request.form['pic_name']
+                pic_telp = request.form['pic_telp']
 
-            # time.sleep(30)
-            # resp = json.loads(respJSON)
-            # server_id = resp['server']['id']
-            # respJSON = nova.serverList(server_id)
-            # resp = json.loads(respJSON)
-            # for addresses in resp['server']['addresses']['private']:
-            #     if addresses["version"] == 4:
-            #         private_ip = addresses["addr"]
-            #         break
-            # respJSON = neutron.floatipList()
-            # respJSON = json.loads(respJSON)
-            # iplist = respJSON['floatingips']
-            # for ip in iplist:
-            #     if ip['fixed_ip_address'] is Null:
-            #         public_ip = ip['floating_ip_address']
-            #         break
-            # nova.setFloatingIp(private_ip,public_ip,server_id)
+                size = str(size)
+                ram = str(ram)
+                cpu = str(cpu)
+                flavorRef = cpu + ram.zfill(2) + size.zfill(3)
+
+            else:
+                imageRef = request.form['imageRef']
+                availability_zone = request.form['availability_zone']
+                networks_uuid = "417b4cdd-b706-4f6c-8e6e-1b06f58e94c8"
+                key_name = request.form['key_name']
+                name = request.form['name']
+                image_name = request.form['image_name']
+                flavorRef = request.form['flavorRef']
+                size = request.form['size']
+                ram = request.form['ram']
+                cpu = request.form['cpu']
+                purpose = request.form['purpose']
+                pic_name = request.form['pic_name']
+                pic_telp = request.form['pic_telp']
+
+                #respJSON = nova.serverCreate(name,imageRef,flavorRef,availability_zone,key_name,networks_uuid,size)
+
+                # time.sleep(30)
+                # resp = json.loads(respJSON)
+                # server_id = resp['server']['id']
+                # respJSON = nova.serverList(server_id)
+                # resp = json.loads(respJSON)
+                # for addresses in resp['server']['addresses']['private']:
+                #     if addresses["version"] == 4:
+                #         private_ip = addresses["addr"]
+                #         break
+                # respJSON = neutron.floatipList()
+                # respJSON = json.loads(respJSON)
+                # iplist = respJSON['floatingips']
+                # for ip in iplist:
+                #     if ip['fixed_ip_address'] is Null:
+                #         public_ip = ip['floating_ip_address']
+                #         break
+                # nova.setFloatingIp(private_ip,public_ip,server_id)
 
             req = Request(
                     owner_id = session['user_id'],
@@ -323,8 +347,8 @@ def create_instance():
             db.session.commit()
 
             return redirect(url_for('computes'))
-        #except:
-            #return "Bad Parameter"
+        except:
+            return "Bad Parameter"
     else:
         users = User.query.filter_by(id=session['user_id']).first()
         #ubahteko baris iki
@@ -441,11 +465,16 @@ def manage_request():
 
     if request.method == 'POST':
         if request.form['action'] == 'Accepted' :
-            print(request.form['request-id'])
+            reqf = request.form
+            nova = novaapi()
+            respJSON = nova.serverCreate(reqf['request-name'],reqf['request-img'],reqf['request-flavor'],reqf['request-ava'],\
+                       reqf['request-keyname'],reqf['request-networks'],reqf['request-size'])
+            resp = json.loads(respJSON)
+
             create = Request.query.filter_by(id=request.form['request-id']).first()
             ins = Instance(
                 user_id = create.owner_id,
-                instance_id = create.server_id,
+                instance_id = resp['server']['id'],
                 name = create.name,
                 image_name = create.image_name,
                 status = 1
@@ -587,6 +616,7 @@ def keylistdelete():
     if request.method == "GET":
         if request.args.get('keyname') is None:
             return "Bad Parameter"
+
         else:
             key_name = request.args.get('keyname')
             nova = novaapi()

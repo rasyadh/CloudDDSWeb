@@ -31,9 +31,8 @@
                             {% endif %}
                             <td>
                                 <input id="action-{{inst.id}}" type="hidden" name="action" value="">
-
                                 <button class="ui yellow button detail" onclick="getdetail('{{inst.name}}','{{inst.image_name}}','{{inst.flavor_id}}','{{inst.flavor_vcpu}}','{{inst.flavor_ram}}','{{inst.flavor_disk}}','{{inst.purpose}}','{{inst.pic_name}}','{{inst.pic_telp}}')">Detail</button>
-                                <button class="ui green button process" onclick="processed('{{inst.id}}')">Process</button>
+                                <button class="ui green button process" onclick="processed('{{inst.id}}','{{inst.name}}','{{inst.image_id}}','{{inst.flavor_id}}','{{inst.network_id}}','{{inst.availability_zone}}','{{inst.keyname}}','{{inst.flavor_disk}}')">Process</button>
                             </td>
                         </form>
                         </tr>
@@ -104,6 +103,13 @@
     <div class="actions">
         <form id="process-request" method="POST">
             <input type="hidden" id="modal-id" name="request-id" value="">
+            <input type="hidden" id="modal-name" name="request-name" value="">
+            <input type="hidden" id="modal-img" name="request-img" value="">
+            <input type="hidden" id="modal-flavor" name="request-flavor" value="">
+            <input type="hidden" id="modal-ava" name="request-ava" value="">
+            <input type="hidden" id="modal-keyname" name="request-keyname" value="">
+            <input type="hidden" id="modal-networks" name="request-networks" value="">
+            <input type="hidden" id="modal-size" name="request-size" value="">
             <input type="hidden" id="modal-action" name="action" value="">
             <button class="ui red cancel button" onclick="creating('decline')">Decline</button>
             <button class="ui green ok button" onclick="creating('accept')">Accept</button>
@@ -125,8 +131,15 @@
         .modal('attach events', '.ui.green.button.process', 'show')
         .modal('setting', 'transition', 'fade up');
 
-    function processed(request_id){
-        document.getElementById('modal-id').value = request_id
+    function processed(request_id,name,image,flavor,network,ava,keyname,flavordisk){
+        document.getElementById('modal-id').value = request_id;
+        document.getElementById('modal-name').value = name;
+        document.getElementById('modal-img').value = image;
+        document.getElementById('modal-flavor').value = flavor;
+        document.getElementById('modal-networks').value = network;
+        document.getElementById('modal-ava').value = ava;
+        document.getElementById('modal-keyname').value = keyname;
+        document.getElementById('modal-size').value = flavordisk;
 
     }
     function getdetail(name,imagename,flavor,flavorvcpu,flavorram,flavordisk,flavorpurpose,flavorpicname,flavorpictelp){
