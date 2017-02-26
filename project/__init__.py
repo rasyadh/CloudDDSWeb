@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 #use this for windows
 app.config.from_object(APP_SETTINGS)
-
+myDOMAIN = APP_SETTINGS.domain_url
 #use this for linux
 #app.config.from_object(os.environ['APP_SETTINGS'])
 

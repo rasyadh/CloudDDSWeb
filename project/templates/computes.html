@@ -21,7 +21,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% if serverreq or serverins %} {% for server in serverins %}
+                            {% if serverreq or serverins %}
+                            {% for server in serverins %}
                             <tr>
                                 <td>{{ server.name }}</td>
                                 {% if server.status == 0%}
