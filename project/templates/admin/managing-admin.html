@@ -17,34 +17,41 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% if alladmin %}
                         {% for admin in alladmin %}
                         <tr>
-                            <td>{{admin.name}}</td>
-                            <td>{{admin.id}}</td>
-                            <td>{{admin.email}}</td>
-                            {% if admin.status == 1 %}
-                            <td>Active</td>
-                            {% elif admin.status == 2 %}
-                            <td>Suspend</td>
-                            {% elif admin.status == 3 %}
-                            <td>Deleted</td>
-                            {% endif %}
-                            <td>
-                                <button class="ui yellow button">Status</button>
-                                <div class="ui fluid popup top left transition hidden">
-                                    <div class="ui three column divided center aligned grid">
-                                        <div class="column">
-                                            <button class="ui button">Active</button>
-                                        </div>
-                                        <div class="column">
-                                            <button class="ui button">Suspend</button>
+                            <form id="form-{{admin.id}}" method='POST'>
+                                <td>{{admin.name}}</td>
+                                <td>{{admin.id}}</td>
+                                <td>{{admin.email}}</td>
+                                {% if admin.status == 1 %}
+                                <td>Active</td>
+                                {% elif admin.status == 2 %}
+                                <td>Suspend</td>
+                                {% elif admin.status == 3 %}
+                                <td>Deleted</td>
+                                {% endif %}
+                                <td>
+                                    <input type="hidden" name="admin-id" value="{{ admin.id }}">
+                                    <input id="action-{{admin.id}}" type="hidden" name="action" value="">
+
+                                    <button class="ui yellow button">Status</button>
+                                    <div class="ui fluid popup top left transition hidden">
+                                        <div class="ui three column divided center aligned grid">
+                                            <div class="column">
+                                                <button class="ui button" onclick="setactive('form-{{admin.id}}','{{admin.id}}')">Active</button>
+                                            </div>
+                                            <div class="column">
+                                                <button class="ui button" onclick="setsuspend('form-{{admin.id}}','{{admin.id}}')">Suspend</button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <button class="ui red button">Delete</button>
-                            </td>
+                                    <button class="ui red button" onclick="setdelete('form-{{admin.id}}','{{admin.id}}')">Delete</button>
+                                </td>
+                            </form>
                         </tr>
                         {% endfor %}
+                        {% endif %}
                     </tbody>
                     <tfoot class="ui right aligned">
                         <tr>
@@ -65,7 +72,7 @@
         Create new admin
     </div>
     <div class="content">
-        <form class="ui form">
+        <form class="ui form" method='POST'>
             <div class="field">
                 <label>Name</label>
                 <div class="ui left icon input">
@@ -110,6 +117,22 @@
         .modal('attach events', '.ui.teal.button.create', 'show')
         .modal('setting', 'transition', 'fade up');
 
+    function setactive(form_id, admin_id) {
+        document.getElementById("action-" + admin_id).value = "activate"
+        var form = document.getElementById(form_id);
+        form.submit();
+    }
+
+    function setsuspend(form_id, admin_id) {
+        document.getElementById("action-" + admin_id).value = "suspend"
+        var form = document.getElementById(form_id);
+        form.submit();
+    }
+    function setdelete(form_id, admin_id) {
+        document.getElementById("action-" + admin_id).value = "delete"
+        var form = document.getElementById(form_id);
+        form.submit();
+    }
 </script>
 
 {% endblock %}

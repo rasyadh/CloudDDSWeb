@@ -60,15 +60,31 @@ class Instance(db.Model):
     instance_id = db.Column(db.String(100), unique=True)
     name = db.Column(db.String(50), nullable=False)
     image_name = db.Column(db.String(100), nullable=False)
+    flavor_vcpu = db.Column(db.String(100), nullable=False)
+    flavor_ram = db.Column(db.String(100), nullable=False)
+    flavor_disk = db.Column(db.String(100), nullable=False)
+    keyname = db.Column(db.String(100), nullable=False)
+    purpose = db.Column(db.String(100), nullable=False)
+    pic_name = db.Column(db.String(100), nullable=False)
+    pic_telp = db.Column(db.String(100), nullable=False)
     status = db.Column(db.Integer, default=1)
+    request_at = db.Column(db.DateTime)
     build_on = db.Column(db.DateTime)
 
-    def __init__(self, user_id=None, instance_id=None,name=None,image_name=None,status=None):
+    def __init__(self, user_id=None, instance_id=None,name=None,image_name=None,flavor_vcpu=None, flavor_ram=None, flavor_disk=None, purpose=None, pic_name=None, pic_telp=None, status=None,request_at=None):
         self.user_id = user_id
         self.instance_id=instance_id
         self.name=name
         self.image_name=image_name
+        self.flavor_vcpu = flavor_vcpu
+        self.flavor_ram = flavor_ram
+        self.flavor_disk = flavor_disk
+        self.keyname = keyname
+        self.purpose = purpose
+        self.pic_name = pic_name
+        self.pic_telp = pic_telp
         self.status=status
+        self.request_at = request_at
         self.build_on = datetime.date.today()
 
     def get_id(self):
@@ -124,3 +140,27 @@ class Request(db.Model):
 
     def __repr__(self):
         return '<Request Instance {0}>'.format(self.name)
+
+class Flavor(db.Model):
+
+    __tablename__ = 'flavors'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50),nullable=False)
+    flavor_id = db.Column(db.String(100),nullable=False)
+    flavor_vcpu = db.Column(db.String(100), nullable=False)
+    flavor_ram = db.Column(db.String(100), nullable=False)
+    flavor_disk = db.Column(db.String(100), nullable=False)
+
+    def __init__(self, name=None, flavor_id=None, flavor_ram=None, flavor_disk=None,flavor_vcpu=None):
+        self.name = name
+        self.flavor_id = flavor_id
+        self.flavor_ram = flavor_ram
+        self.flavor_disk = flavor_disk
+        self.flavor_vcpu = flavor_vcpu
+
+    def get_id(self):
+        return self.id
+
+    def __repr__(self):
+        return '<User {0}>'.format(self.name)

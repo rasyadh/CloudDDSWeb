@@ -61,33 +61,34 @@
             </div>
         </div>
     </div>
+</div>
 
-    <div class="ui vertical stripe apps segment" ng-controller="AppslayananController as alCtrl">
-        <div class="ui stackable grid container">
-            <div class="row">
-                <div class="column">
-                    <h3 class="ui header">Apps</h3>
-                    <p>Didukung arsitektur terdistribusi dengan menggunakan teknologi terkini, membuat layanan infrastruktur
-                        CloudDDS menjadi pilihan tepat bagi Anda yang membutuhkan sumber daya komputasi untuk membangun aplikasi,
-                        menyimpan berkas, atau mempersiapkan arsitektur sistem sesuai kebutuhan.</p>
-                </div>
+<div class="ui vertical stripe apps segment" ng-controller="AppslayananController as alCtrl">
+    <div class="ui stackable grid container">
+        <div class="row">
+            <div class="column">
+                <h3 class="ui header">Apps</h3>
+                <p>Didukung arsitektur terdistribusi dengan menggunakan teknologi terkini, membuat layanan infrastruktur CloudDDS
+                    menjadi pilihan tepat bagi Anda yang membutuhkan sumber daya komputasi untuk membangun aplikasi, menyimpan
+                    berkas, atau mempersiapkan arsitektur sistem sesuai kebutuhan.</p>
             </div>
-            <div class="row">
-                <div class="column">
-                    <div class="ui teal basic button">One Click Apps</div>
-                </div>
+        </div>
+        <div class="row">
+            <div class="column">
+                <div class="ui teal basic button">One Click Apps</div>
             </div>
-            <div class="row">
-                <div class="ui four column grid">
-                    <div class="column" ng-repeat="appl in alCtrl.lApps">
-                        <div class="ui center aligned segment">
-                            <i class="linux icon"></i></br>
-                            <span>{{ '{{ appl.nama }}' }}</span>
-                        </div>
+        </div>
+        <div class="row">
+            <div class="ui four column grid">
+                <div class="column" ng-repeat="appl in alCtrl.lApps">
+                    <div class="ui center aligned segment">
+                        <i class="linux icon"></i></br>
+                        <span>{{ '{{ appl.nama }}' }}</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    {% endblock %}
+{% endblock %}
