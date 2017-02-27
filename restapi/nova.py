@@ -104,7 +104,7 @@ class nova():
 		self.post_data = json.dumps(self.data)
 
 		self.urlJSON['url'] = self.urlJSON['url']+"/servers"
-		r = self.postRequest(self.urlJSON['url'],str(self.headJSON),self.post_data)
+		r = self.postRequest(self.urlJSON['url'],str(self.headJSON),str(self.post_data))
 		respJSON = r.text
 
 		#print(respJSON)
@@ -156,6 +156,19 @@ class nova():
 		self.post_data = json.dumps(self.data)
 		r = self.postRequest(self.urlJSON['url'],str(self.headJSON),str(self.post_data))
 
+		respJSON = r.text
+
+		return respJSON
+
+	def serverDelete(self,server_id):
+		self.urlJSON = json.loads(self.getUrl())
+
+		self.headers['Content-Type'] = 'application/json'
+		self.headers['X-Auth-Token'] = self.urlJSON['x-token']
+		self.headJSON = json.dumps(self.headers)
+
+		self.urlJSON['url'] = self.urlJSON['url']+"/servers/"+str(server_id)
+		r = self.delRequest(self.urlJSON['url'],str(self.headJSON),self.get_param)
 		respJSON = r.text
 
 		return respJSON

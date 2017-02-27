@@ -54,7 +54,7 @@
                                 {% endif %}
                                 <td>dd/mm/yyyy</td>
                                 {% if server.instance_id %}
-                                <td><a class="ui teal button" href="/manage/instance?id={{ server.instance_id }}">Manage Instance</a></td>
+                                <td><a class="ui teal button" href="/manage/instance/{{ server.instance_id }}">Manage Instance</a></td>
 
                                 {% else %}
                                 <td><a class="ui teal button disabled" disabled href="/manage/instance">Manage Instance</a></td>

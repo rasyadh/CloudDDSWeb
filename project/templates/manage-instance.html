@@ -22,15 +22,19 @@
                     </tr>
                     <tr>
                         <td>Request Date</td>
-                        <td>...</td>
+                        <td>{{ serverins.request_at }}</td>
                     </tr>
                     <tr>
                         <td>Approval Date</td>
-                        <td>...</td>
+                        <td>{{ serverins.build_on }}</td>
                     </tr>
                     <tr>
                         <td>PIC Name</td>
-                        <td>...</td>
+                        <td>{{ serverins.pic_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>PIC Telp</td>
+                        <td>{{ serverins.pic_telp }}</td>
                     </tr>
                     <tr>
                         <td>Key Name</td>
@@ -42,8 +46,13 @@
             <table class="ui teal table">
                 <tbody>
                     <tr>
-                        <td>Open Console</td>
-                        <td><a class="ui teal button" href="/manage/instance" target="_blank">Console</a></td>
+                        {% if console['console']['url'] is none %}
+                            <td>Console Unavailable</td>
+                            <td><a class="ui teal button" disabled target="_blank">Console</a></td>
+                        {% else %}
+                            <td>Open Console</td>
+                            <td><a class="ui teal button" href="{{ console['console']['url'] }}" target="_blank">Console</a></td>
+                        {% endif %}
                     </tr>
                     <tr>
                         <td>Scale Up Instance</td>
@@ -60,8 +69,8 @@
             <table class="ui teal table">
                 <thead>
                     <tr>
-                        <th>Operating System : </th>
-                        <th>Uptime : </th>
+                        <th>Operating System : {{ serverins.image_name }}</th>
+                        <th>Uptime : {{ server['server']['OS-SRV-USG:launched_at'] }}</th>
                     </tr>
                 </thead>
             </table>
@@ -69,7 +78,7 @@
             <table class="ui teal fixed table">
                 <thead class="ui center aligned">
                     <tr>
-                        <th>CPU</th>
+                        <th>CPU Uptime</th>
                         <th>RAM</th>
                         <th>Storage</th>
                     </tr>
@@ -77,7 +86,16 @@
                 <tbody>
                     <tr>
                         <td>
-                            <canvas id="cpu_chart"></canvas>
+                            <div class="ui center aligned container">
+                                <div class="ui statistic">
+                                    <div class="value">
+                                        {{ diagnostics["cpu0_time"]/1000000000 }}
+                                    </div>
+                                    <div class="label">
+                                        Second
+                                    </div>
+                                </div>
+                            </div>
                         </td>
                         <td>
                             <canvas id="ram_chart"></canvas>
@@ -144,46 +162,23 @@
         <p>VM akan di non-aktifkan dan tidak dapat digunakan lagi.</p>
     </div>
     <div class="actions">
-        <form class="ui form" method="POST" action="">
-            <button class="ui red cancel button">Batal</button>
-            <button class="ui teal ok button deactive" type="submit" name="deactivate" value="deactivate">Ya</button>
+        <form id="form-delete" class="ui form" method="POST">
+            <input id="action" name="action" hidden value="delete">
+            <button class="ui teal cancel button">Batal</button>
+            <button class="ui red ok button submit" onclick="submit('form-delete')">Ya</button>
         </form>
     </div>
 </div>
 
 <script>
+
+    function submit(form_id){
+        alert(form_id)
+    };
+
     $('.menu.computes .item')
         .tab()
         ;
-
-    var cpu_pie = document.getElementById("cpu_chart").getContext("2d");
-    var cpu_chart = new Chart(cpu_pie, {
-        type: 'pie',
-        data: {
-            labels: [
-                "CPU Usage",
-                "CPU Usage"
-            ],
-            datasets: [
-                {
-                    label: "%",
-                    {% set x = 50 %}
-                    {% set total = 100 %}
-                    data: [{{x}},{{total-x}}],
-                    backgroundColor: [
-                        "#00B5AD",
-                        "#A0A0A0"
-                    ]
-                }
-            ]
-        },
-        options: {
-            animation: {
-                animateScale: true
-            },
-            responsive: true
-        }
-    });
 
     var ram_pie = document.getElementById("ram_chart").getContext("2d");
     var ram_chart = new Chart(ram_pie, {
@@ -195,8 +190,8 @@
             ],
             datasets: [
                 {
-                    label: 'GB',
-                    data: [12, 20],
+                    label: 'MB',
+                    data: [{{ (diagnostics["memory-actual"] - diagnostics["memory-unused"])/1024 }},{{diagnostics["memory-unused"]/1024}}],
                     backgroundColor: [
                         "#00B5AD",
                         "#A0A0A0"
@@ -240,7 +235,7 @@
     });
 
     $('.ui.scale.modal')
-        .modal('attach events', '.ui.submit.button.scale', 'show')
+        .modal('attach events', '.ui.button.scale', 'show')
         .modal('setting', 'transition', 'fade up');
 
     $(function () {

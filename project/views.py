@@ -286,7 +286,6 @@ def create_instance():
     neutron = neutronapi()
 
     if request.method == 'POST':
-        try:
             if request.form['flavor_type'] == "custom":
                 imageRef = request.form['imageRef']
                 availability_zone = request.form['availability_zone']
@@ -376,8 +375,6 @@ def create_instance():
                 send_email("d4tiajoss@gmail.com",subject,html)
 
             return redirect(url_for('computes'))
-        except:
-            return "Bad Parameter"
     else:
         flavorJSON = nova.flavorList(0)
         flavorJSON = json.loads(flavorJSON)
@@ -435,25 +432,38 @@ def request_flav():
     users = User.query.filter_by(id=session['user_id']).first()
     return render_template('request.html',users=users)
 
-@app.route('/manage/instance',methods=["GET"])
-def manage_instance():
+@app.route('/manage/instance/<server_id>',methods=["GET","POST"])
+@app.route('/manage/instance/<server_id>/',methods=["GET","POST"])
+def manage_instance(server_id):
+    nova = novaapi()
     users = User.query.filter_by(id=session['user_id']).first()
-    if request.method == "GET":
-        server_id = request.args.get('id')
-        if server_id is None:
-            abort(404)
-        else:
-            nova = novaapi()
-            respJSON = nova.serverList(server_id)
-            server = json.loads(respJSON)
-            respJSON = nova.serverConsole(server_id)
-            console = json.loads(respJSON)
-            return render_template('manage-instance.html',users=users, server=server, console=console)
+    
+    if request.method == "POST":
+        if request.form['action'] == "delete":
+            respJSON = nova.serverDelete(server_id)
+            serverins = Instance.query.filter_by(instance_id=server_id).first()
+
+            db.session.delete(serverins)
+            db.session.commit()
+            return redirect(url_for('computes'))            
+
+    serverins = Instance.query.filter_by(instance_id=server_id).order_by(Instance.status).first()
+
+    if serverins is None:
+        abort(404)
+    else:
+        respJSON = nova.serverList(server_id)
+        server = json.loads(respJSON)
+        respJSON = nova.serverConsole(server_id)
+        console = json.loads(respJSON)
+        diagnostics = nova.serverDiagnostics(server_id)
+        diagnostics = json.loads(diagnostics)
+        return render_template('manage-instance.html',users=users, server=server, console= console,serverins = serverins, diagnostics = diagnostics)
 
     # html = render_template('email/deletevm-email.html', users=users)
     # subject = "Request Delete VM"
     # send_email("d4tiajoss@gmail.com",subject,html)
-    return render_template('manage-instance.html',users=users)
+
 
 # Client Side --- ADMIN
 @app.route('/admin')
@@ -515,7 +525,7 @@ def manage_request():
             resp = json.loads(respJSON)
 
             create = Request.query.filter_by(id=request.form['request-id']).first()
-            users = User.query.filter_by(id=create.owner_id).first()
+            users = User.query.filter_by(id=int(create.owner_id)).first()
 
             ins = Instance(
                 user_id = create.owner_id,
@@ -666,6 +676,17 @@ def serverListDetail(server_id):
     nova = novaapi()
     respJSON = nova.serverList(server_id)
 
+    return respJSON
+
+@app.route('/restapi/nova/server/delete/<server_id>')
+@app.route('/restapi/nova/server/delete/<server_id>/')
+def serverDelete(server_id):
+    nova = novaapi()
+    respJSON = nova.serverDelete(server_id)
+    serverins = Instance.query.filter_by(instance_id=server_id).order_by(Instance.status).first()
+
+    db.session.delete(serverins)
+    db.commit
 
     return respJSON
 
