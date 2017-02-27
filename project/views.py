@@ -33,6 +33,15 @@ def admin_required(admin):
             return redirect(url_for('index'))
     return wrap
 
+def superadmin_required(superadmin):
+    @wraps(superadmin)
+    def wrap(*args, **kwargs):
+        if 'superadmin' in session:
+            return superadmin(*args,**kwargs)
+        else:
+            return abort(404)
+    return wrap
+
 @app.route('/logout')
 def logout():
     session.pop('logged_in',None)
@@ -71,6 +80,12 @@ def login():
                     elif encrypt.check_password_hash(users.password,request.form['password']) and users.role == 1:
                         session['admin_in'] = True
                         session['admin_id'] = users.id
+                        return redirect(url_for('admin_page'))
+
+                    elif encrypt.check_password_hash(users.password,request.form['password']) and users.role == 2:
+                        session['admin_in'] = True
+                        session['admin_id'] = users.id
+                        session['superadmin'] = True
                         return redirect(url_for('admin_page'))
 
                     else :
@@ -440,7 +455,11 @@ def admin_page():
 @admin_required
 def manage_resource():
     admin = User.query.filter_by(id=session['admin_id']).first()
-    return render_template('admin/managing-resource.html',admin=admin)
+    nova = novaapi()
+
+    flavorJSON = nova.flavorList(0)
+    flavorJSON = json.loads(flavorJSON)
+    return render_template('admin/managing-resource.html',admin=admin,flavorlist=flavorJSON)
 
 @app.route('/admin/manage-user',methods=['GET','POST'])
 @admin_required
@@ -491,7 +510,16 @@ def manage_request():
                 instance_id = resp['server']['id'],
                 name = create.name,
                 image_name = create.image_name,
-                status = 1
+                flavor_vcpu=create.flavor_vcpu,
+                flavor_ram=create.flavor_ram,
+                flavor_disk=create.flavor_disk,
+                keyname=create.keyname,
+                purpose=create.purpose,
+                pic_name=create.pic_name,
+                pic_telp=create.pic_telp,
+                status = 1,
+                request_at=create.request_at
+
             )
             create.status = 1
             db.session.add(ins)
@@ -520,11 +548,24 @@ def manage_request():
 
     return render_template('admin/managing-request.html',admin=admin,request_users=request_users)
 
-@app.route('/admin/manage-admin')
-@admin_required
+@app.route('/admin/manage-admin',methods=['GET','POST'])
+@superadmin_required
 def manage_admin():
     admin = User.query.filter_by(id=session['admin_id']).first()
     alladmin = User.query.filter_by(role=1).all()
+    if request.method == 'POST':
+        if request.form['action'] == "activate" :
+            users = User.query.filter_by(id=request.form['admin-id']).first()
+            users.status = 1
+            db.session.commit()
+        elif request.form['action'] == "suspend":
+            users = User.query.filter_by(id=request.form['admin-id']).first()
+            users.status = 2
+            db.session.commit()
+        elif request.form['action'] == "delete":
+            users = User.query.filter_by(id=request.form['admin-id']).first()
+            users.status = 3
+            db.session.commit()
     return render_template('admin/managing-admin.html',admin=admin,alladmin=alladmin)
 
 # error handler
