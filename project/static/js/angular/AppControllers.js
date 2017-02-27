@@ -149,88 +149,28 @@ app.controller('InfobantuanController', function ($scope, $http) {
         },
         {
             title: "Mekanisme request VM ?",
-            steps: [
-                {
-                    desc: "Login"
-                },
-                {
-                    desc: "Pilih Create VM"
-                },
-                {
-                    desc: "Pilih sesuai kebutuhan"
-                },
-                {
-                    desc: "Verifikasi lewat email"
-                },
-                {
-                    desc: "VM Aktif"
-                }
-            ]
+            size: "huge",
+            steps: "../static/img/faq/request-vm.png"
         },
         {
             title: "Cara Mengakses VM ?",
-            steps: [
-                {
-                    desc: "Login"
-                },
-                {
-                    desc: "Buka VM lewat IP"
-                },
-                {
-                    desc: "Login"
-                }
-            ]
+            size: "huge",
+            steps: "../static/img/faq/request-vm.png"
         },
         {
             title: "Cara Memanajemen VM ?",
-            steps: [
-                {
-                    desc: "Login"
-                },
-                {
-                    desc: "Pilih Manage VM"
-                },
-                {
-                    desc: "Manajemen VM sesuai kebutuhan"
-                }
-            ]
+            size: "large",
+            steps: "../static/img/faq/manajemen-vm.png"
         },
         {
             title: "Cara melakukan upgrade VM (Scale Up) ?",
-            steps: [
-                {
-                    desc: "Login"
-                },
-                {
-                    desc: "Pilih Manage VM"
-                },
-                {
-                    desc: "Pilih Scale Up"
-                },
-                {
-                    desc: "Masukkan spesifikasi request"
-                },
-                {
-                    desc: "Email dan Telefon Konfirmasi"
-                },
-                {
-                    desc: "VM ter-upgrade"
-                }
-            ]
+            size: "huge",
+            steps: "../static/img/faq/scaleup-vm.png"
         },
         {
             title: "Cara menghapus VM ?",
-            steps: [
-                {
-                    desc: "Login"
-                },
-                {
-                    desc: "Pilih Manage VM"
-                },
-                {
-                    desc: "Pilih Delete VM"
-                }
-            ]
+            size: "huge",
+            steps: "../static/img/faq/delete-vm.png"
         },
         {
             title: "Setting username dan password VM ?",
