@@ -420,9 +420,21 @@ def request_flav():
     users = User.query.filter_by(id=session['user_id']).first()
     return render_template('request.html',users=users)
 
-@app.route('/manage/instance')
+@app.route('/manage/instance',methods=["GET"])
 def manage_instance():
     users = User.query.filter_by(id=session['user_id']).first()
+    if request.method == "GET":
+        server_id = request.args.get('id')
+        if server_id is None:
+            abort(404)
+        else:
+            nova = novaapi()
+            respJSON = nova.serverList(server_id)
+            server = json.loads(respJSON)
+            respJSON = nova.serverConsole(server_id)
+            console = json.loads(respJSON)
+            return render_template('manage-instance.html',users=users, server=server, console=console)
+
     # html = render_template('email/deletevm-email.html', users=users)
     # subject = "Request Delete VM"
     # send_email("d4tiajoss@gmail.com",subject,html)
@@ -613,6 +625,23 @@ def serverListDetail(server_id):
     nova = novaapi()
     respJSON = nova.serverList(server_id)
 
+
+    return respJSON
+
+@app.route('/restapi/nova/server/diagnostics/<server_id>')
+@app.route('/restapi/nova/server/diagnostics/<server_id>/')
+def serverDiagnostics(server_id):
+    nova = novaapi()
+    respJSON = nova.serverDiagnostics(server_id)
+
+
+    return respJSON
+
+@app.route('/restapi/nova/server/consoles/<server_id>')
+@app.route('/restapi/nova/server/consoles/<server_id>/')
+def serverConsoles(server_id):
+    nova = novaapi()
+    respJSON = nova.serverConsole(server_id)
 
     return respJSON
 
