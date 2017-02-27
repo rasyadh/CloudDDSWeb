@@ -60,22 +60,34 @@
             <table class="ui teal fixed table center aligned">
                 <thead>
                     <th>Name</th>
-                    <th>CPU</th>
+                    <th>vCPU</th>
                     <th>RAM</th>
                     <th>Storage</th>
+                    <th>Status</th>
                     <th>Action</th>
                 </thead>
                 <tbody>
+                    {% if flavorlist %}
+                    {% for flavor in flavorlist['flavors'] %}
                     <tr>
-                        <td>Small</td>
-                        <td>1 CPU</td>
-                        <td>1 GB</td>
-                        <td>20 GB</td>
+                        <td>{{ flavor['name'] }}</td>
+                        <td>{{ flavor['vcpus'] }} vCPU</td>
+                        {% if flavor['ram']|int >= 1024 %}
+                        <td>{{ ((flavor['ram']|int/1024)|string).rstrip(".0") }} GB</td>
+                        {% else %}
+                        <td>{{ flavor['ram']|int }}MB RAM</td>
+                        {% endif %}
+                        <td>{{ flavor['disk'] }}GB Disk</td>
+                        <td>Activated</td>
+                        <td>-</td>
                         <td>
-                            <button class="ui teal button setas">Set as default</button>
+                            <button class="ui teal button setas">Set as Default</button>
+                            <button class="ui teal button setas">Deactivate</button>
                             <i class="teal checkmark icon"></i>
                         </td>
                     </tr>
+                    {% endfor %}
+                    {% endif %}
                 </tbody>
             </table>
         </div>
