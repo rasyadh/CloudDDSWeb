@@ -20,6 +20,7 @@ class nova():
 	OS_SCH_HNT = {}
 	returnJSON = ""
 	responsepacket = {}
+	console = {}
 
 	def _init_(self):
 		self.token = 190997 #not important
@@ -128,8 +129,36 @@ class nova():
 
 		return respJSON
 
+	def serverDiagnostics(self,server_id):
+		self.urlJSON = json.loads(self.getUrl())
 
+		self.headers['Content-Type'] = 'application/json'
+		self.headers['X-Auth-Token'] = self.urlJSON['x-token']
+		self.headJSON = json.dumps(self.headers)
 
+		self.urlJSON['url'] = self.urlJSON['url']+"/servers/"+server_id + "/diagnostics"
+		r = self.getRequest(self.urlJSON['url'],str(self.headJSON),self.get_param)
+
+		respJSON = r.text
+
+		return respJSON
+
+	def serverConsole(self,server_id):
+		self.urlJSON = json.loads(self.getUrl())
+
+		self.headers['Content-Type'] = 'application/json'
+		self.headers['X-Auth-Token'] = self.urlJSON['x-token']
+		self.headJSON = json.dumps(self.headers)
+
+		self.urlJSON['url'] = self.urlJSON['url']+"/servers/"+server_id + "/action"
+		self.console['type'] = "novnc"
+		self.data['os-getVNCConsole'] = self.console
+		self.post_data = json.dumps(self.data)
+		r = self.postRequest(self.urlJSON['url'],str(self.headJSON),str(self.post_data))
+
+		respJSON = r.text
+
+		return respJSON
 
 	def keyList(self,keyname):
 		#self.urlJSON = self.getUrl()

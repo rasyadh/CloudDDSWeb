@@ -14,11 +14,11 @@
                 <tbody>
                     <tr>
                         <td>Hostname</td>
-                        <td>...</td>
+                        <td>{{server['server']['name']}}</td>
                     </tr>
                     <tr>
                         <td>IP Address</td>
-                        <td>...</td>
+                        <td>{{server['server']['addresses']['external_network'][0]['addr']}}</td>
                     </tr>
                     <tr>
                         <td>Request Date</td>
@@ -32,6 +32,10 @@
                         <td>PIC Name</td>
                         <td>...</td>
                     </tr>
+                    <tr>
+                        <td>Key Name</td>
+                        <td>{{server['server']['key_name']}}</td>
+                    </tr>
                 </tbody>
             </table>
             </br>
@@ -39,15 +43,15 @@
                 <tbody>
                     <tr>
                         <td>Open Console</td>
-                        <td><button class="ui teal button">Console</button></td>
+                        <td><a class="ui teal button" href="/manage/instance" target="_blank">Console</a></td>
                     </tr>
                     <tr>
                         <td>Scale Up Instance</td>
-                        <td><button class="ui blue button">Scale Up</button></td>
+                        <td><button class="ui blue button scale">Scale Up</button></td>
                     </tr>
                     <tr>
                         <td>Delete Instance</td>
-                        <td><button class="ui red button">Delete</button></td>
+                        <td><button class="ui red button deletevm">Delete</button></td>
                     </tr>
                 </tbody>
             </table>
@@ -88,6 +92,65 @@
     </div>
 </div>
 
+<div class="ui scale modal">
+    <i class="close icon"></i>
+    <div class="header">
+        Request Scale Up VM
+    </div>
+    <div class="content">
+        <div class="ui form">
+            <div class="field" id="slider">
+                <label for="custom_vcpu">CPU : </label>
+                <input type="text" id="custom_vcpu" readonly style="border:0; color:#00b5ad; font-weight:bold;">
+                <div id="slider-range-max-vcpu"></div>
+
+                <div class="ui grid" style="margin-top: .5em;">
+                    <div class="left floated wide column">1vCPU</div>
+                    <div class="right floated wide column">2vCPU</div>
+                </div>
+            </div>
+            <div class="field" id="slider">
+                <label for="custom_memory">Memory : </label>
+                <input type="text" id="custom_memory" readonly style="border:0; color:#00b5ad; font-weight:bold;">
+                <div id="slider-range-max-memory"></div>
+                <div class="ui grid" style="margin-top: .5em;">
+                    <div class="left floated six wide column">1 GB</div>
+                    <div class="left floated five wide column" style="margin-left: 2em;">2 GB</div>
+                    <div class="right floated wide column">4 GB</div>
+                </div>
+            </div>
+            <div class="field" id="slider">
+                <label for="custom_storage">Storage : </label>
+                <input type="text" id="custom_storage" readonly style="border:0; color:#00b5ad; font-weight:bold;">
+                <div id="slider-range-storage"></div>
+                <div class="ui grid" style="margin-top: .5em;">
+                    <div class="left floated six wide column">20GB</div>
+                    <div class="left floated five wide column" style="margin-left: 2em;">40GB</div>
+                    <div class="right floated wide column">80GB</div>
+                </div>
+            </div>
+            </br>
+            <button class="ui fluid teal submit button scale" type="submit" name="btn" value="scale">Request</button>
+        </div>
+    </div>
+</div>
+
+<div class="ui deletevm modal">
+    <i class="close icon"></i>
+    <div class="header">
+        Delete VM
+    </div>
+    <div class="content">
+        <p>VM akan di non-aktifkan dan tidak dapat digunakan lagi.</p>
+    </div>
+    <div class="actions">
+        <form class="ui form" method="POST" action="">
+            <button class="ui red cancel button">Batal</button>
+            <button class="ui teal ok button deactive" type="submit" name="deactivate" value="deactivate">Ya</button>
+        </form>
+    </div>
+</div>
+
 <script>
     $('.menu.computes .item')
         .tab()
@@ -98,12 +161,15 @@
         type: 'pie',
         data: {
             labels: [
-                "CPU"
+                "CPU Usage",
+                "CPU Usage"
             ],
             datasets: [
                 {
-                    label: '%',
-                    data: 100,
+                    label: "%",
+                    {% set x = 50 %}
+                    {% set total = 100 %}
+                    data: [{{x}},{{total-x}}],
                     backgroundColor: [
                         "#00B5AD",
                         "#A0A0A0"
@@ -130,7 +196,7 @@
             datasets: [
                 {
                     label: 'GB',
-                    data: [1, 3],
+                    data: [12, 20],
                     backgroundColor: [
                         "#00B5AD",
                         "#A0A0A0"
@@ -157,7 +223,7 @@
             datasets: [
                 {
                     label: 'GB',
-                    data: [40, 60],
+                    data: [20, 12],
                     backgroundColor: [
                         "#00B5AD",
                         "#A0A0A0"
@@ -172,6 +238,59 @@
             responsive: true
         }
     });
+
+    $('.ui.scale.modal')
+        .modal('attach events', '.ui.submit.button.scale', 'show')
+        .modal('setting', 'transition', 'fade up');
+
+    $(function () {
+        var objCpu = [1, 2];
+        $("#slider-range-max-vcpu").slider({
+            range: "max",
+            min: 1,
+            max: objCpu.length,
+            value: 1,
+            slide: function (event, ui) {
+                $("#custom_vcpu").val(objCpu[ui.value - 1]);
+                $("#custom_vcpu_form").val(objCpu[ui.value - 1]);
+            }
+        });
+        $("#custom_vcpu").val(objCpu[$("#slider-range-max-vcpu").slider("value") - 1]);
+    });
+
+    $(function () {
+        var objMemory = [1, 2, 4];
+        $("#slider-range-max-memory").slider({
+            range: "max",
+            min: 1,
+            max: objMemory.length,
+            value: 1,
+            slide: function (event, ui) {
+                $("#custom_memory").val(objMemory[ui.value - 1]);
+                $("#custom_memory_form").val(objMemory[ui.value - 1]);
+            }
+        });
+        $("#custom_memory").val(objMemory[$("#slider-range-max-memory").slider("value") - 1]);
+    });
+
+    $(function () {
+        var objStorage = [20, 40, 80];
+        $("#slider-range-storage").slider({
+            range: "max",
+            min: 1,
+            max: objStorage.length,
+            value: 1,
+            slide: function (event, ui) {
+                $("#custom_storage").val(objStorage[ui.value - 1]);
+                $("#custom_storage_form").val(objStorage[ui.value - 1]);
+            }
+        });
+        $("#custom_storage").val(objStorage[$("#slider-range-storage").slider("value") - 1]);
+    });
+
+    $('.ui.deletevm.modal')
+        .modal('attach events', '.ui.button.deletevm', 'show')
+        .modal('setting', 'transition', 'fade up');
 
 </script>
 
