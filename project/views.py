@@ -379,13 +379,14 @@ def create_instance():
         except:
             return "Bad Parameter"
     else:
-        flavorJSON = nova.flavorList(0)
-        flavorJSON = json.loads(flavorJSON)
+        # flavorJSON = nova.flavorList(0)
+        # flavorJSON = json.loads(flavorJSON)
+        flavorlist = Flavor.query.filter_by(status="1").all()
         keyJSON = nova.keyList("yj34f8r7j34t79j38jgygvf3")
         keyJSON = json.loads(keyJSON)
         imageJSON = nova.imageList(0)
         imageJSON = json.loads(imageJSON)
-        return render_template('create-instance.html',flavorlist = flavorJSON,keylist=keyJSON,imagelist=imageJSON,users=users)
+        return render_template('create-instance.html',flavorlist=flavorlist,keylist=keyJSON,imagelist=imageJSON,users=users)
 
     #return str(respJSON['flavors'])
 
@@ -451,15 +452,40 @@ def manage_instance():
 def admin_page():
     return redirect(url_for('manage_resource'))
 
-@app.route('/admin/manage-resource')
+@app.route('/admin/manage-resource',methods=['GET','POST'])
 @admin_required
 def manage_resource():
-    admin = User.query.filter_by(id=session['admin_id']).first()
-    nova = novaapi()
 
-    flavorJSON = nova.flavorList(0)
-    flavorJSON = json.loads(flavorJSON)
-    return render_template('admin/managing-resource.html',admin=admin,flavorlist=flavorJSON)
+    admin = User.query.filter_by(id=session['admin_id']).first()
+    flavordefault = Flavor.query.all()
+    nova = novaapi()
+    if request.method == 'POST':
+        if request.form['action'] == "Create":
+
+            flav = Flavor(
+                alias=request.form['flavor-alias'],
+                flavor_id=request.form['flavor-id'],
+                flavor_vcpu=request.form['flavor-vcpu'],
+                flavor_ram=request.form['flavor-ram'],
+                flavor_disk=request.form['flavor-disk']
+            )
+
+            db.session.add(flav)
+            db.session.commit()
+            return redirect(url_for('manage_resource'))
+
+        elif request.form['action'] == "Deactivate":
+            flav = Flavor.query.filter_by(flavor_id=request.form['flav-id']).first()
+            db.session.delete(flav)
+            db.session.commit()
+            return redirect(url_for('manage_resource'))
+
+        else:
+            abort(403)
+    else:
+        flavorJSON = nova.flavorList(0)
+        flavorJSON = json.loads(flavorJSON)
+        return render_template('admin/managing-resource.html',admin=admin,flavorlist=flavorJSON,flavordefault=flavordefault)
 
 @app.route('/admin/manage-user',methods=['GET','POST'])
 @admin_required

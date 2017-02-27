@@ -64,28 +64,55 @@
                     <th>RAM</th>
                     <th>Storage</th>
                     <th>Status</th>
+                    <th>Alias</th>
                     <th>Action</th>
                 </thead>
                 <tbody>
                     {% if flavorlist %}
                     {% for flavor in flavorlist['flavors'] %}
-                    <tr>
-                        <td>{{ flavor['name'] }}</td>
-                        <td>{{ flavor['vcpus'] }} vCPU</td>
-                        {% if flavor['ram']|int >= 1024 %}
-                        <td>{{ ((flavor['ram']|int/1024)|string).rstrip(".0") }} GB</td>
-                        {% else %}
-                        <td>{{ flavor['ram']|int }}MB RAM</td>
-                        {% endif %}
-                        <td>{{ flavor['disk'] }}GB Disk</td>
-                        <td>Activated</td>
-                        <td>-</td>
-                        <td>
-                            <button class="ui teal button setas">Set as Default</button>
-                            <button class="ui teal button setas">Deactivate</button>
-                            <i class="teal checkmark icon"></i>
-                        </td>
-                    </tr>
+
+                        <tr>
+                            <td>{{ flavor['name'] }}</td>
+                            <td>{{ flavor['vcpus'] }} vCPU</td>
+                            {% if flavor['ram']|int >= 1024 %}
+                            <td>{{ ((flavor['ram']|int/1024)|string).rstrip(".0") }} GB</td>
+                            {% else %}
+                            <td>{{ flavor['ram']|int }}MB RAM</td>
+                            {% endif %}
+                            <td>{{ flavor['disk'] }}GB Disk</td>
+
+                            {% set exists = [] %}
+                            {% if flavordefault %}
+                                    {% for flav in flavordefault %}
+                                        {% if flav.flavor_id == flavor['id'] %}
+                                            {% if exists.append(flav.flavor_id) %}{% endif %}
+                                            {% if exists.append(flav.alias) %}{% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    {% if exists %}
+                                        <td>Activated</td>
+                                        <td>{{exists[1]}}</td>
+                                    {% else %}
+                                        <td>-</td>
+                                        <td>-</td>
+                                    {% endif %}
+                            {% else %}
+                                <td>-</td>
+                                <td>-</td>
+                            {% endif %}
+                            <td>
+                                {%if exists %}
+                                    <form id="form-deactivate-{{exists[0]}}" method='POST'>
+                                    <input type="hidden" id="action-deactivate" name="action" value="">
+                                    <input type="hidden" id="flav-id" name="flav-id" value="">
+                                    <button class="ui blue button delete" onclick="deactivate('{{exists[0]}}')">Deactivate</button>
+                                    </form>
+                                {% else %}
+                                    <button class="ui teal button setas" onclick="setdefault('{{flavor['id']}}','{{flavor['vcpus']}}','{{flavor['ram']}}','{{flavor['disk']}}')">Set as Default</button>
+                                {% endif %}
+                            </td>
+                        </tr>
                     {% endfor %}
                     {% endif %}
                 </tbody>
@@ -119,21 +146,26 @@
         Set default flavor
     </div>
     <div class="content">
-        <form class="ui form">
+        <form id="flavor-default" class="ui form" method="POST">
+            <input type="hidden" id="modal-id" name="flavor-id" value="">
+            <input type="hidden" id="modal-vcpu" name="flavor-vcpu" value="">
+            <input type="hidden" id="modal-ram" name="flavor-ram" value="">
+            <input type="hidden" id="modal-disk" name="flavor-disk" value="">
+            <input type="hidden" id="modal-action" name="action" value="">
             <div class="field">
                 <label>Name Flavor Alias</label>
-                <input type="text" name="alias" placeholder="Nama Alias">
+                <input type="text" name="flavor-alias" placeholder="Nama Alias">
             </div>
         </form>
     </div>
     <div class="actions">
-        <div class="ui red cancel button">
-            Cancel
-        </div>
-        <div class="ui teal ok right labeled icon button">
-            Create
-            <i class="checkmark icon"></i>
-        </div>
+            <button class="ui red cancel button" oncliick="process('cancel')">
+                Cancel
+            </button>
+            <button class="ui teal ok right labeled icon button" onclick="process('create')">
+                Create
+                <i class="checkmark icon"></i>
+            </button>
     </div>
 </div>
 
@@ -227,6 +259,26 @@
         }
     });
 
+    function setdefault(id,vcpu,ram,disk){
+        document.getElementById("modal-id").value= id;
+        document.getElementById("modal-vcpu").value= vcpu;
+        document.getElementById("modal-ram").value= ram;
+        document.getElementById("modal-disk").value= disk;
+    }
+    function process(status){
+        if (status == "create"){
+            document.getElementById('modal-action').value = "Create"
+        }
+        var form = document.getElementById('flavor-default');
+        form.submit();
+    }
+    function deactivate(id){
+        document.getElementById("action-deactivate").value = "Deactivate"
+        document.getElementById("flav-id").value = id;
+        var form = document.getElementById("form-deactivate-"+id);
+        form.submit();
+
+    }
 </script>
 
 {% endblock %}

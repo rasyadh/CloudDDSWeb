@@ -71,7 +71,7 @@ class Instance(db.Model):
     request_at = db.Column(db.DateTime)
     build_on = db.Column(db.DateTime)
 
-    def __init__(self, user_id=None, instance_id=None,name=None,image_name=None,flavor_vcpu=None, flavor_ram=None, flavor_disk=None, purpose=None, pic_name=None, pic_telp=None, status=None,request_at=None):
+    def __init__(self, user_id=None, instance_id=None,name=None,image_name=None,flavor_vcpu=None, flavor_ram=None, flavor_disk=None, keyname=None, purpose=None, pic_name=None, pic_telp=None, status=None,request_at=None):
         self.user_id = user_id
         self.instance_id=instance_id
         self.name=name
@@ -146,18 +146,21 @@ class Flavor(db.Model):
     __tablename__ = 'flavors'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50),nullable=False)
+    alias = db.Column(db.String(50),nullable=False)
     flavor_id = db.Column(db.String(100),nullable=False)
     flavor_vcpu = db.Column(db.String(100), nullable=False)
     flavor_ram = db.Column(db.String(100), nullable=False)
     flavor_disk = db.Column(db.String(100), nullable=False)
+    status = db.Column(db.String(10),nullable=False,default="1")
 
-    def __init__(self, name=None, flavor_id=None, flavor_ram=None, flavor_disk=None,flavor_vcpu=None):
-        self.name = name
+    def __init__(self, alias=None, flavor_id=None, flavor_vcpu=None, flavor_ram=None, flavor_disk=None):
+        self.alias = alias
         self.flavor_id = flavor_id
+        self.flavor_vcpu = flavor_vcpu
         self.flavor_ram = flavor_ram
         self.flavor_disk = flavor_disk
-        self.flavor_vcpu = flavor_vcpu
+        self.status = "1"
+
 
     def get_id(self):
         return self.id
