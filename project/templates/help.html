@@ -15,16 +15,8 @@
                         <div class="ui header">
                             {{ '{{ info.title }}' }}
                         </div>
-                        <div class="content">
-                            <div class="ui ordered steps">
-                                <div class="step" ng-repeat="stp in info.steps">
-                                    <div class="content">
-                                        <div class="title">{{ '{{ stp.desc }}' }}</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <p>{{ '{{ info.content }}' }}</p>
-                        </div>
+                        <img ng-class="'ui image ' + info.size" ng-src="{{ '{{ info.steps }}'}}">
+                        <p>{{ '{{ info.content }}' }}</p>
                     </div>
                 </div>
             </div>
