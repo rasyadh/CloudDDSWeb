@@ -558,12 +558,41 @@ def nova():
 @app.route('/restapi/nova/server/create/')
 def serverCreate():
     nova = novaapi()
-    name = "Tes-Web"
-    imageRef = "2efaef5b-13d2-439b-bb55-a6e4a3878c2d"
-    flavorRef = "2"
-    key_name = "aziz"
-    networks_uuid = "5eb3b761-4a8e-41b3-a512-b0d9e349f743"
-    availability_zone = "nova"
+    imageRef = request.form['imageRef']
+    availability_zone = request.form['availability_zone']
+    networks_uuid = "417b4cdd-b706-4f6c-8e6e-1b06f58e94c8"
+    key_name = request.form['key_name']
+    name = request.form['name']
+    image_name = request.form['image_name']
+    flavorRef = request.form['flavorRef']
+    size = request.form['size']
+    ram = request.form['ram']
+    cpu = request.form['cpu']
+    purpose = request.form['purpose']
+    pic_name = request.form['pic_name']
+    pic_telp = request.form['pic_telp']
+
+    req = Request(
+            owner_id = session['user_id'],
+            server_id = "",
+            name = name,
+            image_id = imageRef,
+            image_name=image_name,
+            flavor_id = flavorRef,
+            flavor_vcpu = cpu,
+            flavor_ram = ram,
+            flavor_disk = size,
+            network_id = networks_uuid,
+            availability_zone = availability_zone,
+            keyname = key_name,
+            purpose = request.form['purpose'],
+            pic_name = request.form['pic_name'],
+            pic_telp = request.form['pic_telp'],
+            status = 0
+        )
+
+    db.session.add(req)
+    db.session.commit()
 
     respJSON = nova.serverCreate(name,imageRef,flavorRef,availability_zone,key_name,networks_uuid)
 
