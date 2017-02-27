@@ -139,8 +139,8 @@ def registration():
                 confirm_url = myDOMAIN +"registration/activate_account?actemp="+activationcodetmp
                 html = render_template('email/verification-email.html',confirm_url = confirm_url)
                 subject = "Verification Email Cloud Telkom DDS"
-                #send_email(users.email,subject,html)
-                send_email('d4tiajoss@gmail.com',subject,html)
+                send_email(users.email,subject,html)
+                #send_email('d4tiajoss@gmail.com',subject,html)
                 db.session.commit()
 
                 return redirect(url_for('login'))
@@ -212,8 +212,8 @@ def forgot_password():
 
             html = render_template('email/resetpass-email.html',confirm_url = confirm_url, users=users)
             subject = "Request Reset Password Cloud Telkom DDS"
-            #send_email(users.email,subject,html)
-            send_email("gravpokemongo@gmail.com",subject,html)
+            send_email(users.email,subject,html)
+            #send_email("gravpokemongo@gmail.com",subject,html)
     return render_template('forgot-password.html')
 
 @app.route('/forgot_password/')
@@ -365,14 +365,14 @@ def create_instance():
             if request.form['flavor_type'] == "specific":
                 html = render_template('email/requestvm-email.html', users=users)
                 subject = "Request VM will be Processed"
-                #send_email(users.email,subject,html)
-                send_email("d4tiajoss@gmail.com",subject,html)
+                send_email(users.email,subject,html)
+                # send_email("d4tiajoss@gmail.com",subject,html)
 
             else:
                 html = render_template('email/requestvm-email.html', users=users)
                 subject = "Request VM will be Processed"
-                #send_email(users.email,subject,html)
-                send_email("d4tiajoss@gmail.com",subject,html)
+                send_email(users.email,subject,html)
+                # send_email("d4tiajoss@gmail.com",subject,html)
 
             return redirect(url_for('computes'))
     else:
@@ -576,8 +576,8 @@ def manage_request():
 
             html = render_template('email/createdvm-email.html', users=users)
             subject = "VM Successfully Created"
-            #send_email(users.email,subject,html)
-            send_email("d4tiajoss@gmail.com",subject,html)
+            send_email(users.email,subject,html)
+            #send_email("d4tiajoss@gmail.com",subject,html)
 
             return redirect(url_for('manage_request'))
 
@@ -589,8 +589,8 @@ def manage_request():
 
             html = render_template('email/requestvm-decline-email.html', users=users)
             subject = "Declined Request VM"
-            #send_email(users.email,subject,html)
-            send_email("d4tiajoss@gmail.com",subject,html)
+            send_email(users.email,subject,html)
+            #send_email("d4tiajoss@gmail.com",subject,html)
 
             return redirect(url_for('manage_request'))
 
