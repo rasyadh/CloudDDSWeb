@@ -71,11 +71,7 @@ class Instance(db.Model):
     request_at = db.Column(db.DateTime)
     build_on = db.Column(db.DateTime)
 
-<<<<<<< HEAD
-    def __init__(self, user_id=None, instance_id=None,name=None,image_name=None,flavor_vcpu=None, flavor_ram=None, flavor_disk=None,keyname=None, purpose=None, pic_name=None, pic_telp=None, status=None,request_at=None):
-=======
     def __init__(self, user_id=None, instance_id=None,name=None,image_name=None,flavor_vcpu=None, flavor_ram=None, flavor_disk=None, keyname=None, purpose=None, pic_name=None, pic_telp=None, status=None,request_at=None):
->>>>>>> 4020e45604505abe41abf9a09bb99657a9c775ef
         self.user_id = user_id
         self.instance_id=instance_id
         self.name=name
