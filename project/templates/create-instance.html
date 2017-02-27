@@ -54,22 +54,22 @@
                     <div class="ui padded container">
                         <div class="ui four column grid">
                             {% if flavorlist %}
-                                {% for flavor in flavorlist['flavors'] %}
+                                {% for flavor in flavorlist %}
                                 <div class="column">
-                                    <div id="flavor-{{flavor['id']}}" class="ui center aligned segment">
+                                    <div id="flavor-{{flavor.flavor_id}}" class="ui center aligned segment">
                                         <div class="ul list">
-                                            <div class="item">{{ flavor['name'] }}</div>
+                                            <div class="item">{{ flavor.alias }}</div>
                                             <div class="ui divider"></div>
-                                            <div class="item">{{ flavor['vcpus'] }} vCPU</div>
-                                            {% if flavor['ram']|int >= 1024 %}
-                                            <div>{{ ((flavor['ram']|int/1024)|string).rstrip(".0") }} GB of RAM</div>
+                                            <div class="item">{{ flavor.flavor_vcpu }} vCPU</div>
+                                            {% if flavor.flavor_ram|int >= 1024 %}
+                                            <div>{{ ((flavor.flavor_ram|int/1024)|string).rstrip(".0") }} GB of RAM</div>
                                             {% else %}
-                                            <div>{{ flavor['ram']|int }}MB RAM</div>
+                                            <div>{{ flavor.flavor_ram|int }}MB RAM</div>
                                             {% endif %}
-                                            <div>{{ flavor['disk'] }}GB Disk</div>
+                                            <div>{{ flavor.flavor_disk }}GB Disk</div>
                                         </div>
                                         </br>
-                                        <button class="ui fluid teal button" onclick="selectedflavorid('{{flavor['id']}}','{{flavor['disk']}}','{{flavor['ram']}}','{{flavor['vcpus']}}')">Choose</button>
+                                        <button class="ui fluid teal button" onclick="selectedflavorid('{{flavor.flavor_id}}','{{flavor.flavor_disk}}','{{flavor.flavor_ram}}','{{flavor.flavor_vcpu}}')">Choose</button>
                                     </div>
                                 </div>
                                 {% endfor %}
