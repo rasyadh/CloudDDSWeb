@@ -5,7 +5,7 @@ from flask import Flask,flash, request, Response, jsonify, json
 from flask import render_template, url_for, redirect, send_from_directory
 from flask import send_file, make_response, abort, session
 
-from project import app
+from project import app, myDOMAIN
 from project.core   import db, encrypt
 from project.email import send_email
 from restapi.keystone import keystone as keystoneapi
@@ -121,11 +121,11 @@ def registration():
                 db.session.add(users)
                 db.session.add(activationcode)
 
-                confirm_url = "http://10.14.36.100:5000/registration/activate_account?actemp="+activationcodetmp
+                confirm_url = myDOMAIN +"registration/activate_account?actemp="+activationcodetmp
                 html = render_template('email/verification-email.html',confirm_url = confirm_url)
                 subject = "Verification Email Cloud Telkom DDS"
                 #send_email(users.email,subject,html)
-                send_email(users.email,subject,html)
+                send_email('d4tiajoss@gmail.com',subject,html)
                 db.session.commit()
 
                 return redirect(url_for('login'))
@@ -193,7 +193,7 @@ def forgot_password():
             db.session.add(forgot_token)
             db.session.commit()
 
-            confirm_url = "http://localhost:5000/forgot_password/reset_password?tokens="+token
+            confirm_url = myDOMAIN +"forgot_password/reset_password?tokens="+token
 
             html = render_template('email/resetpass-email.html',confirm_url = confirm_url, users=users)
             subject = "Request Reset Password Cloud Telkom DDS"
@@ -265,6 +265,7 @@ def computes():
 @app.route('/manage/create', methods=['GET','POST'])
 @login_required
 def create_instance():
+    users = User.query.filter_by(id=session['user_id']).first()
     nova = novaapi()
     glance = glanceapi()
     neutron = neutronapi()
@@ -347,12 +348,22 @@ def create_instance():
             db.session.add(req)
             db.session.commit()
 
+            if request.form['flavor_type'] == "specific":
+                html = render_template('email/requestvm-email.html', users=users)
+                subject = "Request VM will be Processed"
+                #send_email(users.email,subject,html)
+                send_email("d4tiajoss@gmail.com",subject,html)
+
+            else:
+                html = render_template('email/requestvm-email.html', users=users)
+                subject = "Request VM will be Processed"
+                #send_email(users.email,subject,html)
+                send_email("d4tiajoss@gmail.com",subject,html)
+
             return redirect(url_for('computes'))
         except:
             return "Bad Parameter"
     else:
-        users = User.query.filter_by(id=session['user_id']).first()
-        #ubahteko baris iki
         flavorJSON = nova.flavorList(0)
         flavorJSON = json.loads(flavorJSON)
         keyJSON = nova.keyList("yj34f8r7j34t79j38jgygvf3")
@@ -360,18 +371,14 @@ def create_instance():
         imageJSON = nova.imageList(0)
         imageJSON = json.loads(imageJSON)
         return render_template('create-instance.html',flavorlist = flavorJSON,keylist=keyJSON,imagelist=imageJSON,users=users)
-    #return str(respJSON['flavors'])
-@app.route('/manage/images')
-@login_required
-def images():
-    users = User.query.filter_by(id=session['user_id']).first()
-    return render_template('images.html',users=users)
 
-@app.route('/manage/network')
+    #return str(respJSON['flavors'])
+
+@app.route('/manage/help')
 @login_required
-def network():
+def help():
     users = User.query.filter_by(id=session['user_id']).first()
-    return render_template('network.html',users=users)
+    return render_template('help.html',users=users)
 
 @app.route('/manage/settings',methods=["GET","POST"])
 @login_required
@@ -403,6 +410,7 @@ def settings():
             users.status = 2
             db.session.commit()
             message = "Account telah diaktifasi"
+            return redirect(url_for('logout'))
 
     return render_template('settings.html',users=users,message=message)
 
@@ -415,6 +423,9 @@ def request_flav():
 @app.route('/manage/instance')
 def manage_instance():
     users = User.query.filter_by(id=session['user_id']).first()
+    # html = render_template('email/deletevm-email.html', users=users)
+    # subject = "Request Delete VM"
+    # send_email("d4tiajoss@gmail.com",subject,html)
     return render_template('manage-instance.html',users=users)
 
 # Client Side --- ADMIN
@@ -473,6 +484,8 @@ def manage_request():
             resp = json.loads(respJSON)
 
             create = Request.query.filter_by(id=request.form['request-id']).first()
+            users = User.query.filter_by(id=create.owner_id).first()
+
             ins = Instance(
                 user_id = create.owner_id,
                 instance_id = resp['server']['id'],
@@ -484,12 +497,26 @@ def manage_request():
             db.session.add(ins)
             db.session.delete(create)
             db.session.commit()
+
+            html = render_template('email/createdvm-email.html', users=users)
+            subject = "VM Successfully Created"
+            #send_email(users.email,subject,html)
+            send_email("d4tiajoss@gmail.com",subject,html)
+
             return redirect(url_for('manage_request'))
 
         elif request.form['action'] == 'Decline':
             create = Request.query.filter_by(id=request.form['request-id']).first()
+            users = User.query.filter_by(id=create.owner_id).first()
             create.status = 2
             db.session.commit()
+
+            html = render_template('email/requestvm-decline-email.html', users=users)
+            subject = "Declined Request VM"
+            #send_email(users.email,subject,html)
+            send_email("d4tiajoss@gmail.com",subject,html)
+
+            return redirect(url_for('manage_request'))
 
     return render_template('admin/managing-request.html',admin=admin,request_users=request_users)
 

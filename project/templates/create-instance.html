@@ -14,14 +14,16 @@
                 <div class="ui bottom attached active tab segment" data-tab="distribution">
                     <div class="ui padded container">
                         <div class="ui four column grid">
-                            {% for image in imagelist['images'] %}
-                            <a class="column">
-                                <div id="image-{{image['id']}}" class="ui center aligned segment instance">
-                                    <p>{{image['name']}}</p>
-                                    </br>
-                                    <button class="ui fluid teal button" onclick="selectedimageid('{{image['id']}}','{{image['name']}}')">Choose</button>
-                                </div>
+                            {% if imagelist %}
+                                {% for image in imagelist['images'] %}
+                                <a class="column">
+                                    <div id="image-{{image['id']}}" class="ui center aligned segment instance">
+                                        <p>{{image['name']}}</p>
+                                        </br>
+                                        <button class="ui fluid teal button" onclick="selectedimageid('{{image['id']}}','{{image['name']}}')">Choose</button>
+                                    </div>
                                 {% endfor %}
+                            {% endif %}
                             </a>
                         </div>
                     </div>
@@ -51,25 +53,27 @@
                 <div class="ui bottom attached active tab segment" data-tab="flavor" ng-controller="CreateflavorController as cfCtrl">
                     <div class="ui padded container">
                         <div class="ui four column grid">
-                            {% for flavor in flavorlist['flavors'] %}
-                            <div class="column">
-                                <div id="flavor-{{flavor['id']}}" class="ui center aligned segment">
-                                    <div class="ul list">
-                                        <div class="item">{{ flavor['name'] }}</div>
-                                        <div class="ui divider"></div>
-                                        <div class="item">{{ flavor['vcpus'] }} vCPU</div>
-                                        {% if flavor['ram']|int >= 1024 %}
-                                        <div>{{ ((flavor['ram']|int/1024)|string).rstrip(".0") }} GB of RAM</div>
-                                        {% else %}
-                                        <div>{{ flavor['ram']|int }}MB RAM</div>
-                                        {% endif %}
-                                        <div>{{ flavor['disk'] }}GB Disk</div>
+                            {% if flavorlist %}
+                                {% for flavor in flavorlist['flavors'] %}
+                                <div class="column">
+                                    <div id="flavor-{{flavor['id']}}" class="ui center aligned segment">
+                                        <div class="ul list">
+                                            <div class="item">{{ flavor['name'] }}</div>
+                                            <div class="ui divider"></div>
+                                            <div class="item">{{ flavor['vcpus'] }} vCPU</div>
+                                            {% if flavor['ram']|int >= 1024 %}
+                                            <div>{{ ((flavor['ram']|int/1024)|string).rstrip(".0") }} GB of RAM</div>
+                                            {% else %}
+                                            <div>{{ flavor['ram']|int }}MB RAM</div>
+                                            {% endif %}
+                                            <div>{{ flavor['disk'] }}GB Disk</div>
+                                        </div>
+                                        </br>
+                                        <button class="ui fluid teal button" onclick="selectedflavorid('{{flavor['id']}}','{{flavor['disk']}}','{{flavor['ram']}}','{{flavor['vcpus']}}')">Choose</button>
                                     </div>
-                                    </br>
-                                    <button class="ui fluid teal button" onclick="selectedflavorid('{{flavor['id']}}','{{flavor['disk']}}','{{flavor['ram']}}','{{flavor['vcpus']}}')">Choose</button>
                                 </div>
-                            </div>
-                            {% endfor %}
+                                {% endfor %}
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -80,6 +84,7 @@
                                 <label for="custom_vcpu">CPU : </label>
                                 <input type="text" id="custom_vcpu" readonly style="border:0; color:#00b5ad; font-weight:bold;">
                                 <div id="slider-range-max-vcpu"></div>
+
                                 <div class="ui grid" style="margin-top: .5em;">
                                     <div class="left floated wide column">1vCPU</div>
                                     <div class="right floated wide column">2vCPU</div>
@@ -90,9 +95,9 @@
                                 <input type="text" id="custom_memory" readonly style="border:0; color:#00b5ad; font-weight:bold;">
                                 <div id="slider-range-max-memory"></div>
                                 <div class="ui grid" style="margin-top: .5em;">
-                                    <div class="left floated six wide column">1GB</div>
-                                    <div class="left floated five wide column">2GB</div>
-                                    <div class="right floated wide column">4GB</div>
+                                    <div class="left floated six wide column">1 GB</div>
+                                    <div class="left floated five wide column" style="margin-left: 2em;">2 GB</div>
+                                    <div class="right floated wide column">4 GB</div>
                                 </div>
                             </div>
                             <div class="field" id="slider">
@@ -101,7 +106,7 @@
                                 <div id="slider-range-storage"></div>
                                 <div class="ui grid" style="margin-top: .5em;">
                                     <div class="left floated six wide column">20GB</div>
-                                    <div class="left floated five wide column">40GB</div>
+                                    <div class="left floated five wide column" style="margin-left: 2em;">40GB</div>
                                     <div class="right floated wide column">80GB</div>
                                 </div>
                             </div>
@@ -133,16 +138,18 @@
                             <div class="default text">Key Pair</div>
                             <div class="menu">
                                 {% set n = 1 %}
-                                {% for keypair in keylist['keypairs'] %}
-                                {% if n == 1 %}
-                                    <div class="item" selected data-value="{{ keypair['keypair']['name'] }}">{{ 
-                                keypair['keypair']['name'] }}</div>
-                                {% else %}
-                                    <div class="item" data-value="{{ keypair['keypair']['name'] }}">{{ 
-                                keypair['keypair']['name'] }}</div>
+                                {% if keylist %}
+                                    {% for keypair in keylist['keypairs'] %}
+                                        {% if n == 1 %}
+                                            <div class="item" selected data-value="{{ keypair['keypair']['name'] }}">{{
+                                        keypair['keypair']['name'] }}</div>
+                                        {% else %}
+                                            <div class="item" data-value="{{ keypair['keypair']['name'] }}">{{
+                                        keypair['keypair']['name'] }}</div>
+                                        {% endif %}
+                                    {% set n = n+1   %}
+                                    {% endfor %}
                                 {% endif %}
-                                {% set n = n+1   %}
-                                {% endfor %}
 
                             </div>
                         </div>
@@ -203,7 +210,7 @@
             <input id="purpose" type="text" name="purpose" hidden value="">
             <input id="pic_name" type="text" name="pic_name" hidden value="">
             <input id="pic_telp" type="text" name="pic_telp" hidden value="">
-        
+
         </form>
             <button id="submit_button" class="ui fluid large teal button" onclick="submit('form_create')">Create</button>
     </div>
@@ -214,7 +221,7 @@
         ;
 
     $(function () {
-        var objCpu = [1, 2];        
+        var objCpu = [1, 2];
         $("#slider-range-max-vcpu").slider({
             range: "max",
             min: 1,
@@ -225,7 +232,7 @@
                 $("#custom_vcpu_form").val(objCpu[ui.value - 1]);
             }
         });
-        $("#custom_vcpu").val(objCpu[$("#slider-range-max-vcpu").slider("value")-1]);        
+        $("#custom_vcpu").val(objCpu[$("#slider-range-max-vcpu").slider("value")-1]);
     });
 
     $(function () {
@@ -240,11 +247,11 @@
                 $("#custom_memory_form").val(objMemory[ui.value-1]);
             }
         });
-        $("#custom_memory").val(objMemory[$("#slider-range-max-memory").slider("value")-1]);        
+        $("#custom_memory").val(objMemory[$("#slider-range-max-memory").slider("value")-1]);
     });
 
     $(function () {
-        var objStorage = [20, 40, 80];        
+        var objStorage = [20, 40, 80];
         $("#slider-range-storage").slider({
             range: "max",
             min: 1,

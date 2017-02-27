@@ -4,6 +4,7 @@
     <div class="ui stackable grid container">
         <div class="column">
             <h3 class="ui header">Manage Instance</h3>
+            <a href="/manage/computes">Back.</a>
         </div>
     </div>
 
@@ -36,6 +37,10 @@
             </br>
             <table class="ui teal table">
                 <tbody>
+                    <tr>
+                        <td>Open Console</td>
+                        <td><button class="ui teal button">Console</button></td>
+                    </tr>
                     <tr>
                         <td>Scale Up Instance</td>
                         <td><button class="ui blue button">Scale Up</button></td>
@@ -93,13 +98,12 @@
         type: 'pie',
         data: {
             labels: [
-                "CPU Used Space",
-                "CPU Free Space"
+                "CPU"
             ],
             datasets: [
                 {
                     label: '%',
-                    data: [100, 0],
+                    data: 100,
                     backgroundColor: [
                         "#00B5AD",
                         "#A0A0A0"

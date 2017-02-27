@@ -40,7 +40,7 @@ class Token(db.Model):
     email_user = db.Column(db.String,nullable=False,unique=True)
     code = db.Column(db.String,nullable=False,unique=True)
     type = db.Column(db.Integer, nullable=False) #0 = registration, 1= reset password
-    created_at = db.Column(db.DateTime, nullable=False)
+    created_at = db.Column(db.DateTime)
 
     def __init__(self,id=None,email_user=None,code=None, type=None):
         self.id = id
@@ -59,7 +59,7 @@ class Instance(db.Model):
     name = db.Column(db.String(50), nullable=False)
     image_name = db.Column(db.String(100), nullable=False)
     status = db.Column(db.Integer, default=1)
-    build_on = db.Column(db.DateTime, nullable=False)
+    build_on = db.Column(db.DateTime)
 
     def __init__(self, user_id=None, instance_id=None,name=None,image_name=None,status=None):
         self.user_id = user_id
@@ -96,9 +96,9 @@ class Request(db.Model):
     pic_name = db.Column(db.String(100), nullable=False)
     pic_telp = db.Column(db.String(100), nullable=False)
     status = db.Column(db.Integer, default=0) #0 = pending, 1 = accepted, 2 = decline
-    request_at = db.Column(db.DateTime, nullable=False)
+    request_at = db.Column(db.DateTime)
 
-    def __init__(self,owner_id,server_id,name,image_id,image_name , flavor_id, flavor_vcpu, flavor_ram, flavor_disk,network_id, availability_zone, keyname, purpose, pic_name, pic_telp, status):
+    def __init__(self,owner_id=None,server_id=None,name=None,image_id=None,image_name=None, flavor_id=None, flavor_vcpu=None, flavor_ram=None, flavor_disk=None,network_id=None, availability_zone=None, keyname=None, purpose=None, pic_name=None, pic_telp=None, status=None):
         self.owner_id = owner_id
         self.server_id = server_id
         self.name = name

@@ -18,37 +18,13 @@ app.controller('InfomainController', function () {
     ];
 });
 
-app.controller('FlavormainController', function () {
-    this.mFlavor = [
-        {
-            type: "Small",
-            color: "red",
-            memori: 1,
-            processor: 1,
-            disk: 20
-        },
-        {
-            type: "Medium",
-            color: "yellow",
-            memori: 2,
-            processor: 1,
-            disk: 40
-        },
-        {
-            type: "Large",
-            color: "green",
-            memori: 2,
-            processor: 2,
-            disk: 60
-        },
-        {
-            type: "Extra Large",
-            color: "blue",
-            memori: 4,
-            processor: 2,
-            disk: 80
-        }
-    ];
+app.controller('FlavormainController', function ($scope) {
+    this.mFlavor = listFlavor;
+    
+    $scope.select = function(index){
+        $scope.data = index;
+    }
+
 });
 
 app.controller('VendormainController', function () {
@@ -68,7 +44,7 @@ app.controller('VendormainController', function () {
 
 /* Layanan Controllers */
 app.controller('FlavorlayananController', function ($scope) {
-    this.lFlavor = layananFlavor;
+    this.lFlavor = listFlavor;
 
     $scope.selectedIndex = 0;
     
@@ -78,46 +54,38 @@ app.controller('FlavorlayananController', function ($scope) {
         
 });
 
-var layananFlavor = [
+var listFlavor = [
     {
-        type: "S",
+        type: "Small",
+        color: "red",
         vcpu: 1,
         ram: 1,
-        swap: 1,
         disk: 20,
-        public_ip: 1
+        detail: "Cocok digunakan untuk membuat hosting"
     },
     {
-        type: "M",
+        type: "Medium",
+        color: "yellow",
         vcpu: 1,
         ram: 2,
-        swap: 1,
         disk: 40,
-        public_ip: 1
+        detail: "Cocok digunakan untuk development aplikasi web dan lainnya"
     },
     {
-        type: "L",
+        type: "Large",
+        color: "green",
         vcpu: 2,
         ram: 2,
-        swap: 2,
         disk: 60,
-        public_ip: 1
-    },
-    {
-        type: "XL",
-        vcpu: 2,
-        ram: 4,
-        swap: 2,
-        disk: 80,
-        public_ip: 1
+        detail: "Cocok digunakan untuk development dengan menggunakan container"
     },
     {
         type: "Custom",
+        color: "blue",
         vcpu: "Custom",
         ram: "Custom",
-        swap: "Custom",
         disk: "Custom",
-        public_ip: 1
+        detail: "Cocok digunakan untuk kebutuhan dengan spesifikasi yang tinggi"
     }
 ];
 

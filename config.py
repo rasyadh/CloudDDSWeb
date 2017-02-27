@@ -3,6 +3,7 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config(object):
+    domain_url = "http://localhost:5000/"
     DEBUG       = False
     TESTING     = False
     CSRF_ENABLED= True
@@ -13,9 +14,9 @@ class Config(object):
     MAIL_PORT = 465
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
-    MAIL_USERNAME = 'd4tiajoss'
-    MAIL_PASSWORD = 'cumlaude2018'
-    MAIL_DEFAULT_SENDER = 'd4tiajoss@gmail.com'
+    MAIL_USERNAME = 'cloudtelkomdds'
+    MAIL_PASSWORD = 'Admintelk0m'
+    MAIL_DEFAULT_SENDER = 'cloudtelkomdds@gmail.com'
 
 class ProductionConfig(Config):
     DEBUG = False
