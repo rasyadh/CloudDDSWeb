@@ -16,8 +16,9 @@ class User(db.Model):
     nomorhp = db.Column(db.String(50), nullable=False)
     registered_on = db.Column(db.DateTime, nullable=False)
     role = db.Column(db.Integer, default=0) #0=user, 1=admin, 2=superadmin
+    keystone_token = db.Column(db.String(50),default="") #keperluan mobile
 
-    def __init__(self, name=None, email=None, password=None, status=0, nomorhp=None, role=0):
+    def __init__(self, name=None, email=None, password=None, status=0, nomorhp=None, role=0, keystone_token=""):
         self.name = name
         self.email = email
         self.password = password
@@ -25,6 +26,7 @@ class User(db.Model):
         self.nomorhp = nomorhp
         self.registered_on = datetime.date.today()
         self.role = role
+        self.keystone_token = keystone_token
 
     def get_id(self):
         return self.id
