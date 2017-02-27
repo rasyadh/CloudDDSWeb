@@ -40,10 +40,10 @@
             if(prev_flav_id)
             {
                 document.getElementById("flavor-"+prev_flav_id).className =
-                document.getElementById("flavor-"+prev_flav_id).className.replace(" teal",'');
+                document.getElementById("flavor-"+prev_flav_id).className.replace(" teal inverted",'');
             }
             var input = document.getElementById("flavor-"+flavorid);
-            input.className += " teal";
+            input.className += " teal inverted";
             var d = document.getElementById("flavorRef");
             d.value = selectedflavorid;
             var d = document.getElementById("size");
@@ -61,10 +61,10 @@
         if(prev_image_id)
         {
             document.getElementById("image-"+prev_image_id).className =
-            document.getElementById("image-"+prev_image_id).className.replace(" teal",'');
+            document.getElementById("image-"+prev_image_id).className.replace(" teal inverted",'');
         }
         var input = document.getElementById("image-"+imageid);
-        input.className += " teal";
+        input.className += " teal inverted";
         var d = document.getElementById("imageRef");
         d.value = selectedimageid;
         var d = document.getElementById("image_name");

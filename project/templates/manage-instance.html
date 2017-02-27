@@ -46,12 +46,12 @@
             <table class="ui teal table">
                 <tbody>
                     <tr>
-                        {% if console['console']['url'] is none %}
-                            <td>Console Unavailable</td>
-                            <td><a class="ui teal button" disabled target="_blank">Console</a></td>
-                        {% else %}
+                        {% if console['console']['url'] %}
                             <td>Open Console</td>
                             <td><a class="ui teal button" href="{{ console['console']['url'] }}" target="_blank">Console</a></td>
+                        {% else %}
+                            <td>Console Unavailable</td>
+                            <td><a class="ui teal button" disabled target="_blank">Console</a></td>
                         {% endif %}
                     </tr>
                     <tr>
@@ -70,7 +70,11 @@
                 <thead>
                     <tr>
                         <th>Operating System : {{ serverins.image_name }}</th>
-                        <th>Uptime : {{ server['server']['OS-SRV-USG:launched_at'] }}</th>
+                        {% if uptime %}
+                            <th>Uptime : {{ uptime }}</th>
+                        {% else %}
+                            <th>Uptime : Undefined</th>
+                        {% endif %}
                     </tr>
                 </thead>
             </table>
