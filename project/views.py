@@ -213,7 +213,7 @@ def forgot_password():
             html = render_template('email/resetpass-email.html',confirm_url = confirm_url, users=users)
             subject = "Request Reset Password Cloud Telkom DDS"
             #send_email(users.email,subject,html)
-            send_email("gravpokemongo@gmail.com",subject,html)
+            send_email("d4tiajoss@gmail.com",subject,html)
     return render_template('forgot-password.html')
 
 @app.route('/forgot_password/')
@@ -438,7 +438,7 @@ def request_flav():
 def manage_instance(server_id):
     nova = novaapi()
     users = User.query.filter_by(id=session['user_id']).first()
-    
+
     if request.method == "POST":
         if request.form['action'] == "delete":
             respJSON = nova.serverDelete(server_id)
@@ -446,7 +446,7 @@ def manage_instance(server_id):
 
             db.session.delete(serverins)
             db.session.commit()
-            return redirect(url_for('computes'))            
+            return redirect(url_for('computes'))
 
     serverins = Instance.query.filter_by(instance_id=server_id).order_by(Instance.status).first()
 
