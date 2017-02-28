@@ -92,10 +92,10 @@
     function setflavordata(flavor_type){
         flavor_types = flavor_type;
         document.getElementById("flavor_type").value = flavor_type;
-        if(prev_image_id)
+        if(prev_flav_id)
         {
-            document.getElementById("image-"+prev_image_id).className =
-            document.getElementById("image-"+prev_image_id).className.replace(" teal",'');
+            document.getElementById("flavor-"+prev_flav_id).className =
+            document.getElementById("flavor-"+prev_flav_id).className.replace("teal inverted",'');
         }
         prev_flav_id = "";
 

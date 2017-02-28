@@ -443,9 +443,12 @@ def manage_instance(server_id):
         if request.form['action'] == "delete":
             respJSON = nova.serverDelete(server_id)
             serverins = Instance.query.filter_by(instance_id=server_id).first()
-
             db.session.delete(serverins)
             db.session.commit()
+            html = render_template('email/deletevm-email.html', users=users)
+            subject = "Request Delete VM"
+            send_email(users.email,subject,html)
+
             return redirect(url_for('computes'))            
 
     serverins = Instance.query.filter_by(instance_id=server_id).order_by(Instance.status).first()
@@ -455,16 +458,28 @@ def manage_instance(server_id):
     else:
         respJSON = nova.serverList(server_id)
         server = json.loads(respJSON)
-        respJSON = nova.serverConsole(server_id)
-        console = json.loads(respJSON)
-        diagnostics = nova.serverDiagnostics(server_id)
-        diagnostics = json.loads(diagnostics)
-        return render_template('manage-instance.html',users=users, server=server, console= console,serverins = serverins, diagnostics = diagnostics)
+        if 'server' in server:
+            respJSON = nova.serverConsole(server_id)
+            console = json.loads(respJSON)
+            if "console" in console:
+                diagnostics = nova.serverDiagnostics(server_id)
+                diagnostics = json.loads(diagnostics)
+                if 'cpu0_time' in diagnostics:
+                    return render_template('manage-instance.html',users=users, server=server,serverins = serverins, diagnostics = diagnostics, console = console)
+                else:
+                    return render_template('manage-instance.html',users=users, server=server,serverins = serverins, diagnostics = False, console = console)
+            else:
+                diagnostics = nova.serverDiagnostics(server_id)
+                diagnostics = json.loads(diagnostics)
+                if 'cpu0_time' in diagnostics:
+                    return render_template('manage-instance.html',users=users, server=server,serverins = serverins, diagnostics = diagnostics, console = False)
+                else:
+                    return render_template('manage-instance.html',users=users, server=server,serverins = serverins, diagnostics = False, console = False)
+        else:
+            return redirect(url_for('computes'))
+        return respJSON
 
-    # html = render_template('email/deletevm-email.html', users=users)
-    # subject = "Request Delete VM"
-    # send_email("d4tiajoss@gmail.com",subject,html)
-
+    
 
 # Client Side --- ADMIN
 @app.route('/admin')
@@ -546,40 +561,43 @@ def manage_request():
         if request.form['action'] == 'Accepted' :
             reqf = request.form
             nova = novaapi()
-            respJSON = nova.serverCreate(reqf['request-name'],reqf['request-img'],reqf['request-flavor'],reqf['request-ava'],\
-                       reqf['request-keyname'],reqf['request-networks'],reqf['request-size'])
+            respJSON = nova.serverCreate(reqf['request-name'],reqf['request-img'],reqf['request-flavor'],reqf['request-ava'], reqf['request-keyname'],reqf['request-networks'],reqf['request-size'])
             resp = json.loads(respJSON)
+            if "server" in resp:
+                server_id = resp['server']['id']
 
-            create = Request.query.filter_by(id=request.form['request-id']).first()
-            users = User.query.filter_by(id=int(create.owner_id)).first()
+                create = Request.query.filter_by(id=request.form['request-id']).first()
+                users = User.query.filter_by(id=int(create.owner_id)).first()
 
-            ins = Instance(
-                user_id = create.owner_id,
-                instance_id = resp['server']['id'],
-                name = create.name,
-                image_name = create.image_name,
-                flavor_vcpu=create.flavor_vcpu,
-                flavor_ram=create.flavor_ram,
-                flavor_disk=create.flavor_disk,
-                keyname=create.keyname,
-                purpose=create.purpose,
-                pic_name=create.pic_name,
-                pic_telp=create.pic_telp,
-                status = 1,
-                request_at=create.request_at
+                ins = Instance(
+                    user_id = create.owner_id,
+                    instance_id = server_id,
+                    name = create.name,
+                    image_name = create.image_name,
+                    flavor_vcpu=create.flavor_vcpu,
+                    flavor_ram=create.flavor_ram,
+                    flavor_disk=create.flavor_disk,
+                    keyname=create.keyname,
+                    purpose=create.purpose,
+                    pic_name=create.pic_name,
+                    pic_telp=create.pic_telp,
+                    status = 1,
+                    request_at=create.request_at
 
-            )
-            create.status = 1
-            db.session.add(ins)
-            db.session.delete(create)
-            db.session.commit()
+                )
+                create.status = 1
+                db.session.add(ins)
+                db.session.delete(create)
+                db.session.commit()
 
-            html = render_template('email/createdvm-email.html', users=users)
-            subject = "VM Successfully Created"
-            send_email(users.email,subject,html)
-            #send_email("d4tiajoss@gmail.com",subject,html)
+                html = render_template('email/createdvm-email.html', users=users)
+                subject = "VM Successfully Created"
+                send_email(users.email,subject,html)
+                #send_email("d4tiajoss@gmail.com",subject,html)
 
-            return redirect(url_for('manage_request'))
+                return redirect(url_for('manage_request'))
+            else: 
+                return redirect(url_for('manage_request'))
 
         elif request.form['action'] == 'Decline':
             create = Request.query.filter_by(id=request.form['request-id']).first()
@@ -643,56 +661,59 @@ def nova():
 
     return url
 
-@app.route('/restapi/nova/server/create')
-@app.route('/restapi/nova/server/create/')
+@app.route('/restapi/nova/server/create',methods=["POST"])
 def serverCreate():
-    nova = novaapi()
-    imageRef = request.form['imageRef']
-    availability_zone = request.form['availability_zone']
-    networks_uuid = "417b4cdd-b706-4f6c-8e6e-1b06f58e94c8"
-    key_name = request.form['key_name']
-    name = request.form['name']
-    image_name = request.form['image_name']
-    flavorRef = request.form['flavorRef']
-    size = request.form['size']
-    ram = request.form['ram']
-    cpu = request.form['cpu']
-    purpose = request.form['purpose']
-    pic_name = request.form['pic_name']
-    pic_telp = request.form['pic_telp']
+    if request.method == "POST":
+        nova = novaapi()
+        imageRef = request.form['imageRef']
+        availability_zone = request.form['availability_zone']
+        networks_uuid = "417b4cdd-b706-4f6c-8e6e-1b06f58e94c8"
+        key_name = request.form['key_name']
+        name = request.form['name']
+        image_name = request.form['image_name']
+        flavorRef = request.form['flavorRef']
+        size = request.form['size']
+        ram = request.form['ram']
+        cpu = request.form['cpu']
+        purpose = request.form['purpose']
+        pic_name = request.form['pic_name']
+        pic_telp = request.form['pic_telp']
+        user_id = request.form['user_id']
 
-    req = Request(
-            owner_id = session['user_id'],
-            server_id = "",
-            name = name,
-            image_id = imageRef,
-            image_name=image_name,
-            flavor_id = flavorRef,
-            flavor_vcpu = cpu,
-            flavor_ram = ram,
-            flavor_disk = size,
-            network_id = networks_uuid,
-            availability_zone = availability_zone,
-            keyname = key_name,
-            purpose = request.form['purpose'],
-            pic_name = request.form['pic_name'],
-            pic_telp = request.form['pic_telp'],
-            status = 0
-        )
+        req = Request(
+                owner_id = user_id,
+                server_id = "",
+                name = name,
+                image_id = imageRef,
+                image_name=image_name,
+                flavor_id = flavorRef,
+                flavor_vcpu = cpu,
+                flavor_ram = ram,
+                flavor_disk = size,
+                network_id = networks_uuid,
+                availability_zone = availability_zone,
+                keyname = key_name,
+                purpose = request.form['purpose'],
+                pic_name = request.form['pic_name'],
+                pic_telp = request.form['pic_telp'],
+                status = 0
+            )
 
-    db.session.add(req)
-    db.session.commit()
+        db.session.add(req)
+        db.session.commit()
 
-    respJSON = nova.serverCreate(name,imageRef,flavorRef,availability_zone,key_name,networks_uuid)
+        respJSON = nova.serverCreate(name,imageRef,flavorRef,availability_zone,key_name,networks_uuid,size)
 
 
-    return respJSON
+        return respJSON
+    else:
+        abort(404)
 
 @app.route('/restapi/nova/server/list')
 @app.route('/restapi/nova/server/list/')
 def serverList():
     nova = novaapi()
-    respJSON = nova.serverList()
+    respJSON = nova.serverList("yj34f8r7j34t79j38jgygvf3")
 
     return respJSON
 
@@ -817,7 +838,7 @@ def keylistnew():
                 resp = resp['content']
                 resp = json.loads(resp)
                 pk = resp['keypair']
-                r = Response(response=pk, status=200, mimetype="text/plain")
+                r = Response(response=pk['private_key'], status=200, mimetype="text/plain")
                 r.headers["Content-Type"] = "text/plain; charset=utf-8"
                 r.headers["Content-Disposition"] = "attachment; filename="+ key_name +".pem"
                 return r
