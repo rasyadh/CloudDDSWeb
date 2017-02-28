@@ -16,15 +16,15 @@
                     <tbody>
                         <tr>
                             <td>Users</td>
-                            <td>...</td>
+                            <td>{{rowsUser}}</td>
                         </tr>
                         <tr>
                             <td>Instances</td>
-                            <td>...</td>
+                            <td>{{rowsInstance}}</td>
                         </tr>
                         <tr>
-                            <td>Floating IPs</td>
-                            <td>...</td>
+                            <td>Request Instances</td>
+                            <td>{{rowsRequest}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -68,7 +68,7 @@
                     <th>Action</th>
                 </thead>
                 <tbody>
-                    {% if flavorlist %}
+                    {% if flavorlist  %}
                     {% for flavor in flavorlist['flavors'] %}
 
                         <tr>

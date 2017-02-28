@@ -213,7 +213,8 @@ def forgot_password():
             html = render_template('email/resetpass-email.html',confirm_url = confirm_url, users=users)
             subject = "Request Reset Password Cloud Telkom DDS"
             send_email(users.email,subject,html)
-            #send_email("gravpokemongo@gmail.com",subject,html)
+            #send_email("d4tiajoss@gmail.com",subject,html)
+
     return render_template('forgot-password.html')
 
 @app.route('/forgot_password/')
@@ -366,13 +367,13 @@ def create_instance():
                 html = render_template('email/requestvm-email.html', users=users)
                 subject = "Request VM will be Processed"
                 send_email(users.email,subject,html)
-                # send_email("d4tiajoss@gmail.com",subject,html)
+                #send_email("d4tiajoss@gmail.com",subject,html)
 
             else:
                 html = render_template('email/requestvm-email.html', users=users)
                 subject = "Request VM will be Processed"
                 send_email(users.email,subject,html)
-                # send_email("d4tiajoss@gmail.com",subject,html)
+                #send_email("d4tiajoss@gmail.com",subject,html)
 
             return redirect(url_for('computes'))
     else:
@@ -438,7 +439,7 @@ def request_flav():
 def manage_instance(server_id):
     nova = novaapi()
     users = User.query.filter_by(id=session['user_id']).first()
-    
+
     if request.method == "POST":
         if request.form['action'] == "delete":
             respJSON = nova.serverDelete(server_id)
@@ -477,7 +478,6 @@ def manage_instance(server_id):
                     return render_template('manage-instance.html',users=users, server=server,serverins = serverins, diagnostics = False, console = False)
         else:
             return redirect(url_for('computes'))
-        return respJSON
 
     
 
@@ -520,9 +520,17 @@ def manage_resource():
         else:
             abort(403)
     else:
+        rowsUser = User.query.filter_by(role=0).count()
+        rowsInstance = Instance.query.count()
+        rowsRequest = Request.query.count()
         flavorJSON = nova.flavorList(0)
         flavorJSON = json.loads(flavorJSON)
-        return render_template('admin/managing-resource.html',admin=admin,flavorlist=flavorJSON,flavordefault=flavordefault)
+        return render_template('admin/managing-resource.html',
+                                admin=admin,flavorlist=flavorJSON,
+                                flavordefault=flavordefault,
+                                rowsUser=rowsUser,
+                                rowsInstance=rowsInstance,
+                                rowsRequest=rowsRequest)
 
 @app.route('/admin/manage-user',methods=['GET','POST'])
 @admin_required
