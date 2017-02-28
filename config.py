@@ -3,7 +3,7 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config(object):
-    domain_url = "http://localhost:5000/"
+    domain_url = "http://10.14.36.100:5000/"
     DEBUG       = False
     TESTING     = False
     CSRF_ENABLED= True

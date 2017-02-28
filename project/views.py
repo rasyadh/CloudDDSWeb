@@ -139,8 +139,8 @@ def registration():
                 confirm_url = myDOMAIN +"registration/activate_account?actemp="+activationcodetmp
                 html = render_template('email/verification-email.html',confirm_url = confirm_url)
                 subject = "Verification Email Cloud Telkom DDS"
-                #send_email(users.email,subject,html)
-                send_email('d4tiajoss@gmail.com',subject,html)
+                send_email(users.email,subject,html)
+                #send_email('d4tiajoss@gmail.com',subject,html)
                 db.session.commit()
 
                 return redirect(url_for('login'))
@@ -214,6 +214,7 @@ def forgot_password():
             subject = "Request Reset Password Cloud Telkom DDS"
             #send_email(users.email,subject,html)
             send_email("d4tiajoss@gmail.com",subject,html)
+
     return render_template('forgot-password.html')
 
 @app.route('/forgot_password/')
@@ -446,6 +447,11 @@ def manage_instance(server_id):
 
             db.session.delete(serverins)
             db.session.commit()
+
+            html = render_template('email/deletevm-email.html', users=users)
+            subject = "Request Delete VM"
+            send_email("d4tiajoss@gmail.com",subject,html)
+
             return redirect(url_for('computes'))
 
     serverins = Instance.query.filter_by(instance_id=server_id).order_by(Instance.status).first()
@@ -461,9 +467,7 @@ def manage_instance(server_id):
         diagnostics = json.loads(diagnostics)
         return render_template('manage-instance.html',users=users, server=server, console= console,serverins = serverins, diagnostics = diagnostics)
 
-    # html = render_template('email/deletevm-email.html', users=users)
-    # subject = "Request Delete VM"
-    # send_email("d4tiajoss@gmail.com",subject,html)
+
 
 
 # Client Side --- ADMIN
@@ -505,9 +509,17 @@ def manage_resource():
         else:
             abort(403)
     else:
+        rowsUser = User.query.filter_by(role=0).count()
+        rowsInstance = Instance.query.count()
+        rowsRequest = Request.query.count()
         flavorJSON = nova.flavorList(0)
         flavorJSON = json.loads(flavorJSON)
-        return render_template('admin/managing-resource.html',admin=admin,flavorlist=flavorJSON,flavordefault=flavordefault)
+        return render_template('admin/managing-resource.html',
+                                admin=admin,flavorlist=flavorJSON,
+                                flavordefault=flavordefault,
+                                rowsUser=rowsUser,
+                                rowsInstance=rowsInstance,
+                                rowsRequest=rowsRequest)
 
 @app.route('/admin/manage-user',methods=['GET','POST'])
 @admin_required
