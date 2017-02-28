@@ -45,15 +45,16 @@
             </br>
             <table class="ui teal table">
                 <tbody>
-                    <tr>
-                        {% if console %}
+                    {% if console %}
+                        <tr>
                             <td>Open Console</td>
                             <td><a class="ui teal button" href="{{ console['console']['url'] }}" target="_blank">Console</a></td>
-                        {% else %}
-                            <td>Console Unavailable</td>
-                            <td><a class="ui teal button"  target="_blank">Console</a></td>
-                        {% endif %}
-                    </tr>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="2">Console Unavailable</td>
+                        </tr>
+                    {% endif %}
                     <tr>
                         <td>Scale Up Instance</td>
                         <td><button class="ui blue button scale">Scale Up</button></td>
@@ -93,7 +94,11 @@
                             <div class="ui center aligned container">
                                 <div class="ui statistic">
                                     <div class="value">
-                                        {{ diagnostics["cpu0_time"]/1000000000 }}
+                                        {% if diagnostics %}
+                                            {{ diagnostics["cpu0_time"]/1000000000 }}
+                                        {% else %}
+                                            Undefined
+                                        {% endif %}
                                     </div>
                                     <div class="label">
                                         Second
@@ -184,32 +189,62 @@
         .tab()
         ;
 
-    var ram_pie = document.getElementById("ram_chart").getContext("2d");
-    var ram_chart = new Chart(ram_pie, {
-        type: 'pie',
-        data: {
-            labels: [
-                "RAM Used Space",
-                "RAM Free Space"
-            ],
-            datasets: [
-                {
-                    label: 'MB',
-                    data: [{{ (diagnostics["memory-actual"] - diagnostics["memory-unused"])/1024 }},{{diagnostics["memory-unused"]/1024}}],
-                    backgroundColor: [
-                        "#00B5AD",
-                        "#A0A0A0"
-                    ]
-                }
-            ]
-        },
-        options: {
-            animation: {
-                animateScale: true
+    {% if diagnostics %}
+        var ram_pie = document.getElementById("ram_chart").getContext("2d");
+        var ram_chart = new Chart(ram_pie, {
+            type: 'pie',
+            data: {
+                labels: [
+                    "RAM Used Space",
+                    "RAM Free Space"
+                ],
+                datasets: [
+                    {
+                        label: 'MB',
+                        data: [{{ (diagnostics["memory-actual"] - diagnostics["memory-unused"])/1024 }},{{diagnostics["memory-unused"]/1024}}],
+                        backgroundColor: [
+                            "#00B5AD",
+                            "#A0A0A0"
+                        ]
+                    }
+                ]
             },
-            responsive: true
-        }
-    });
+            options: {
+                animation: {
+                    animateScale: true
+                },
+                responsive: true
+            }
+        });
+    {% else %}
+        var ram_pie = document.getElementById("ram_chart").getContext("2d");
+        var ram_chart = new Chart(ram_pie, {
+            type: 'pie',
+            data: {
+                labels: [
+                    "RAM Used Space",
+                    "RAM Free Space"
+                ],
+                datasets: [
+                    {
+                        label: 'MB',
+                        data: [1,1],
+                        backgroundColor: [
+                            "#00B5AD",
+                            "#A0A0A0"
+                        ]
+                    }
+                ]
+            },
+            options: {
+                animation: {
+                    animateScale: true
+                },
+                responsive: true
+            }
+        });
+    {% endif %}
+
 
     var storage_pie = document.getElementById("storage_chart").getContext("2d");
     var storage_chart = new Chart(storage_pie, {

@@ -6,7 +6,8 @@ class nova():
 
 	headers = {}
 	data = {}
-	post_data = ""
+	post_data_create = ""
+	post_data_console = ""
 	get_param = {}
 	urlJSON = ""
 	headJSON = ""
@@ -73,6 +74,55 @@ class nova():
 
 		return str(respJSON)
 
+	def serverList(self,server_id):
+		self.urlJSON = json.loads(self.getUrl())
+
+		self.headers['Content-Type'] = 'application/json'
+		self.headers['X-Auth-Token'] = self.urlJSON['x-token']
+		self.headJSON = json.dumps(self.headers)
+
+		if server_id == "yj34f8r7j34t79j38jgygvf3":
+			self.urlJSON['url'] = self.urlJSON['url']+"/servers"
+			r = self.getRequest(self.urlJSON['url'],str(self.headJSON),self.get_param)
+		else:
+			self.urlJSON['url'] = self.urlJSON['url']+"/servers/"+server_id
+			r = self.getRequest(self.urlJSON['url'],str(self.headJSON),self.get_param)
+
+		respJSON = r.text
+
+		return respJSON
+
+	def serverDiagnostics(self,server_id):
+		self.urlJSON = json.loads(self.getUrl())
+
+		self.headers['Content-Type'] = 'application/json'
+		self.headers['X-Auth-Token'] = self.urlJSON['x-token']
+		self.headJSON = json.dumps(self.headers)
+
+		self.urlJSON['url'] = self.urlJSON['url']+"/servers/"+ str(server_id) + "/diagnostics"
+		r = self.getRequest(self.urlJSON['url'],str(self.headJSON),self.get_param)
+
+		respJSON = r.text
+
+		return respJSON
+
+	def serverConsole(self,server_id):
+		self.urlJSON = json.loads(self.getUrl())
+
+		self.headers['Content-Type'] = 'application/json'
+		self.headers['X-Auth-Token'] = self.urlJSON['x-token']
+		self.headJSON = json.dumps(self.headers)
+
+		self.urlJSON['url'] = self.urlJSON['url']+"/servers/"+ str(server_id) + "/action"
+		self.console['type'] = "novnc"
+		self.data['os-getVNCConsole'] = self.console
+		self.post_data_console = json.dumps(self.data)
+		r = self.postRequest(self.urlJSON['url'],str(self.headJSON),str(self.post_data_console))
+
+		respJSON = r.text
+
+		return respJSON
+
 	def serverCreate(self,name,imageRef,flavorRef,availability_zone, key_name, networks_uuid,size):
 		#self.urlJSON = self.getUrl()
 		self.urlJSON = json.loads(self.getUrl())
@@ -101,62 +151,13 @@ class nova():
 		self.data['server'] = self.server
 		#self.data['OS-SCH-HNT:scheduler_hints'] = self.OS_SCH_HNT
 
-		self.post_data = json.dumps(self.data)
+		self.post_data_create = json.dumps(self.data)
 
 		self.urlJSON['url'] = self.urlJSON['url']+"/servers"
-		r = self.postRequest(self.urlJSON['url'],str(self.headJSON),str(self.post_data))
+		r = self.postRequest(self.urlJSON['url'],str(self.headJSON),str(self.post_data_create))
 		respJSON = r.text
 
 		#print(respJSON)
-
-		return respJSON
-
-	def serverList(self,server_id):
-		self.urlJSON = json.loads(self.getUrl())
-
-		self.headers['Content-Type'] = 'application/json'
-		self.headers['X-Auth-Token'] = self.urlJSON['x-token']
-		self.headJSON = json.dumps(self.headers)
-
-		if server_id == "yj34f8r7j34t79j38jgygvf3":
-			self.urlJSON['url'] = self.urlJSON['url']+"/servers"
-			r = self.getRequest(self.urlJSON['url'],str(self.headJSON),self.get_param)
-		else:
-			self.urlJSON['url'] = self.urlJSON['url']+"/servers/"+server_id
-			r = self.getRequest(self.urlJSON['url'],str(self.headJSON),self.get_param)
-
-		respJSON = r.text
-
-		return respJSON
-
-	def serverDiagnostics(self,server_id):
-		self.urlJSON = json.loads(self.getUrl())
-
-		self.headers['Content-Type'] = 'application/json'
-		self.headers['X-Auth-Token'] = self.urlJSON['x-token']
-		self.headJSON = json.dumps(self.headers)
-
-		self.urlJSON['url'] = self.urlJSON['url']+"/servers/"+server_id + "/diagnostics"
-		r = self.getRequest(self.urlJSON['url'],str(self.headJSON),self.get_param)
-
-		respJSON = r.text
-
-		return respJSON
-
-	def serverConsole(self,server_id):
-		self.urlJSON = json.loads(self.getUrl())
-
-		self.headers['Content-Type'] = 'application/json'
-		self.headers['X-Auth-Token'] = self.urlJSON['x-token']
-		self.headJSON = json.dumps(self.headers)
-
-		self.urlJSON['url'] = self.urlJSON['url']+"/servers/"+server_id + "/action"
-		self.console['type'] = "novnc"
-		self.data['os-getVNCConsole'] = self.console
-		self.post_data = json.dumps(self.data)
-		r = self.postRequest(self.urlJSON['url'],str(self.headJSON),str(self.post_data))
-
-		respJSON = r.text
 
 		return respJSON
 
