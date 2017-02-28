@@ -149,12 +149,12 @@ app.controller('InfobantuanController', function ($scope, $http) {
         },
         {
             title: "Mekanisme request VM ?",
-            size: "huge",
+            size: "large",
             steps: "../static/img/faq/request-vm.png"
         },
         {
             title: "Cara Mengakses VM ?",
-            size: "huge",
+            size: "large",
             steps: "../static/img/faq/request-vm.png"
         },
         {
@@ -164,12 +164,12 @@ app.controller('InfobantuanController', function ($scope, $http) {
         },
         {
             title: "Cara melakukan upgrade VM (Scale Up) ?",
-            size: "huge",
+            size: "large",
             steps: "../static/img/faq/scaleup-vm.png"
         },
         {
             title: "Cara menghapus VM ?",
-            size: "huge",
+            size: "large",
             steps: "../static/img/faq/delete-vm.png"
         },
         {
