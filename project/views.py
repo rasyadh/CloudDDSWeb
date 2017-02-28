@@ -62,7 +62,7 @@ def login():
 
     if request.method == 'POST' :
         try:
-            users = User.query.filter_by(email=request.form['email']+request.form['email_domain']).first()
+            users = User.query.filter_by(email=request.form['email'].lower()+request.form['email_domain']).first()
 
             if users is None :
                 errormsg = "Email Tidak Terdaftar"
@@ -109,7 +109,7 @@ def registration():
 
 
     if request.method == 'POST':
-        users = User.query.filter_by(email=request.form['email']+request.form['email_domain']).first()
+        users = User.query.filter_by(email=request.form['email'].lower()+request.form['email_domain']).first()
 
         if users is not None :
             errormsg = "Email telah terdaftar"
@@ -118,7 +118,7 @@ def registration():
             try:
                 users = User(
                     name=request.form['name'],
-                    email=request.form['email']+request.form['email_domain'],
+                    email=request.form['email'].lower()+request.form['email_domain'],
                     #email=request.form['email']+"@gmail.com",
                     #password= encrypt.generate_password_hash(request.form['password']),
                     status=0,
